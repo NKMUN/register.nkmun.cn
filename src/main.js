@@ -12,6 +12,11 @@ Vue.use(VueValidator)
 Vue.http.options.root = '/api'
 Vue.http.options.timeout = 5000
 
+// load stored token
+let token = window.localStorage.getItem('_token')
+if (token)
+  Vue.http.headers.common['Authorization'] = 'Bearer '+token
+
 // create router
 const router = new VueRouter({
   history: true,

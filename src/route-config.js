@@ -10,8 +10,19 @@
     '/enroll/success': {
       component: require('./components/EnrollSuccess.vue')
     },
-    '/enroll/failure': {
-      component: require('./components/EnrollFailure.vue')
+    '/login': {
+      component: require('./components/Login.vue')
+    },
+    '/generic-failure': {
+      component: require('./components/GenericFailure.vue')
+    },
+    '/admin': {
+      component: require('./components/Admin/Home.vue'),
+      subRoutes: {
+        '/enroll': {
+          component: require('./components/Admin/Enroll.vue')
+        }
+      }
     },
     // not found handler
     '*': {

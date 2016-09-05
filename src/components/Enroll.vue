@@ -1,6 +1,6 @@
 <template>
   <div :class="{ busy: busy }">
-    <h3>预注册</h3>
+    <h3>报名</h3>
 
     <div class="disclaimer">
       <h4 class="heading">特别说明</h4>
@@ -15,7 +15,7 @@
     </div>
 
     <validator name='prereg'>
-      <form id="enroll" v-el:form novalidate autocomplete="on">
+      <form id="enroll" v-el:form novalidate autocomplete="on" enctype="application/x-www-form-urlencoded">
 
         <div class="section {{$.class}}" v-for="$ in form">
 
@@ -30,6 +30,7 @@
                 :field="_.dbId"
                 :placeholder="_.placeholder"
                 v-validate="_.validate"
+                :disabled="busy"
               ></input>
             </label>
 
@@ -42,6 +43,7 @@
                   :field="_.dbId"
                   :value="r.val"
                   v-validate="_.validate"
+                  :disabled="busy"
                 ></input>
                 {{r.text}}
               </label>
@@ -53,10 +55,13 @@
                 :field="_.dbId"
                 :placeholder="_.placeholder"
                 v-validate="_.validate"
+                :disabled="busy"
                 cols="100"
                 rows="15"
               ></textarea>
             </template>
+
+            <p v-if="_.tag === 'p'">{{_.text}}</p>
 
             {{{ _.html }}}
           </div>
@@ -73,53 +78,11 @@
 </template>
 
 <script>
+  import getResponseMessage from '../lib/guess-response-message'
   import EmailRegex from 'email-regex'
+  import FORM from '../def/enroll-form'
   const re_email = EmailRegex({exact: 'true'})
   const re_en_name = /[a-zA-Z0-9_\- .,]/
-
-  const FT = (name, dbId, placeholder='', validate=[]) => ({tag: 'input', name, dbId, validate, placeholder})
-  const FN = (name, dbId, placeholder='', validate=[]) => ({tag: 'input', type: 'number', name, dbId, validate, placeholder})
-  const FR = (name, dbId, opts, validate=[]) => ({tag: 'radio', name, dbId, validate, opts})
-  const O  = (text, val) => ({text, val})
-  const TA = (dbId, placeholder='', validate=[]) => ({tag: 'textarea', dbId, validate, placeholder})
-  const H  = (html) => ({tag: 'html', html})
-  
-  const GENDER_OPTS = [O('男', 'm'), O('女', 'f'), O('未知', 'u')]
-  const FORM = [
-    {
-      section: '学校',
-      class:   'school',
-      fields:  [
-        FT('中文名称', 'school',    '澄空学园',   ['required']),
-        FT('英文名称', 'school_en', 'Sumi Sora', ['required', 'enName'])
-      ]
-    }, 
-    {
-      section: '联系人',
-      class:   'contact',
-      fields:  [
-        FT('姓名',    'name',   '黑黑黑',              ['required']),
-        FR('性别',    'gender', GENDER_OPTS,          ['required']),
-        FT('手机号码', 'phone', '13800000000',         ['required', 'phone']),
-        FT('邮件地址', 'email', 'someone@example.com', ['required', 'email']),
-      ]
-    },
-    {
-      section: '名额',
-      class:   'quote',
-      fields:  [
-        FN('申请名额', 'quote', 0, ['required'])
-      ]
-    },
-    {
-      section: '学术水平测试',
-      class:   'ac-test',
-      fields:  [
-         H(`<p class="topic">背景信息</p>`),
-        TA('ac_paper', '', ['required'])
-      ]
-    }
-  ]
 
   export default {
     validators: {
@@ -156,10 +119,10 @@
           this.busy = false
           switch (res.status) {
             case 409:
-              this.$router.go({ path: '/enroll/failure', query: {status: res.status, message: '不能重复预注册'} })
+              this.$router.go({ path: '/generic-failure', query: {status: res.status, message: '不能重复预注册'} })
             break
             default:
-              this.$router.go({ path: '/enroll/failure', query: {status: res.status, message: '未知错误'} })
+              this.$router.go({ path: '/generic-failure', query: {status: res.status, message: getResponseMessage(res)} })
             break
           }
         })

@@ -1,1 +1,1 @@
-Official Website For NKMUN
+NKMUN Registration System

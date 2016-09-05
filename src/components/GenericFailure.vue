@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h3>预报名失败</h3>
-    {{$route.x}}
+    <h3>错误</h3>
     <p>{{$route.query.status}} / {{$route.query.message}}</p>
   </div>
 </template>
