@@ -20,17 +20,16 @@
 
           <h4 class="heading {{$.class}}">{{$.section}}</h4>
 
-          <div class="field {{_.dbId}}" v-for="_ in $.fields">
+          <div :class="{ field: _.dbId }" v-for="_ in $.fields">
             <label v-if="_.tag === 'input'" :for="_.dbId">
               <span class="field-name">{{_.name}}</span>
               <input
-                :type="_.type"
+                :type="_.type || 'text'"
                 :name="_.dbId"
                 :field="_.dbId"
                 :placeholder="_.placeholder"
                 v-validate="_.validate"
                 :disabled="busy"
-                class="text-input"
               ></input>
             </label>
 
@@ -61,7 +60,7 @@
               ></textarea>
             </template>
 
-            <p v-if="_.tag === 'p'">{{_.text}}</p>
+            <p v-if="_.tag === 'p'" :class="_.className">{{_.text}}</p>
 
             {{{ _.html }}}
           </div>
@@ -205,7 +204,7 @@
         opacity: .5
     .container
       font-size: 14px
-    .text-input
+    input[type="text"], input[type="number"]
       height: 20px
       width: 220px
       padding: 5px 8px
@@ -222,6 +221,5 @@
     textarea
       resize: none
     .field
-      height: 50px
       line-height: 50px
 </style>
