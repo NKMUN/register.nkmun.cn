@@ -5,7 +5,8 @@
         v-for="entry in list" 
         :active="active === entry.id" 
         :disabled="busy"
-        @click.prevent="edit(entry.id)"
+        :busy="busy"
+        @click.prevent="!busy ? edit(entry.id) : nop()"
       >
         {{entry.school}}
       </li>
@@ -59,11 +60,8 @@
 </template>
 
 <style lang="stylus">
-  [busy]
-    cursor: progress 
-    .list.selection
-      li
-        cursor: progress     // busy indication
+  *[busy]
+    cursor: progress !important
   .lr
     display: flex
     flex-direction: row
@@ -131,6 +129,7 @@
       }
     },
     methods: {
+      nop() {},
       update() {
         this.busy = true
         let payload = {
