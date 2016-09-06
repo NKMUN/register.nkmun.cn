@@ -4,17 +4,10 @@ import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 import VueValidator from 'vue-validator'
 import { configRouter } from './route-config'
-import { RadonInstall } from 'radon-ui'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(VueValidator)
-Vue.use(RadonInstall, {
-    Modal: true,
-    Notification: true,
-    LoadingBar: true,
-    Preview: true
-})
 
 Vue.http.options.root = '/api'
 Vue.http.options.timeout = 5000

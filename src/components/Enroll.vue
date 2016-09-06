@@ -1,16 +1,15 @@
 <template>
-  <div :busy="busy">
+  <div :busy="busy" class="container">
     <h3>报名</h3>
 
     <div class="disclaimer">
       <h4 class="heading">特别说明</h4>
       <p>
-        1、本报名表适用对象为全国各高中学校模联社团指导教师或学生负责人；<br>
-        2、报名表提交截止日期：北京时间2016年10月7日23时59分；<br>
+        1、本报名表适用对象为全国各高中学校模联社团学生负责人；<br>
+        2、报名表提交截止日期为北京时间2016年10月17日（含）；<br>
         3、本报名表所有填写框内除注明英文的选项外，请使用中文填写；<br>
-        5、如在填写报名表中出现任何问题或疑问，请发送邮件至2017@nkmun.org咨询；<br>
-        6、对于在截至日期之前提交多份报名表的学校，组委会将以最后一份报名表为准；<br>
-        7、本报名表最终解释权归本次大会组委会所有。<br>
+        4、如在填写报名表中出现任何问题或疑问，请发送邮件至2017@nkmun.cn咨询；<br>
+        5、本报名表最终解释权归本次大会组委会所有。<br>
       </p>
     </div>
 
@@ -203,4 +202,33 @@
     .ac-test
       .topic
         opacity: .5
+</style>
+
+<style>
+  body{
+    font-size: 14px;
+  }
+  input{
+    height:20px;
+    width:220px;
+    padding:5px 8px;
+    margin: 5px;
+    border:1px solid #aaa;
+    border-radius:8px;
+    padding-right:30px;
+  }
+  input[type="radio"]{
+    width: 15px;
+    height:15px;
+    padding: 0;
+    vertical-align:middle;
+    margin:-2px 0 1px 0;
+  }
+  textarea{
+    resize: none;
+  }
+  .field{
+    height: 50px;
+    line-height: 50px;
+  }
 </style>

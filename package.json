@@ -57,7 +57,6 @@
     "mocha": "^2.4.5",
     "nightwatch": "^0.8.18",
     "ora": "^0.2.0",
-    "radon-ui": "^0.1.9",
     "shelljs": "^0.6.0",
     "stylus-loader": "^2.3.1",
     "url-loader": "^0.5.7",
