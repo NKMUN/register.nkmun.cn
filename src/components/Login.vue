@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ busy: busy }">
+  <div :busy="busy">
     <h3>登录</h3>
     <form novalidate v-el:form enctype="application/x-www-form-urlencoded">
 
@@ -32,6 +32,7 @@
 
     <button
       :disabled="!test && (busy)"
+      :busy="busy"
       @click.prevent="login"
     >提交
     </button>
@@ -39,6 +40,8 @@
 </template>
 
 <style lang="stylus">
+  *[busy]
+    cursor: progress !important
 </style>
 
 <script>

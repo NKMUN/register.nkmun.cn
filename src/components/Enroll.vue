@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ busy: busy }">
+  <div :busy="busy">
     <h3>报名</h3>
 
     <div class="disclaimer">
@@ -69,7 +69,8 @@
 
         <button
           :disabled=" !test && ($prereg.invalid || busy)"
-          @click.prevent="submit"
+          :busy="busy"
+          @click.prevent="!busy ? submit() : nop()"
         >提交
         </button>
       </form>
@@ -106,6 +107,7 @@
       }
     },
     methods: {
+      nop() {},
       submit() {
         this.busy = true
         this.$http.post('enroll', new FormData(this.$els.form))
@@ -182,8 +184,8 @@
 </script>
 
 <style lang="stylus">
-  .busy
-    cursor: progress
+  *[busy]
+    cursor: progress !important
   form
     .field-name
       &::after
