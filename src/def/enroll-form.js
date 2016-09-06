@@ -39,7 +39,7 @@ export default [
       section: '名额申请',
       class:   'quote',
       fields:  [
-        FN('中文会场（含中国系统）',    'quote_cn',        0, ['required']),
+        FN('中文会场',    'quote_cn',        0, ['required']),
         FN('英文会场',                  'quote_en',        0, ['required']),
         FN('联动体系',                  'quote_linkage',   0, ['required']),
         FN('媒体团队',                  'quote_press',     0, ['required']),

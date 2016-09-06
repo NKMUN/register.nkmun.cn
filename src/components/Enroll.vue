@@ -30,6 +30,7 @@
                 :placeholder="_.placeholder"
                 v-validate="_.validate"
                 :disabled="busy"
+                class="text-input"
               ></input>
             </label>
 
@@ -202,33 +203,25 @@
     .ac-test
       .topic
         opacity: .5
-</style>
-
-<style>
-  body{
-    font-size: 14px;
-  }
-  input{
-    height:20px;
-    width:220px;
-    padding:5px 8px;
-    margin: 5px;
-    border:1px solid #aaa;
-    border-radius:8px;
-    padding-right:30px;
-  }
-  input[type="radio"]{
-    width: 15px;
-    height:15px;
-    padding: 0;
-    vertical-align:middle;
-    margin:-2px 0 1px 0;
-  }
-  textarea{
-    resize: none;
-  }
-  .field{
-    height: 50px;
-    line-height: 50px;
-  }
+    .container
+      font-size: 14px
+    .text-input
+      height: 20px
+      width: 220px
+      padding: 5px 8px
+      margin: 5px
+      border: 1px solid #aaa
+      border-radius: 8px
+      padding-right: 30px
+    input[type="radio"]
+      width: 15px
+      height: 15px
+      padding: 0
+      vertical-align: middle
+      margin: -2px 0 1px 0
+    textarea
+      resize: none
+    .field
+      height: 50px
+      line-height: 50px
 </style>
