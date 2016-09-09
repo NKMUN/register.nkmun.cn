@@ -1,5 +1,5 @@
 <template>
-  <div :busy="busy" class="container">
+  <div :busy="busy" class="container enroll">
     <h3>报名</h3>
 
     <div class="disclaimer">
@@ -35,7 +35,7 @@
 
             <label v-if="_.tag === 'radio'">
               <span class="field-name">{{_.name}}</span>
-              <label v-for="r in _.opts">
+              <label class="radio-options" v-for="r in _.opts">
                 <input 
                   type="radio"
                   :name="_.dbId"
@@ -56,7 +56,7 @@
                 v-validate="_.validate"
                 :disabled="busy"
                 cols="100"
-                rows="15"
+                rows="8"
               ></textarea>
             </template>
 
@@ -67,6 +67,7 @@
         </div>
 
         <button
+          class="submit-btn"
           :disabled=" !test && ($prereg.invalid || busy)"
           :busy="busy"
           @click.prevent="!busy ? submit() : nop()"
@@ -185,41 +186,82 @@
 <style lang="stylus">
   *[busy]
     cursor: progress !important
-  form
-    .field-name
-      &::after
-        content: "："
-    input, textarea
-      &.touched.invalid
-        background-color: pink
-      &.touched.valid
-        background-color: lightgreen
-    .section 
-      border-top: 1px solid black
-      margin: 2em 0
-      &:first-child
-        border-top: none
-    .ac-test
-      .topic
-        opacity: .5
-    .container
-      font-size: 14px
-    input[type="text"], input[type="number"]
-      height: 20px
-      width: 220px
-      padding: 5px 8px
-      margin: 5px
-      border: 1px solid #aaa
-      border-radius: 8px
-      padding-right: 30px
-    input[type="radio"]
-      width: 15px
-      height: 15px
-      padding: 0
-      vertical-align: middle
-      margin: -2px 0 1px 0
-    textarea
-      resize: none
-    .field
-      line-height: 50px
+  .enroll
+    margin: auto
+    padding: auto
+    text-align: center
+    .disclaimer
+      p
+        text-align: left
+        padding-left: 100px
+    form
+      margin-bottom: 40px
+      .field-name
+        display: inline-block
+        width: 64px
+        text-align: right
+        margin-right: 15px
+      input, textarea
+        &.touched.invalid
+          background-color: pink
+          border: 1px solid #fb2f53
+        &.touched.valid
+          background-color: lightgreen
+          border: 1px solid #2ec522
+      .section 
+        border-top: 1px solid black
+        margin: 20px 100px
+        &:first-child
+          border-top: none
+      .ac-test
+        .topic
+          opacity: .5
+      .container
+        font-size: 14px
+      input[type="text"], input[type="number"]
+        height: 20px
+        width: 220px
+        padding: 5px 8px
+        margin: 5px
+        border: 1px solid #aaa
+        border-radius: 8px
+        padding-right: 30px
+      input[type="text"]:focus, input[type="number"]:focus
+        border: 1px solid #52abf3
+        outline: 0
+      input[type="radio"]
+        width: 15px
+        height: 15px
+        padding: 0
+        vertical-align: middle
+        margin: -2px 0 1px 0
+      input[type="radio"]:focus
+        outline: 0
+      textarea
+        resize: none
+        width: 800px
+        font-size: 14px
+        border-radius: 10px
+      textarea:focus
+        border: 1px solid #52abf3
+        outline: 0
+      .field
+        line-height: 50px
+      .radio-options
+        margin-left: 60px
+        margin-right: 32px
+      .topic, .question
+        text-align: left
+        padding-left: 100px
+      .submit-btn
+        width: 200px;
+        height: 45px;
+        border-radius: 10px;
+        border: 1px solid #52abf3;
+        background-color: #52abf3;
+        color: #fff;
+        font-size: 14px;
+      .submit-btn:disabled
+        border: 1px solid #e2e2e2;
+        background-color: #a2a2a2;
 </style>
