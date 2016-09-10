@@ -49,7 +49,6 @@ export default [
       section: '学术水平测试',
       class:   'ac-test',
       fields:  [
-        P(TESTS.BACKGROUND, 'topic'),
         ...TEST_FORM
       ]
     }

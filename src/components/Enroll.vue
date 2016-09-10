@@ -265,7 +265,7 @@
           margin-right: 32px
         .topic, .question
           text-align: left
-          padding-left: 100px
+          padding: 0 100px
         .submit-btn
           width: 200px;
           height: 45px;
