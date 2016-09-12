@@ -60,8 +60,8 @@
 </template>
 
 <style lang="stylus">
-  *[busy]
-    cursor: progress !important
+  @import "../../styles/busy";
+  @import "../../styles/tab-list";
   .lr
     display: flex
     flex-direction: row

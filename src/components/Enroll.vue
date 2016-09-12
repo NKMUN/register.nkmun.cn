@@ -190,8 +190,9 @@
 </script>
 
 <style lang="stylus">
-  *[busy]
-    cursor: progress !important
+  @import "../styles/form";
+  @import "../styles/busy";
+
   .enroll
     position: relative
     height: 100%
@@ -199,6 +200,8 @@
     padding: 100px 0
     background: url("../assets/form_background.jpg") no-repeat fixed top
     background-size: 100% 100%
+    .container
+      font-size: 14px
     .form-area
       width: 1200px;
       margin: auto
@@ -213,74 +216,11 @@
         p
           text-align: left
           padding-left: 100px
-      form
-        margin-bottom: 40px
-        .field-name
-          display: inline-block
-          width: 64px
-          text-align: right
-          margin-right: 15px
-        input, textarea
-          &.touched.invalid
-            border: 1px solid #fb2f53
-          &.touched.valid
-            border: 1px solid #2ec522
-        .section 
-          border-top: 1px solid #bdbdbd
-          margin: 20px 100px
-          &:first-child
-            border-top: none
-        .ac-test
-          .topic
-            opacity: .5
-        .container
-          font-size: 14px
-        input[type="text"], input[type="number"], .radio-group
-          display: inline-block
-          height: 20px
-          width: 220px
-          padding: 5px 30px 5px 8px
-          margin: 5px
-          line-height: normal
-        input[type="text"], input[type="number"]
-          border: 1px solid #aaa
-          border-radius: 8px
-        input[type="text"]:focus, input[type="number"]:focus
-          border: 1px solid #52abf3
-          outline: 0
-        input[type="radio"]
-          width: 15px
-          height: 15px
-          padding: 0
-          vertical-align: middle
-          margin: -2px 0 1px 0
-        input[type="radio"]:focus
-          outline: 0
-        textarea
-          resize: none
-          width: 800px
-          font-size: 14px
-          border-radius: 10px
-        textarea:focus
-          border: 1px solid #52abf3
-          outline: 0
-        .field
-          line-height: 50px
-        .radio-options
-          display: inline-block
-          margin:  0 32px
+    form
+      .section.ac-test
+        .topic
+          opacity: .5
         .topic, .question
           text-align: left
           padding: 0 100px
-        .submit-btn
-          width: 200px;
-          height: 45px;
-          border-radius: 10px;
-          border: 1px solid #52abf3;
-          background-color: #52abf3;
-          color: #fff;
-          font-size: 14px;
-        .submit-btn:disabled
-          border: 1px solid #e2e2e2;
-          background-color: #a2a2a2;
 </style>

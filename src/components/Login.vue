@@ -48,8 +48,7 @@
 </template>
 
 <style lang="stylus">
-  *[busy]
-    cursor: progress !important
+  @import "../styles/busy";
 </style>
 
 <script>

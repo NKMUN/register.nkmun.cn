@@ -33,6 +33,7 @@
 </template>
 
 <style lang="stylus">
+  @import "../styles/busy";
   .tab-name
     cursor: pointer
 </style>
