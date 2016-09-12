@@ -86,6 +86,7 @@
   import getResponseMessage from '../lib/guess-response-message'
   import FORM from '../def/enroll-form'
   import validators from '../lib/validators'
+  import { forgetForm, storeForm, restoreForm, resetForm } from '../lib/vue-persistent-form'
 
   export default {
     validators,
@@ -102,13 +103,14 @@
     },
     methods: {
       nop() {},
+      forgetForm, storeForm, restoreForm, resetForm,
       submit() {
         this.busy = true
         this.$http.post('enroll', new FormData(this.$els.form))
         .then( (res) => {
           this.busy = false
-          this.$els.form.reset()
-          this.clearStore()
+          this.resetForm()
+          this.forgetForm()
           this.$router.replace('/enroll/success')
         })
         .catch( (res) => {
@@ -123,52 +125,8 @@
           }
         })
       },
-      getStore() {
-        let store = window.localStorage
-        if (store)
-          return store
-        else
-          return {    // no-op store
-            getItem() { return null },
-            setItem() {},
-            removeItem() {}
-          }
-      },
-      getFields() {
-        return Array.prototype.slice.call( this.$els.form.querySelectorAll('input, textarea') )
-               .map( $ => $.id || $.name || $.field )
-      },
-      clearStore() {
-        this.clear = true
-        let store = this.getStore()
-        this.getFields()
-        .forEach( key => store.removeItem(this.SIG + key) )
-      },
-      storeForm() {
-        if (this.clear)
-          return false
-        let form = this.$els.form
-        let store = this.getStore()
-        this.getFields()
-        .forEach( key => store.setItem(this.SIG + key, form[key].value) )
-      },
-      restoreForm() {
-        this.clear = false
-        let form = this.$els.form
-        let store = this.getStore()
-        form.reset()
-        this.getFields()
-        .forEach( key => {
-          let val = store.getItem(this.SIG + key)
-          if (val) {
-            form[key].value = val
-            this.$validate(key, true)
-          }
-        })
-      }
     },
     ready() {
-      // LT-TODO: pull ac-test data from server
       this.restoreForm()
     },
     beforeDestroy() {
