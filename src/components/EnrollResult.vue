@@ -43,6 +43,9 @@
   import getResponseMessage from '../lib/guess-response-message'
 
   export default {
+    created() {    // bind private, non-reactive data
+      this.groups = COMMITTEE_GROUPS
+    },
     data() {
       return {
         busy:    true,
@@ -50,7 +53,6 @@
         error:   null,
         schools: [],
         tab:     COMMITTEE_GROUPS[0].id,
-        groups:  COMMITTEE_GROUPS
       }
     },
     ready() {

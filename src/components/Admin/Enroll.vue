@@ -93,7 +93,9 @@
     let msg = getResponseMessage(res)
   }
 
-  function extractCollectedField(section) {
+  function extractCollectedField(_section) {
+    // shallow copy section definition
+    let section = Object.assign({}, _section)
     section.fields = section.fields.filter( ({tag}) => tag!=='p' && tag!=='html')
     return section
   }
@@ -105,14 +107,16 @@
   }
 
   export default {
+    created() {    // bind private, non-reactive data
+      this.test = false    // debug flag
+      this.form = FORM.map( extractCollectedField ),    // form generation data
+      this.committeeMapping = COMMITTEE                 // committee allocation
+    },
     data() {
       return {
-        test: false,
         busy: true,
         list: [],
         dirty: false,
-        form: FORM.map( extractCollectedField ),
-        committeeMapping: COMMITTEE,
         active: '',
         activeEntry: {},
         committee: {}

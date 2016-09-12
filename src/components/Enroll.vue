@@ -99,12 +99,14 @@
         return re_en_name.test(str)
       }
     },
+    created() {    // bind private, non-reactive data
+      this.test = true      // debug flag
+      this.form = FORM      // form generation data
+      this.SIG = 'enroll_'  // form signature
+    },
     data() {
       return {
-        SIG: 'enroll_',   // form signature
-        // test: true,    // debug flag
         busy: false,
-        form: FORM,
         clear: false      // clear store flag
       }
     },
