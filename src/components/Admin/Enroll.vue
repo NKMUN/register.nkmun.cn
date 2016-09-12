@@ -83,7 +83,7 @@
 </style>
 
 <script>
-  import FORM from '../../def/enroll-form'
+  import {review as FORM} from '../../def/enroll-form'
   import COMMITTEE from '../../def/committee'
   import getResponseMessage from '../../lib/guess-response-message'
 
@@ -91,13 +91,6 @@
     console.log(res)
     // TODO: complain about error
     let msg = getResponseMessage(res)
-  }
-
-  function extractCollectedField(_section) {
-    // shallow copy section definition
-    let section = Object.assign({}, _section)
-    section.fields = section.fields.filter( ({tag}) => tag!=='p' && tag!=='html')
-    return section
   }
 
   function defaultCommittee() {
@@ -109,8 +102,8 @@
   export default {
     created() {    // bind private, non-reactive data
       this.test = false    // debug flag
-      this.form = FORM.map( extractCollectedField ),    // form generation data
-      this.committeeMapping = COMMITTEE                 // committee allocation
+      this.form = FORM     // form generation data
+      this.committeeMapping = COMMITTEE    // committee allocation
     },
     data() {
       return {
