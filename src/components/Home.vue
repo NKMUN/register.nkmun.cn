@@ -2,7 +2,8 @@
   <div class="main">
     <div class="section">
       <nav>
-        <a @click="$router.go('enroll')">报名</a>
+        <a @click="$router.go('/enroll')">报名</a>
+        <a @click="$router.go('/enroll/result')">报名结果</a>
         <a >领队注册</a>
         <a ></a>
       </nav>

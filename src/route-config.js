@@ -10,6 +10,9 @@
     '/enroll/success': {
       component: require('./components/EnrollSuccess.vue')
     },
+    '/enroll/result': {
+      component: require('./components/EnrollResult.vue')
+    },
     '/login': {
       component: require('./components/Login.vue')
     },

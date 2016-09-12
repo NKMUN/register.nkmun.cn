@@ -1,19 +1,33 @@
-const L = (name, dbId) => ({name, dbId}) 
+const G = (name, id, ...keys) => ({name, id, keys})
+const L = (name, dbId) => ({name, dbId})
 
-export default [
-  L('中文会场1', 'loc_a'),
-  L('中文会场2', 'loc_b'),
-  L('中文会场3', 'loc_c'),
-  L('中文会场4', 'loc_d'),
-  L('中国系统1', 'loc_e'),
-  L('中国系统2', 'loc_f'),
-  L('中国系统3', 'loc_g'),
-  L('英文会场1', 'loc_h'),
-  L('英文会场2', 'loc_i'),
-  L('英文会场3', 'loc_j'),
-  L('英文会场4', 'loc_k'),
-  L('英文会场5', 'loc_l'),
-  L('媒体团队', 'loc_m'),
-  L('商赛', 'loc_n'),
-  L('联动体系', 'loc_o'),
+const committees = [
+  G('中文', 'cn',
+    L('中文会场1', 'loc_cn_1'),
+    L('中文会场2', 'loc_cn_2'),
+    L('中文会场3', 'loc_cn_3'),
+    L('中文会场4', 'loc_cn_4'),
+    L('中国系统1', 'loc_cs_1'),
+    L('中国系统2', 'loc_cs_2'),
+    L('中国系统3', 'loc_cs_3'),
+  ),
+  G('英文', 'en',
+    L('英文会场1', 'loc_en_1'),
+    L('英文会场2', 'loc_en_2'),
+    L('英文会场3', 'loc_en_3'),
+    L('英文会场4', 'loc_en_4'),
+    L('英文会场5', 'loc_en_5'),
+  ),
+  G('其他', 'etc',
+    L('媒体团队',  'loc_media'),
+    L('商赛',     'loc_biz'),
+    L('联动体系',  'loc_link'),
+  )
 ]
+
+function ungroupCommittees(groups) {
+  return groups.map( $=>$.keys ).reduce( (l,r)=>[...l, ...r] )
+}
+
+export default ungroupCommittees(committees)
+export const groups = committees
