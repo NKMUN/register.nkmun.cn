@@ -1,5 +1,13 @@
 const G = (name, id, ...keys) => ({name, id, keys})
 const L = (name, dbId) => ({name, dbId})
+import {mergeArray} from './_utilities'
+function ungroupCommittees(groups) {
+  return groups.map( $=>$.keys ).reduce( mergeArray )
+}
+
+/*
+ * Define committees below
+ */
 
 const committees = [
   G('中文', 'cn',
@@ -24,10 +32,6 @@ const committees = [
     L('联动体系',  'loc_link'),
   )
 ]
-
-function ungroupCommittees(groups) {
-  return groups.map( $=>$.keys ).reduce( (l,r)=>[...l, ...r] )
-}
 
 export default ungroupCommittees(committees)
 export const groups = committees
