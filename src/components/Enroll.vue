@@ -15,7 +15,7 @@
       </div>
 
       <validator name='prereg'>
-        <form id="enroll" v-el:form novalidate autocomplete="on" enctype="application/x-www-form-urlencoded">
+        <form id="enroll" v-el:form novalidate autocomplete="on">
 
           <div class="section {{$.class}}" v-for="$ in form">
 
