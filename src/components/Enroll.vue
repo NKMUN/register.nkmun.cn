@@ -36,17 +36,19 @@
 
               <label v-if="_.tag === 'radio'">
                 <span class="field-name">{{_.name}}</span>
-                <label class="radio-options" v-for="r in _.opts">
-                  <input 
-                    type="radio"
-                    :name="_.dbId"
-                    :field="_.dbId"
-                    :value="r.val"
-                    v-validate="_.validate"
-                    :disabled="busy"
-                  ></input>
-                  {{r.text}}
-                </label>
+                <div class="radio-group">
+                  <label class="radio-options" v-for="r in _.opts">
+                    <input
+                      type="radio"
+                      :name="_.dbId"
+                      :field="_.dbId"
+                      :value="r.val"
+                      v-validate="_.validate"
+                      :disabled="busy"
+                    ></input>
+                    {{r.text}}
+                  </label>
+                </div>
               </label>
 
               <template v-if="_.tag === 'textarea'">
@@ -233,14 +235,16 @@
             opacity: .5
         .container
           font-size: 14px
-        input[type="text"], input[type="number"]
+        input[type="text"], input[type="number"], .radio-group
+          display: inline-block
           height: 20px
           width: 220px
-          padding: 5px 8px
+          padding: 5px 30px 5px 8px
           margin: 5px
+          line-height: normal
+        input[type="text"], input[type="number"]
           border: 1px solid #aaa
           border-radius: 8px
-          padding-right: 30px
         input[type="text"]:focus, input[type="number"]:focus
           border: 1px solid #52abf3
           outline: 0
@@ -263,8 +267,8 @@
         .field
           line-height: 50px
         .radio-options
-          margin-left: 60px
-          margin-right: 32px
+          display: inline-block
+          margin:  0 32px
         .topic, .question
           text-align: left
           padding: 0 100px
