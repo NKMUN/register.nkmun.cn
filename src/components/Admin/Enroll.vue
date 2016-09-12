@@ -85,14 +85,12 @@
 <script>
   import FORM from '../../def/enroll-form'
   import COMMITTEE from '../../def/committee'
+  import getResponseMessage from '../../lib/guess-response-message'
 
   function complainError(res, vm) {
     console.log(res)
-    if (res instanceof Error) {
-      // TODO: something wrong during process
-    }else{
-      // complain about connection error
-    }
+    // TODO: complain about error
+    let msg = getResponseMessage(res)
   }
 
   function extractCollectedField(section) {
