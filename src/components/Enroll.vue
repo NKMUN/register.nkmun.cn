@@ -193,15 +193,14 @@
   @import "../styles/form";
   @import "../styles/busy";
 
-  .enroll
+  .container.enroll
+    font-size: 14px
     position: relative
     height: 100%
     width: 100%
     padding: 100px 0
     background: url("../assets/form_background.jpg") no-repeat fixed top
     background-size: 100% 100%
-    .container
-      font-size: 14px
     .form-area
       width: 1200px;
       margin: auto
