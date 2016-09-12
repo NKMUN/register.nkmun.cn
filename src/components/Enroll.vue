@@ -86,12 +86,13 @@
   import getResponseMessage from '../lib/guess-response-message'
   import FORM from '../def/enroll-form'
   import validators from '../lib/validators'
+  import TEST_FLAG from '../directives/test-flag'
   import { forgetForm, storeForm, restoreForm, resetForm } from '../lib/vue-persistent-form'
 
   export default {
     validators,
     created() {    // bind private, non-reactive data
-      this.test = true      // debug flag
+      this.test = TEST_FLAG // debug flag
       this.form = FORM      // form generation data
       this.SIG = 'enroll_'  // form signature
     },

@@ -86,6 +86,7 @@
   import {review as FORM} from '../../def/enroll-form'
   import COMMITTEE from '../../def/committee'
   import getResponseMessage from '../../lib/guess-response-message'
+  import TEST_FLAG from '../../directives/test-flag'
 
   function complainError(res, vm) {
     console.log(res)
@@ -101,7 +102,7 @@
 
   export default {
     created() {    // bind private, non-reactive data
-      this.test = false    // debug flag
+      this.test = TEST_FLAG    // debug flag
       this.form = FORM     // form generation data
       this.committeeMapping = COMMITTEE    // committee allocation
     },
