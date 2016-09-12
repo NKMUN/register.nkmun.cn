@@ -11,7 +11,12 @@
     </div>
     <div v-if="loaded">
       <ul class="tab-list">
-        <li v-for="group in groups" class="tab-name" @click.prevent="tab = group.id">{{group.name}}</li>
+        <li 
+          v-for="group in groups" 
+          class="tab-name"
+          @click.prevent="tab = group.id"
+          :active="group.id === tab"
+        >{{group.name}}</li>
       </ul>
       <div v-for="group in groups">
         <table :data-tab="group.id" v-show="tab === group.id">
