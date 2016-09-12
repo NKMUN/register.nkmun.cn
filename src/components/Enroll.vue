@@ -84,23 +84,11 @@
 
 <script>
   import getResponseMessage from '../lib/guess-response-message'
-  import EmailRegex from 'email-regex'
   import FORM from '../def/enroll-form'
-  const re_email = EmailRegex({exact: 'true'})
-  const re_en_name = /[a-zA-Z0-9_\- .,]/
+  import validators from '../lib/validators'
 
   export default {
-    validators: {
-      phone(str) {
-        return /1[34578]\d{9}/.test(str)
-      },
-      email(str) {
-        return re_email.test(str)
-      },
-      enName(str) {
-        return re_en_name.test(str)
-      }
-    },
+    validators,
     created() {    // bind private, non-reactive data
       this.test = true      // debug flag
       this.form = FORM      // form generation data
