@@ -1,5 +1,5 @@
 <template>
-  <div :busy="busy">
+  <div class="container login" :busy="busy">
     <h3>登录</h3>
 
     <div v-if="tryStored">

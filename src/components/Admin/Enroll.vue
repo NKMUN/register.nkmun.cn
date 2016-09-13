@@ -1,5 +1,5 @@
 <template>
-  <div class="lr" :busy="busy">
+  <div class="container admin_enroll lr" :busy="busy">
     <ul class="list selection left">
       <li 
         v-for="entry in list" 
@@ -62,7 +62,7 @@
 <style lang="stylus">
   @import "../../styles/busy";
   @import "../../styles/tab-list";
-  .lr
+  .admin_enroll
     display: flex
     flex-direction: row
     flex-wrap: nowrap
@@ -74,12 +74,29 @@
     &[active]
       font-weight: bolder
   table tbody
+    h4
+      text-align: left
     td
-      &:first-child 
-        text-align: left
+      text-align: left
+      &:first-child
+        width: 20%
         vertical-align: top
       pre
         margin: 0
+        width: 80%
+        word-break: break-word
+        word-wrap: break-word
+        white-space: pre-line
+  .committee
+    text-align: left
+    .field
+      span
+        text-align: center
+        display: inline-block
+        width: 80px
+      .quota
+        width: 30px
+        text-align: right
 </style>
 
 <script>

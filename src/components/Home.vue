@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="container home">
     <div class="section">
       <nav>
         <a @click="$router.go('/enroll')">报名</a>

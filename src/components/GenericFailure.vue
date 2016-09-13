@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container generic_failure">
     <h3>错误</h3>
     <p>{{$route.query.status}} / {{$route.query.message}}</p>
   </div>

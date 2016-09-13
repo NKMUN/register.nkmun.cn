@@ -1,5 +1,5 @@
 <template>
-  <div :busy="busy">
+  <div class="container registration" :busy="busy">
     <h3>领队注册</h3>
 
     <form novalidate>

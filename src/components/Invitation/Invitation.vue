@@ -1,6 +1,6 @@
 <template>
-  <div :busy="busy">
-    <h3>Welcome to NKMUN</h3>
+  <div class="container invitation" :busy="busy">
+    <h3>Hi汇文</h3>
     <form novalidate>
       <div class="field invitation">
         <div class="section invitation">

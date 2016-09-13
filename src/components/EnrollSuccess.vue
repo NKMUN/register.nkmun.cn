@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container enroll_success">
     <h3>预报名成功</h3>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div :busy="busy">
+  <div class="container disclaimer" :busy="busy">
     <h3>责任条款</h3>
     <div v-if="!disclaimer">
       正在载入责任条款
