@@ -71,7 +71,7 @@
 
           <button
             class="submit-btn"
-            :disabled=" !test && ($prereg.invalid || busy)"
+            :disabled="!test && ($prereg.invalid || busy)"
             :busy="busy"
             @click.prevent="!busy ? submit() : nop()"
           >提交
@@ -95,11 +95,11 @@
       this.test = TEST_FLAG // debug flag
       this.form = FORM      // form generation data
       this.SIG = 'enroll_'  // form signature
+      this.clear = false    // clear store flag
     },
     data() {
       return {
-        busy: false,
-        clear: false      // clear store flag
+        busy: false
       }
     },
     methods: {
