@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :busy="busy">
     <h3>责任条款</h3>
     <div v-if="!disclaimer">
       正在载入责任条款
@@ -22,15 +22,16 @@
 </template>
 
 <style lang="stylus">
+  @import "../../styles/busy" 
 </style>
 
 <script>
   import Vue from "vue"
   import getResponseMessage from "../../lib/guess-response-message" 
   export default {
-    props: ['busy'],
     data() {
       return {
+        busy: true,
         disclaimer: null,
         agreed: false
       }
@@ -38,7 +39,10 @@
     methods: {
       nop() {},
       next() {
-        this.$router.replace('registration')
+        this.$router.replace({
+          path:  'registration',
+          query: this.$route.query
+        })
       }
     },
     ready() {

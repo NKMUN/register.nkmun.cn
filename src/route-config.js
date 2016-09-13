@@ -13,6 +13,18 @@
     '/enroll/result': {
       component: require('./components/EnrollResult.vue')
     },
+    '/invitation': {
+      component: require('./components/Invitation/Invitation.vue')
+    },
+    '/invitation/disclaimer': {
+      component: require('./components/Invitation/Disclaimer.vue')
+    },
+    '/invitation/registration': {
+      component: require('./components/Invitation/Registration.vue')
+    },
+    '/invitation/success': {
+      component: require('./components/Invitation/Success.vue')
+    },
     '/login': {
       component: require('./components/Login.vue')
     },
