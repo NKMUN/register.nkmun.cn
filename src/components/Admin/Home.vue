@@ -1,5 +1,5 @@
 <template>
-  <div class="container admin_home">
+  <div class="container admin-home">
     <div class="menu lr">
       <div class="banner">组委后台</div>
       <nav>
@@ -12,7 +12,7 @@
 
 <style lang="stylus">
   @import "../../styles/flex-lr";
-  .admin_home
+  .admin-home
     .menu
       position: relative
       background: #52abf3

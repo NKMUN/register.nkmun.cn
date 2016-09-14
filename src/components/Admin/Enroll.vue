@@ -1,5 +1,5 @@
 <template>
-  <div class="container admin_enroll lr" :busy="busy">
+  <div class="container admin-enroll lr" :busy="busy">
     <ul class="list selection left">
       <li 
         v-for="entry in list" 
@@ -63,7 +63,7 @@
   @import "../../styles/busy";
   @import "../../styles/tab-list";
   @import "../../styles/flex-lr";
-  .admin_enroll
+  .admin-enroll
     .selection
       margin-right: 4ch
       li

@@ -1,5 +1,5 @@
 <template>
-  <div class="container enroll_result" :busy="busy">
+  <div class="container enroll-result" :busy="busy">
     <h3>预报名结果</h3>
     <div v-if="busy">
       正在载入...
