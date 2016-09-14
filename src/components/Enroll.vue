@@ -32,6 +32,7 @@
                   v-validate="_.validate"
                   :disabled="busy"
                 ></input>
+                <span class="hint"></span>
               </label>
 
               <label v-if="_.tag === 'radio'">

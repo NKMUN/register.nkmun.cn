@@ -10,10 +10,20 @@ form
       border-top: none
 
   input, textarea
+    &~.hint
+      position: relative
+      &:after
+        position: absolute
     &.touched.invalid
       border: 1px solid #fb2f53
+      &~.hint:after
+        color: #fb2f53
+        content: "×"
     &.touched.valid
       border: 1px solid #2ec522
+      &~.hint:after
+        color: #2ec522
+        content: "√"
 
   .field
     line-height: 50px
