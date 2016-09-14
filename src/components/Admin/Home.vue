@@ -14,23 +14,26 @@
   @import "../../styles/flex-lr";
   .admin-home
     .menu
-      position: relative
       background: #52abf3
       color: #fff
       width: 100%
       height: 60px
       line-height: 60px
+      border-bottom: 1px solid #52abf3
       .banner
         font-weight: bold
         width: 100px
         text-align: center
+        font-size: 20px
+        margin: 0 15px
       nav
         a
           display: inline-block
+          height: 55px
           font-size: 18px
           margin: 0 15px
-        &[active]
-          /* TODO: active background color */
+          &[active]
+            border-bottom: 5px solid #fff
 </style>
 
 <script>

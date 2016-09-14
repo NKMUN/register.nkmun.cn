@@ -1,6 +1,7 @@
 <template>
   <div class="container admin-enroll lr" :busy="busy">
     <ul class="list selection left">
+      <span>学校列表</span>
       <li 
         v-for="entry in list" 
         :active="active === entry.id" 
@@ -64,10 +65,24 @@
   @import "../../styles/tab-list";
   @import "../../styles/flex-lr";
   .admin-enroll
+    align-items: stretch
     .selection
-      margin-right: 4ch
+      margin: 0 4ch 0 0
+      padding: 16px 10px
+      font-size: 14px
+      line-height: 24px
+      background: #293038
+      color: #fff
+      list-style: none
+      span
+        display: block
+        font-size: 18px
+        text-align: center
+        margin-bottom: 5px
       li
         cursor: pointer
+        margin-bottom: 5px
+        padding: 0 10px
       &[active]
         font-weight: bolder
     table tbody
