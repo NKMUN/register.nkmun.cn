@@ -1,32 +1,36 @@
 <template>
   <div class="container admin_home">
-    <nav class="menu">
-      <a>组委后台</a>
-      <a :active="active === 'enroll'" @click="go('enroll')">预报名审核</a>
-    </nav>
+    <div class="menu lr">
+      <div class="banner">组委后台</div>
+      <nav>
+        <a :active="active === 'enroll'" @click="go('enroll')">预报名审核</a>
+      </nav>
+    </div>
     <router-view></router-view>
   </div>
 </template>
 
 <style lang="stylus">
+  @import "../../styles/flex-lr";
   .admin_home
     .menu
       position: relative
-      list-style: none
       background: #52abf3
       color: #fff
       width: 100%
       height: 60px
-      a:nth-child(1)
+      line-height: 60px
+      .banner
         font-weight: bold
         width: 100px
         text-align: center
-      a
-        display: inline-block
-        height: 60px
-        line-height: 60px
-        font-size: 18px
-        margin: 0 15px
+      nav
+        a
+          display: inline-block
+          font-size: 18px
+          margin: 0 15px
+        &[active]
+          /* TODO: active background color */
 </style>
 
 <script>

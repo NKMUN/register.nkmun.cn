@@ -62,41 +62,38 @@
 <style lang="stylus">
   @import "../../styles/busy";
   @import "../../styles/tab-list";
+  @import "../../styles/flex-lr";
   .admin_enroll
-    display: flex
-    flex-direction: row
-    flex-wrap: nowrap
-    align-items: flex-start
-    justify-content: flex-start
-  .list.selection
-    li
-      cursor: pointer
-    &[active]
-      font-weight: bolder
-  table tbody
-    h4
+    .selection
+      margin-right: 4ch
+      li
+        cursor: pointer
+      &[active]
+        font-weight: bolder
+    table tbody
+      h4
+        text-align: left
+      td
+        text-align: left
+        &:first-child
+          width: 20%
+          vertical-align: top
+        pre
+          margin: 0
+          width: 80%
+          word-break: break-word
+          word-wrap: break-word
+          white-space: pre-line
+    .committee
       text-align: left
-    td
-      text-align: left
-      &:first-child
-        width: 20%
-        vertical-align: top
-      pre
-        margin: 0
-        width: 80%
-        word-break: break-word
-        word-wrap: break-word
-        white-space: pre-line
-  .committee
-    text-align: left
-    .field
-      span
-        text-align: center
-        display: inline-block
-        width: 80px
-      .quota
-        width: 30px
-        text-align: right
+      .field
+        span
+          text-align: center
+          display: inline-block
+          width: 80px
+        .quota
+          width: 30px
+          text-align: right
 </style>
 
 <script>
