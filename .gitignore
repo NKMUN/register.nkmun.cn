@@ -1,4 +1,6 @@
 .DS_Store
+*.doc
+*.docx
 node_modules/
 dist/
 npm-debug.log
