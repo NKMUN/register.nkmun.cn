@@ -13,7 +13,17 @@
 <style lang="stylus">
   @import "../../styles/flex-lr";
   .admin-home
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    justify-content: flex-start
+    height: 100vh
+    .container
+      flex-grow: 1
+      width: 100%
     .menu
+      flex-grow: 0
+      flex-shrink: 0
       background: #52abf3
       color: #fff
       width: 100%
@@ -41,7 +51,12 @@
     data() {
       return {
         test:   false,
-        active: '' 
+      }
+    },
+    computed: {
+      active() {
+        if (this.$route.matched[1])
+          return this.$route.matched[1].handler.path.match(/[^/]+/)[0]
       }
     },
     methods: {

@@ -66,9 +66,14 @@
   @import "../../styles/flex-lr";
   .admin-enroll
     align-items: stretch
+    .details, .selection
+      overflow-x: initial
+      overflow-y: scroll
+    .details
+      flex-grow: 1
     .selection
       margin: 0 4ch 0 0
-      padding: 16px 10px
+      padding: 16px 14px 16px 10px
       font-size: 14px
       line-height: 24px
       background: #293038
