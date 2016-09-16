@@ -147,10 +147,10 @@
     height: 100%
     width: 100%
     padding: 100px 0
-    background: url("../assets/form_background.jpg") no-repeat fixed top
+    background: url("../assets/images/form_background.jpg") no-repeat fixed top
     background-size: 100% 100%
     .form-area
-      width: 1200px;
+      width: 80%
       margin: auto
       text-align: center
       border: 1px solid #fff

@@ -1,6 +1,6 @@
 <template>
   <div class="container login" :busy="busy">
-    <h3>登录</h3>
+    <h2>登录</h2>
 
     <div v-if="tryStored">
       <h4>正在登录</h4>
@@ -8,25 +8,22 @@
 
     <div v-if="!tryStored">
       <form novalidate v-el:form enctype="application/x-www-form-urlencoded">
-
         <div class="field">
           <label>
-            <span>用户</span>
-            <input name="user" type="text" :disabled="busy"></input>
+            <input name="user" type="text" :disabled="busy" placeholder="请输入邮箱帐号"></input>
           </label>
         </div>
 
         <div class="field">
           <label>
-            <span>密码</span>
-            <input name="password" type="password" :disabled="busy"></input>
+            <input name="password" type="password" :disabled="busy" placeholder="请输入密码"></input>
           </label>
         </div>
 
         <div class="field ctrl">
           <label>
-            <span>记住我</span>
             <input id="remember-credential" type="checkbox" v-model="remember" :disabled="busy"></input>
+            <span>记住我</span>
           </label>
         </div>
 
@@ -37,6 +34,7 @@
       </div>
 
       <button
+        class="login-btn"
         :disabled="!test && (busy)"
         :busy="busy"
         @click.prevent="login"
@@ -48,6 +46,34 @@
 
 <style lang="stylus">
   @import "../styles/busy";
+  .login
+    form
+      margin: 0
+    h2
+      padding-left: 90px
+      letter-spacing: 25px
+    input[type="text"], input[type="password"]
+      margin: 0
+    input[type="checkbox"]
+      width: 14px
+      height: 14px
+      vertical-align: middle
+      margin: 0 0 2px 0
+    .login-btn
+        display: block
+        width: 267px
+        height: 35px
+        border-radius: 8px
+        border: 1px solid #52abf3
+        background-color: #52abf3
+        color: #fff
+        font-size: 14px
+        margin-bottom: 15px
+        padding-left: 10px
+        letter-spacing: 15px
+        &:disabled
+          border: 1px solid #e2e2e2
+          background-color: #a2a2a2
 </style>
 
 <script>

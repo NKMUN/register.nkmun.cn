@@ -43,6 +43,7 @@
           height: 55px
           font-size: 18px
           margin: 0 15px
+          cursor: pointer
           &[active]
             border-bottom: 5px solid #fff
 </style>
