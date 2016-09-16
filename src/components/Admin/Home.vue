@@ -4,6 +4,7 @@
       <div class="banner">组委后台</div>
       <nav>
         <a :active="active === 'enroll'" @click="go('enroll')">预报名审核</a>
+        <logout-btn></logout-btn>
       </nav>
     </div>
     <router-view></router-view>
@@ -47,7 +48,11 @@
 </style>
 
 <script>
+  import Logout from '../Logout'
   export default {
+    components: {
+      'logout-btn': Logout
+    },
     data() {
       return {
         test:   false,

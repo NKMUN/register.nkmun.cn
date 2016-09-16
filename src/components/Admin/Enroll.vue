@@ -114,6 +114,7 @@
   import TEST_FLAG from '../../directives/test-flag'
 
   function complainError(res, vm) {
+    vm.busy = false
     console.log(res)
     // TODO: complain about error
     let msg = getResponseMessage(res)
@@ -157,16 +158,15 @@
           committee: this.committee
         }
         return this.$http.post('enroll/'+this.active+'?update=1', payload)
-                .catch( (res) => complainError(res, this) )
                 .then( (res) => {
                   this.busy = false
                   this.dirty = false
                 })
+                .catch( (res) => complainError(res, this) )
       },
       load(id) {
         this.busy = true
         return this.$http.get('enroll/'+id)
-                   .catch( (res) => complainError(res, this) )
                    .then( (res) => {
                      console.log(res)
                      this.busy = false
@@ -175,6 +175,7 @@
                      this.committee = this.activeEntry.committee || defaultCommittee()
                      this.dirty = false
                    })
+                   .catch( (res) => complainError(res, this) )
       },
       edit(id) {
         this.busy = true
@@ -188,11 +189,11 @@
     ready() {
       this.busy = true
       this.$http.get('enroll')
-      .catch( (res) => complainError(res, this) )
       .then( (res) => {
         this.list = res.json()
         this.busy = false
       })
+      .catch( (res) => complainError(res, this) )
     }
   }
 </script>

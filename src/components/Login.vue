@@ -40,8 +40,7 @@
         :disabled="!test && (busy)"
         :busy="busy"
         @click.prevent="login"
-      >提交
-      </button>
+      >登录</button>
     </div>
 
   </div>
@@ -54,46 +53,26 @@
 <script>
   import Vue from 'vue'
   import getResponseMessage from '../lib/guess-response-message'
-  const TOKEN_KEY = '_token'
-
-  function getStoredToken() {
-    if (Vue.http.headers.common['Authorization'])
-      return Vue.http.headers.common['Authorization'].substr('Bearer '.length)
-    if (window.localStorage)
-      return window.localStorage.getItem(TOKEN_KEY)
-  }
-
-  function isTokenStored() {
-    // check if user want to store token
-    return window.localStorage && window.localStorage.getItem(TOKEN_KEY)
-  }
-
-  function setToken(token, remember = false) {
-    if (!token)
-      return clearToken()
-    Vue.http.headers.common['Authorization'] = 'Bearer '+token
-    if (remember && window.localStorage)
-      window.localStorage.setItem(TOKEN_KEY, token)
-  }
-
-  function clearToken() {
-    delete Vue.http.headers.common['Authorization']
-    if (window.localStorage)
-      window.localStorage.removeItem(TOKEN_KEY)
-  }
+  import { isTokenStored, getToken, setToken, clearToken, decodeToken } from '../lib/token-store'
+  import TEST_FLAG from '../directives/test-flag'
 
   export default {
+    props: ['busy', 'nextRoute'],
+    created() {
+      this.test = TEST_FLAG
+    },
     data() {
       return {
-        busy: false,
         tryStored: false,
         remember: false,
         wrongCred: false
       }
     },
     ready() {
+      if (this.test)
+        return
       // detect stored token
-      let token = getStoredToken()
+      let token = getToken()
       if (token) {
         // try to refresh token
         this.remember = isTokenStored()
@@ -119,9 +98,9 @@
     },
     methods: {
       loginSuccess(token) {
-        //this.$els.form.reset()
-        this.$router.replace(this.$route.query.next || '/')
         setToken(token, this.remember)
+        let {access} = decodeToken(token)
+        this.$router.replace(this.nextRoute[access] || '/')
       },
       login() {
         this.busy = true
