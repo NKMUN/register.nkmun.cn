@@ -13,26 +13,17 @@
       </li>
     </ul>
     <div class="details right" v-show="active !== ''">
-      <table>
-        <thead></thead>
-        <tbody v-for="$ in form">
-          <tr>
-            <th><h4>{{$.section}}</h4></th>
-          </tr>
-          <tr v-for="_ in $.fields">
-            <td class="field-name">{{_.name}}</td>
-            <td v-if="_.tag === 'input'">
-              <span>{{ activeEntry[_.dbId] }}</span>
-            </td>
-            <td v-if="_.tag === 'radio'">
-              <span v-for="opt in _.opts" v-if="activeEntry[_.dbId] === opt.val">{{ opt.text }}</span>
-            </td>
-            <td v-if="_.tag === 'textarea'">
-              <pre>{{ activeEntry[_.dbId] }}</pre>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-for="$ in form" class="section {{$.class}}">
+        <h4 class="heading {{$.class}}">{{$.section}}</h4>
+        <div class="field" v-for="_ in $.fields">
+          <span class="field-name">{{_.name}}</span>
+          <span class="value" v-if="_.tag === 'input'">{{ activeEntry[_.dbId] }}</span>
+          <span class="value" v-if="_.tag === 'radio'">
+            <template v-for="opt in _.opts" v-if="activeEntry[_.dbId] === opt.val">{{ opt.text }}</template>
+          </span>
+          <pre class="value" v-if="_.tag === 'textarea'">{{ activeEntry[_.dbId] }}</pre>
+        </div>
+      </div>
 
       <div class="committee">
         <h4>分配名额</h4>
