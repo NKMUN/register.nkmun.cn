@@ -139,8 +139,9 @@
       setTimeout( ()=>{
         if (!this.$route.query.invitation)
           return this.$router.replace('/invitation')
+        window.scrollTo(0, 0)
+        this.restoreForm()
       }, 0)
-      this.restoreForm()
     },
     beforeDestroy() {
       this.storeForm()
