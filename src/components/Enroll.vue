@@ -80,18 +80,18 @@
       </validator>
     </div>
 
-    <overlay-modal v-if="success">
+    <overlay-modal v-if="success" class="modal-success">
       <h3 slot="caption">预报名成功</h3>
       <p slot="content">
-        组委已收到您提交的报名表，将于审核后向您的邮箱发送邮件通知学测结果，请静候佳音。
+        组委已收到您提交的报名表，将于审核后通过邮件向您通知学测结果以及后续事项，请静候佳音。
       </p>
       <div slot="button">
         <button @click.prevent="$router.replace('/')">返回主页</button>
       </div>
     </overlay-modal>
 
-    <overlay-modal v-if="error">
-      <h3 slot="caption">Oops。出错了</h3>
+    <overlay-modal v-if="error" class="modal-error">
+      <h3 slot="caption">看上去有哪里出错了</h3>
       <div slot="content">
         <p>{{error}}</p>
       </div>
@@ -203,4 +203,33 @@
         .topic, .question
           text-align: left
           padding: 0 100px
+    .modal-success
+      text-align: center
+      p
+        text-indent: 2em
+        text-align: justify
+        margin-bottom: 35px
+      button
+        cursor: pointer
+        width: 120px
+        height: 35px
+        border-radius: 10px
+        border: 1px solid #52abf3
+        background-color: #52abf3
+        color: #fff
+        font-size: 14px
+    .modal-error
+      text-align: center
+      p
+        text-align: center
+        margin-bottom: 35px
+      button
+        cursor: pointer
+        width: 120px
+        height: 35px
+        border-radius: 10px
+        border: 1px solid #52abf3
+        background-color: #52abf3
+        color: #fff
+        font-size: 14px
 </style>

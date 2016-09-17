@@ -30,4 +30,12 @@
     flex-direction: row
     align-items: middle
     justify-content: middle
+    .modal
+      position: absolute
+      top: 35%
+      left: 35%
+      width: 30%
+      padding: 15px
+      background-color: #fff
+      border: 1px solid #232323
 </style>
