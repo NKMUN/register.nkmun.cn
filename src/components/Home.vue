@@ -1,5 +1,9 @@
 <template>
-  <div class="container home lr">
+  <div class="banner">
+    <img src="../assets/images/hilogo.png" class="logo" alt="hilogo"/>
+    <img src="../assets/images/nklogo.png" class="logo" alt="nklogo"/>
+  </div>
+  <div class="container home lr"> 
     <div class="section left">
       <img src="../assets/images/homepic.jpg" class="homepic" alt="首页图片"/>
     </div>
@@ -9,23 +13,42 @@
         <a @click.prevent="!busy && $router.go('/enroll')">报名</a>
         <a @click.prevent="!busy && $router.go('/enroll/result')" class="hide">报名结果</a>
         <a @click.prevent="!busy && $router.go('/invitation')" class="hide">领队注册</a>
-      </nav>
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="stylus">
+  .banner
+    display: block
+    text-align: center
+    vertical-align: middle
+    width: 100vw
+    height: 80px
+    background-color: #52abf3
+    .logo
+      margin: 4px auto
+    .logo:nth-child(1)
+      padding-right: 20px
+    .logo:nth-child(2)
+      padding-left: 20px
+      border-left: 1px solid #fff
   .home
     width: 80%
     margin: auto
-    padding-top: 150px
+    padding-top: 75px
     .left
+      display: block
       width: 50%
-      height: 350px
-      padding-left: 5%
-      margin-top: 20px
+      height: 400px
+      padding: 0 5%
+      margin-top: 40px
+      .homepic
+        width: 100%
     .right
+      display: block
       width: 50%
-      height: 350px
+      height: 400px
       padding-left: 10%
       border-left: 1px solid #e3e3e3
       .hide
