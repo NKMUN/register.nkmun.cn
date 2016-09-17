@@ -7,9 +7,6 @@
     '/enroll': {
       component: require('./components/Enroll.vue'),
     },
-    '/enroll/success': {
-      component: require('./components/EnrollSuccess.vue')
-    },
     '/enroll/result': {
       component: require('./components/EnrollResult.vue')
     },

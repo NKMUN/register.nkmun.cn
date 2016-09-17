@@ -30,7 +30,7 @@
                   :field="_.dbId"
                   :placeholder="_.placeholder"
                   v-validate="_.validate"
-                  :disabled="busy"
+                  :disabled="disabled"
                 ></input>
                 <span class="hint"></span>
               </label>
@@ -45,7 +45,7 @@
                       :field="_.dbId"
                       :value="r.val"
                       v-validate="_.validate"
-                      :disabled="busy"
+                      :disabled="disabled"
                     ></input>
                     {{r.text}}
                   </label>
@@ -58,7 +58,7 @@
                   :field="_.dbId"
                   :placeholder="_.placeholder"
                   v-validate="_.validate"
-                  :disabled="busy"
+                  :disabled="disabled"
                   cols="100"
                   rows="8"
                 ></textarea>
@@ -72,14 +72,33 @@
 
           <button
             class="submit-btn"
-            :disabled="!test && ($prereg.invalid || busy)"
-            :busy="busy"
-            @click.prevent="!busy ? submit() : nop()"
+            :disabled="!test && ($prereg.invalid || disabled)"
+            @click.prevent="!disabled ? submit() : nop()"
           >提交
           </button>
         </form>
       </validator>
     </div>
+
+    <overlay-modal v-if="success">
+      <h3 slot="caption">预报名成功</h3>
+      <p slot="content">
+        组委已收到您提交的报名表，将于审核后向您的邮箱发送邮件通知学测结果，请静候佳音。
+      </p>
+      <div slot="button">
+        <button @click.prevent="$router.replace('/')">返回主页</button>
+      </div>
+    </overlay-modal>
+
+    <overlay-modal v-if="error">
+      <h3 slot="caption">Oops。出错了</h3>
+      <div slot="content">
+        <p>{{error}}</p>
+      </div>
+      <div slot="button">
+        <button @click.prevent="error = null">关闭</button>
+      </button>
+    </overlay-modal>
   </div>
 </template>
 
@@ -89,8 +108,12 @@
   import validators from '../lib/validators'
   import TEST_FLAG from '../directives/test-flag'
   import { forgetForm, storeForm, restoreForm, resetForm } from '../lib/vue-persistent-form'
+  import OverlayModal from './OverlayModal'
 
   export default {
+    components: {
+      'overlay-modal': OverlayModal
+    },
     validators,
     created() {    // bind private, non-reactive data
       this.test = TEST_FLAG // debug flag
@@ -100,7 +123,14 @@
     },
     data() {
       return {
-        busy: false
+        busy: false,
+        success: false,
+        error: null
+      }
+    },
+    computed: {
+      disabled() {
+        return this.busy || this.success || this.error
       }
     },
     methods: {
@@ -111,18 +141,16 @@
         this.$http.post('enroll', new FormData(this.$els.form))
         .then( (res) => {
           this.busy = false
-          this.resetForm()
-          this.forgetForm()
-          this.$router.replace('/enroll/success')
+          this.success = true
         })
         .catch( (res) => {
           this.busy = false
           switch (res.status) {
             case 409:
-              this.$router.go({ path: '/generic-failure', query: {status: res.status, message: '不能重复预注册'} })
+              this.error = '409 / 不能重复预注册'
             break
             default:
-              this.$router.go({ path: '/generic-failure', query: {status: res.status, message: getResponseMessage(res)} })
+              this.error = `${res.status} / ${getResponseMessage(res)}`
             break
           }
         })
@@ -132,7 +160,12 @@
       this.restoreForm()
     },
     beforeDestroy() {
-      this.storeForm()
+      if (this.success) {
+        this.resetForm()
+        this.forgetForm()
+      }else{
+        this.storeForm()
+      }
     }
   }
 </script>
