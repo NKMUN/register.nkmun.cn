@@ -40,7 +40,7 @@
     .left
       display: block
       width: 50%
-      height: 400px
+      height: 410px
       padding: 0 5%
       margin-top: 40px
       .homepic
@@ -48,7 +48,7 @@
     .right
       display: block
       width: 50%
-      height: 400px
+      height: 410px
       padding-left: 10%
       border-left: 1px solid #e3e3e3
       .hide
