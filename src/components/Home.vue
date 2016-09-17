@@ -1,7 +1,7 @@
 <template>
   <div class="banner">
-    <img src="../assets/images/hilogo.png" class="logo" alt="hilogo"/>
-    <img src="../assets/images/nklogo.png" class="logo" alt="nklogo"/>
+    <img src="../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/home' }" />
+    <img src="../assets/images/nklogo.png" class="logo" alt="nklogo" @click="officialsite" />
   </div>
   <div class="container home lr"> 
     <div class="section left">
@@ -90,6 +90,11 @@
     data() {
       return {
         busy: false
+      }
+    },
+    methods: {
+      officialsite: function () {
+        location.href='https://nkmun.cn'
       }
     }
   }
