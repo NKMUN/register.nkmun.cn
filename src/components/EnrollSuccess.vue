@@ -8,4 +8,11 @@
 </style>
 
 <script>
+  export default {
+    ready() {
+      setTimeout( () => {
+        window.scrollTo(0, 0)
+      }, 0)
+    }
+  }
 </script>
