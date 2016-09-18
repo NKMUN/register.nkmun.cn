@@ -1,5 +1,6 @@
 import * as re from './regexp'
 import IdValidator from 'id-validator'
+import isInteger from 'is-integer'
 
 let validators = {}
 
@@ -34,6 +35,10 @@ validators.password = function(str) {
 const idValidate = new IdValidator()
 validators.residenceId = function(str) {
   return idValidate.isValid(str)
+}
+
+validators.integer = function(str) {
+  return isInteger( Number(str) )
 }
 
 export default validators

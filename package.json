@@ -17,6 +17,7 @@
     "babel-runtime": "^6.0.0",
     "email-regex": "^1.0.0",
     "id-validator": "^1.2.1",
+    "is-integer": "^1.0.6",
     "jwt-decode": "^2.1.0",
     "stylus": "^0.54.5",
     "vue": "^1.0.21",
