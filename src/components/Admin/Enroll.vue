@@ -70,6 +70,8 @@
       background: #293038
       color: #fff
       list-style: none
+      overflow-y: scroll
+      overflow-x: hidden
       span
         display: block
         font-size: 18px
@@ -79,6 +81,10 @@
         cursor: pointer
         margin-bottom: 5px
         padding: 0 10px
+        max-width: 30ch
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
       &[active]
         font-weight: bolder
     table tbody
