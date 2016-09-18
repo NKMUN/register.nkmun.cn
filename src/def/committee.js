@@ -18,6 +18,7 @@ const committees = [
     L('中国系统1', 'loc_cs_1'),
     L('中国系统2', 'loc_cs_2'),
     L('中国系统3', 'loc_cs_3'),
+    L('商赛',     'loc_biz'),
   ),
   G('英文', 'en',
     L('英文会场1', 'loc_en_1'),
@@ -28,7 +29,6 @@ const committees = [
   ),
   G('其他', 'etc',
     L('媒体团队',  'loc_media'),
-    L('商赛',     'loc_biz'),
     L('联动体系',  'loc_link'),
   )
 ]

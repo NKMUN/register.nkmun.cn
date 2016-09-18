@@ -12,8 +12,9 @@ const SECTION_SCHOOL = {
   section: '学校',
   class:   'school',
   fields:  [
-    FT('中文名称', 'school',    '请输入学校中文全称',   ['required']),
-    FT('英文名称', 'school_en', '请输入学校英文全称',   ['required', 'enName'])
+    FT('中文名称', 'school',      '请输入学校中文全称',   ['required']),
+    FT('英文名称', 'school_en',   '请输入学校英文全称',   ['required', 'enName']),
+    FT('地址',     'school_addr', '请输入学校地址',      ['required'])
   ]
 }
 
