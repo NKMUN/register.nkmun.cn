@@ -25,7 +25,33 @@
             <label v-if="_.tag === 'input'" :for="_.dbId">
               <span class="field-name">{{_.name}}</span>
               <input
-                :type="_.type || 'text'"
+                type="text"
+                :name="_.dbId"
+                :field="_.dbId"
+                :placeholder="_.placeholder"
+                v-validate="_.validate"
+                :disabled="busy"
+              ></input>
+            </label>
+
+            <label v-if="_.tag === 'number'" :for="_.dbId">
+              <span class="field-name">{{_.name}}</span>
+              <input
+                type="number"
+                min="0"
+                step="1"
+                :name="_.dbId"
+                :field="_.dbId"
+                :placeholder="_.placeholder"
+                v-validate="_.validate"
+                :disabled="busy"
+              ></input>
+            </label>
+
+            <label v-if="_.tag === 'password'" :for="_.dbId">
+              <span class="field-name">{{_.name}}</span>
+              <input
+                type="password"
                 :name="_.dbId"
                 :field="_.dbId"
                 :placeholder="_.placeholder"

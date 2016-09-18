@@ -21,6 +21,7 @@
           <span class="value" v-if="_.tag === 'radio'">
             <template v-for="opt in _.opts" v-if="activeEntry[_.dbId] === opt.val">{{ opt.text }}</template>
           </span>
+          <span class="value" v-if="_.tag === 'integer'">{{ activeEntry[_.dbId] }}</span>
           <pre class="value" v-if="_.tag === 'textarea'">{{ activeEntry[_.dbId] }}</pre>
         </div>
       </div>
@@ -32,16 +33,17 @@
             <div class="field" v-for="$ in committeeMapping">
               <label>
                 <span>{{$.name}}</span>
-                <input 
-                  type="number"
+                <input-integer
+                  min="0"
+                  step="1"
                   :name="$.dbId"
                   :field="$.dbId"
+                  :placeholder="$.placeholder"
+                  :disabled="disabled"
+                  v-validate="$.validate"
                   v-model="committee[$.dbId]"
-                  @change="dirty = true"
-                  number
-                  :disabled="busy"
-                  min=0
-                ></input>
+                  @change.prevent="this.dirty = true"
+                ></input-integer>
               </label>
             </div>
           </form>
@@ -118,6 +120,7 @@
   import COMMITTEE from '../../def/committee'
   import getResponseMessage from '../../lib/guess-response-message'
   import TEST_FLAG from '../../directives/test-flag'
+  import InputInteger from '../FormInput/Integer'
 
   function complainError(res, vm) {
     vm.busy = false
@@ -133,6 +136,9 @@
   }
 
   export default {
+    components: {
+      'input-integer': InputInteger
+    },
     created() {    // bind private, non-reactive data
       this.test = TEST_FLAG    // debug flag
       this.form = FORM     // form generation data
