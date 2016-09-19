@@ -26,13 +26,27 @@
               <label v-if="_.tag === 'input'" :for="_.dbId">
                 <span class="field-name">{{_.name}}</span>
                 <input
-                  :type="_.type || 'text'"
+                  type="text"
                   :name="_.dbId"
                   :field="_.dbId"
                   :placeholder="_.placeholder"
                   v-validate="_.validate"
                   :disabled="disabled"
                 ></input>
+                <span class="hint"></span>
+              </label>
+
+              <label v-if="_.tag === 'integer'" :for="_.dbId">
+                <span class="field-name">{{_.name}}</span>
+                <input-integer
+                  min="0"
+                  step="1"
+                  :name="_.dbId"
+                  :field="_.dbId"
+                  :placeholder="_.placeholder"
+                  :disabled="disabled"
+                  v-validate="_.validate"
+                ></input-integer>
                 <span class="hint"></span>
               </label>
 
@@ -110,10 +124,12 @@
   import TEST_FLAG from '../directives/test-flag'
   import { forgetForm, storeForm, restoreForm, resetForm } from '../lib/vue-persistent-form'
   import OverlayModal from './OverlayModal'
+  import InputInteger from './FormInput/Integer'
 
   export default {
     components: {
-      'overlay-modal': OverlayModal
+      'overlay-modal': OverlayModal,
+      'input-integer': InputInteger
     },
     validators,
     created() {    // bind private, non-reactive data

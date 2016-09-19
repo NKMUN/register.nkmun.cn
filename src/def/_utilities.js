@@ -1,8 +1,8 @@
 
 const FT = (name, dbId, placeholder='', validate=[]) => ({tag: 'input', name, dbId, validate, placeholder})
-const FN = (name, dbId, placeholder='', validate=[]) => ({tag: 'input', type: 'number', name, dbId, validate, placeholder})
+const FN = (name, dbId, placeholder='', validate=[]) => ({tag: 'integer', name, dbId, validate, placeholder})
 const FR = (name, dbId, opts, validate=[]) => ({tag: 'radio', name, dbId, validate, opts})
-const FP = (name, dbId, placeholder='', validate=[]) => ({tag: 'input', name, dbId, validate, placeholder})
+const FP = (name, dbId, placeholder='', validate=[]) => ({tag: 'password', name, dbId, validate, placeholder})
 const O  = (text, val) => ({text, val})
 const TA = (name, dbId, placeholder='', validate=[]) => ({name, tag: 'textarea', dbId, validate, placeholder})
 const H  = (html) => ({tag: 'html', html})
