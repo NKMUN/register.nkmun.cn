@@ -12,7 +12,7 @@
         {{entry.school}}
       </li>
     </ul>
-    <div class="details right" v-show="active !== ''">
+    <div class="details right" v-show="active !== ''" v-el:detail>
       <div v-for="$ in form" class="section {{$.class}}">
         <h4 class="heading {{$.class}}">{{$.section}}</h4>
         <div class="field" v-for="_ in $.fields">
@@ -186,6 +186,7 @@
                      this.active = id
                      this.committee = this.activeEntry.committee || defaultCommittee()
                      this.dirty = false
+                     this.$els.detail.scrollTop = 0
                    })
                    .catch( (res) => complainError(res, this) )
       },
