@@ -2,9 +2,9 @@
   <div class="container admin-enroll lr" :busy="busy">
     <ul class="list selection left">
       <span>学校列表</span>
-      <li 
-        v-for="entry in list" 
-        :active="active === entry.id" 
+      <li
+        v-for="entry in list"
+        :active="active === entry.id"
         :disabled="busy"
         :busy="busy"
         @click.prevent="!busy ? edit(entry.id) : nop()"
