@@ -40,6 +40,7 @@
                 <span class="field-name">{{_.name}}</span>
                 <input-integer
                   min="0"
+                  max="10"
                   step="1"
                   :name="_.dbId"
                   :field="_.dbId"
