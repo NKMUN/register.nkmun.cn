@@ -4,6 +4,7 @@ import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 import VueValidator from 'vue-validator'
 import { configRouter } from './route-config'
+import { getToken, setToken } from './lib/token-store'
 
 Vue.use(VueResource)
 Vue.use(VueRouter)
@@ -13,9 +14,9 @@ Vue.http.options.root = '/api'
 Vue.http.options.timeout = 5000
 
 // load stored token
-let token = window.localStorage.getItem('_token')
+let token = getToken()
 if (token)
-  Vue.http.headers.common['Authorization'] = 'Bearer '+token
+  setToken(token, true)
 
 // create router
 const router = new VueRouter({
