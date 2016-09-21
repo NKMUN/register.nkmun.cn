@@ -59,10 +59,12 @@
 
       <div class="operation">
         <button
+          class="invite"
           :disabled="busy"
           @click.prevent="!busy ? sendInvitation(active) : nop()"
         >确认并发送邀请信</button> <span class="hint">
         <button
+          class="pending"
           :disabled="busy"
           @click.prevent="!busy ? setToPending(active) : nop()"
         >待定</button> <span class="hint">
@@ -138,6 +140,28 @@
         .quota
           width: 30px
           text-align: right
+    .operation
+      margin-bottom: 40px
+      button
+        cursor: pointer
+        width: 200px
+        height: 45px
+        border-radius: 10px
+        border: 1px solid #52abf3
+        background-color: #52abf3
+        color: #fff
+        font-size: 14px
+        &:disabled
+          border: 1px solid #e2e2e2
+          background-color: #a2a2a2
+      .pending
+        background-color: #cc3333
+        border: 1px solid #cc3333
+      .invite
+        background-color: #00cc33
+        border: 1px solid #00cc33
+    pre
+      width: 80%
 </style>
 
 <script>
