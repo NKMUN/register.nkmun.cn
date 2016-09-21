@@ -2,7 +2,6 @@
   <input
     v-el:input
     type="number"
-    :placeholder="placeholder"
     :disabled="disabled || false"
     @change.prevent="checkChange()"
     @focus.prevent="blur ? select() : nop()"
@@ -14,7 +13,7 @@
 
 <script>
   export default {
-    props: ['max', 'min'],
+    props: ['max', 'min', 'disabled'],
     created() {
       this.blur = true
     },
