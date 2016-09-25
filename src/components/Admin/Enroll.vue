@@ -99,6 +99,7 @@
       list-style: none
       overflow-y: scroll
       overflow-x: hidden
+      flex-shrink: 0
       h4
         display: block
         font-size: 18px
@@ -116,20 +117,16 @@
           white-space: nowrap
           &[active]
             font-weight: bolder
-    table tbody
+    .details
       h4
         text-align: left
-      td
-        text-align: left
-        &:first-child
-          width: 20%
-          vertical-align: top
-        pre
-          margin: 0
-          width: 80%
+      .field
+        .value
+          max-width: 80ch
+        pre.value
           word-break: break-word
-          word-wrap: break-word
-          white-space: pre-line
+          word-wrap:  break-word
+          white-space: pre-wrap
     .committee
       text-align: left
       .field
@@ -160,8 +157,6 @@
       .invite
         background-color: #00cc33
         border: 1px solid #00cc33
-    pre
-      width: 80%
 </style>
 
 <script>
