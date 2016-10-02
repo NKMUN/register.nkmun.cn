@@ -192,7 +192,7 @@
   @import "../styles/form";
   @import "../styles/busy";
 
-  .container.enroll
+  .enroll
     font-size: 14px
     position: relative
     height: 100%
