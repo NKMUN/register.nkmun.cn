@@ -1,14 +1,17 @@
 <template>
+  <div class="banner">
+    <img src="../../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/home' }" />
+    <img src="../../assets/images/nklogo.png" class="logo" alt="nklogo" @click="officialsite" />
+  </div>
   <div class="container invitation" :busy="busy">
-    <h3>Hi汇文</h3>
     <form novalidate>
-      <div class="field invitation">
-        <div class="section invitation">
+      <div class="field invitation-code">
+        <div class="section invitation-input">
           <label>
-            <span class="field-name">激活码</span>
+            <span class="field-name">邀请码</span>
             <input
               type="text"  
-              placeholder="请输入激活码"
+              placeholder="请输入邀请码"
               :disabled="busy"
               v-model="invitation"
             ></input>
@@ -34,6 +37,29 @@
   @import "../../styles/form";
   .error
     color: red
+  .banner
+    display: block
+    text-align: center
+    vertical-align: middle
+    width: 100vw
+    height: 80px
+    background-color: #52abf3
+    .logo
+      margin: 4px auto
+    .logo:nth-child(1)
+      padding-right: 20px
+    .logo:nth-child(2)
+      padding-left: 20px
+      border-left: 1px solid #fff
+  .invitation
+    width: 80%
+    margin: auto
+    padding-top: 100px
+    text-align: center
+    .submit-btn
+      width: 260px
+      height: 35px
+      margin-top: 10px
 </style>
 
 <script>
@@ -79,6 +105,9 @@
           }
           this.error = msg
         })
+      },
+      officialsite: function () {
+        location.href='https://nkmun.cn'
       }
     }
   }

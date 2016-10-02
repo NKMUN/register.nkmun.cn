@@ -1,84 +1,84 @@
 <template>
   <div class="container registration" :busy="busy">
-    <h3>领队注册</h3>
+    <div class="form-area">
+      <h2>领队注册</h2>
 
-    <form novalidate>
-      <div class="section info">
-        <h4 class="heading">学校信息</h4>
-        <div class="field" v-for="$ in ro_fields">
-          <label>
-            <span class="field-name">{{$.name}}</span>
-            <input type="text" readonly :value="$route.query[$.dbId]"></input>
-          </label>
-        </div>
-      </div>
-    </form>
-
-    <validator name='leader-reg'>
-      <form id="leader-reg" v-el:form novalidate autocomplete="on">
-
-        <div class="section {{$.class}}" v-for="$ in form">
-
-          <h4 class="heading {{$.class}}">{{$.section}}</h4>
-
-          <div :class="{ field: _.dbId }" v-for="_ in $.fields">
-            <label v-if="_.tag === 'input'" :for="_.dbId">
-              <span class="field-name">{{_.name}}</span>
-              <input
-                type="text"
-                :name="_.dbId"
-                :field="_.dbId"
-                :placeholder="_.placeholder"
-                v-validate="_.validate"
-                :disabled="disabled"
-              ></input>
+      <form novalidate>
+        <div class="section info">
+          <h4 class="heading">学校信息</h4>
+          <div class="field" v-for="$ in ro_fields">
+            <label>
+              <span class="field-name">{{$.name}}</span>
+              <input type="text" readonly :value="$route.query[$.dbId]"></input>
             </label>
-
-            <label v-if="_.tag === 'number'" :for="_.dbId">
-              <span class="field-name">{{_.name}}</span>
-              <input
-                type="number"
-                min="0"
-                step="1"
-                :name="_.dbId"
-                :field="_.dbId"
-                :placeholder="_.placeholder"
-                v-validate="_.validate"
-                :disabled="disabled"
-              ></input>
-            </label>
-
-            <label v-if="_.tag === 'password'" :for="_.dbId">
-              <span class="field-name">{{_.name}}</span>
-              <input
-                type="password"
-                :name="_.dbId"
-                :field="_.dbId"
-                :placeholder="_.placeholder"
-                v-validate="_.validate"
-                :disabled="disabled"
-              ></input>
-            </label>
-
-            <label v-if="_.tag === 'radio'">
-              <span class="field-name">{{_.name}}</span>
-              <div class="radio-group">
-                <label class="radio-options" v-for="r in _.opts">
-                  <input
-                    type="radio"
-                    :name="_.dbId"
-                    :field="_.dbId"
-                    :value="r.val"
-                    v-validate="_.validate"
-                    :disabled="disabled"
-                  ></input>
-                  {{r.text}}
-                </label>
-              </div>
-            </label>
-
           </div>
         </div>
+      </form>
+
+      <validator name='leader-reg'>
+        <form id="leader-reg" v-el:form novalidate autocomplete="on">
+
+          <div class="section {{$.class}}" v-for="$ in form">
+
+            <h4 class="heading {{$.class}}">{{$.section}}</h4>
+            <div :class="{ field: _.dbId }" v-for="_ in $.fields">
+              <label v-if="_.tag === 'input'" :for="_.dbId">
+                <span class="field-name">{{_.name}}</span>
+                <input
+                  type="text"
+                  :name="_.dbId"
+                  :field="_.dbId"
+                  :placeholder="_.placeholder"
+                  v-validate="_.validate"
+                  :disabled="disabled"
+                ></input>
+              </label>
+
+              <label v-if="_.tag === 'number'" :for="_.dbId">
+                <span class="field-name">{{_.name}}</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="1"
+                  :name="_.dbId"
+                  :field="_.dbId"
+                  :placeholder="_.placeholder"
+                  v-validate="_.validate"
+                  :disabled="disabled"
+                ></input>
+              </label>
+
+              <label v-if="_.tag === 'password'" :for="_.dbId">
+                <span class="field-name">{{_.name}}</span>
+                <input
+                  type="password"
+                  :name="_.dbId"
+                  :field="_.dbId"
+                  :placeholder="_.placeholder"
+                  v-validate="_.validate"
+                  :disabled="disabled"
+                ></input>
+              </label>
+
+              <label v-if="_.tag === 'radio'">
+                <span class="field-name">{{_.name}}</span>
+                <div class="radio-group">
+                  <label class="radio-options" v-for="r in _.opts">
+                    <input
+                      type="radio"
+                      :name="_.dbId"
+                      :field="_.dbId"
+                      :value="r.val"
+                      v-validate="_.validate"
+                      :disabled="disabled"
+                    ></input>
+                    {{r.text}}
+                  </label>
+                </div>
+              </label>
+            </div>
+            
+          </div>
 
         <button
           class="submit-btn"
@@ -205,4 +205,62 @@
   .password-hint
     opacity: .5
     font-size: 80%
+  .registration
+    font-size: 14px
+    position: relative
+    height: calc(100vh - 100px)
+    width: 100%
+    padding-top: 100px
+    background: url("../../assets/images/form_background.jpg") no-repeat fixed top
+    background-size: 100% 100%
+    .form-area
+      width: 80%
+      margin: autocomplete
+      text-align: center
+      border: 1px solid #fff
+      background-color: rgba(255,255,255,0.8)
+      box-shadow: 5px -5px 5px #00000075
+      .illustration
+        text-align: left
+        padding-left: 100px
+      .disclaimer
+        p
+          text-align: left
+          padding-left: 100px
+    form
+      .section.ac-test
+        .topic
+          opacity: .5
+        .topic, .question
+          text-align: left
+          padding: 0 100px
+    .modal-success
+      text-align: center
+      p
+        text-indent: 2em
+        text-align: justify
+        margin-bottom: 35px
+      button
+        cursor: pointer
+        width: 120px
+        height: 35px
+        border-radius: 10px
+        border: 1px solid #52abf3
+        background-color: #52abf3
+        color: #fff
+        font-size: 14px
+    .modal-error
+      text-align: center
+      p
+        text-align: center
+        margin-bottom: 35px
+      button
+        cursor: pointer
+        width: 120px
+        height: 35px
+        border-radius: 10px
+        border: 1px solid #52abf3
+        background-color: #52abf3
+        color: #fff
+        font-size: 14px
 </style>

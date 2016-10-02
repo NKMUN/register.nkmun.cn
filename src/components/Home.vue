@@ -1,5 +1,5 @@
 <template>
-  <div class="home-banner">
+  <div class="banner">
     <img src="../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/home' }" />
     <img src="../assets/images/nklogo.png" class="logo" alt="nklogo" @click="officialsite" />
   </div>
@@ -19,7 +19,7 @@
 </template>
 
 <style lang="stylus">
-  .home-banner
+  .banner
     display: block
     text-align: center
     vertical-align: middle

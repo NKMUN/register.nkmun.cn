@@ -7,7 +7,7 @@ const SECTION_CONTACT = {
   class:   'contact',
   fields:  [
     FT('邮箱地址',   'email',    '请输入领队邮箱地址', ['required', 'email']),
-    FP('密码',      'password', '包含大写、小写、数字、符号中的两种', ['required', 'password']),
+    FP('密码',      'password', '包含大小写、数字、符号中的两种', ['required', 'password']),
     FT('姓名',      'name',     '请输入领队姓名',    ['required']),
     FR('性别',      'gender',   GENDER_OPTS,       ['required']),
     FT('手机号码',   'phone',    '请输入领队手机号码', ['required', 'phone']),

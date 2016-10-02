@@ -1,4 +1,8 @@
 <template>
+  <div class="banner">
+    <img src="../../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/home' }" />
+    <img src="../../assets/images/nklogo.png" class="logo" alt="nklogo" @click="officialsite" />
+  </div>
   <div class="container disclaimer" :busy="busy">
     <h3>责任条款</h3>
     <div v-if="!disclaimer">
@@ -22,7 +26,48 @@
 </template>
 
 <style lang="stylus">
-  @import "../../styles/busy" 
+  @import "../../styles/busy"
+  .banner
+    display: block
+    text-align: center
+    vertical-align: middle
+    width: 100vw
+    height: 80px
+    background-color: #52abf3
+    .logo
+      margin: 4px auto
+    .logo:nth-child(1)
+      padding-right: 20px
+    .logo:nth-child(2)
+      padding-left: 20px
+      border-left: 1px solid #fff
+  .disclaimer
+    width: 80%
+    margin: auto
+    text-align: center
+    padding-bottom: 50px
+    div
+      text-align: justify
+    div:last-of-type
+      text-align: center
+      margin-bottom: 20px
+    .next
+      display: block
+      cursor: pointer
+      width: 260px
+      height: 35px
+      margin: auto
+      line-height: 35px
+      border-radius: 8px
+      border: 1px solid #9cc974
+      background-color: #9cc974
+      color: #fff
+      font-size: 14px
+      text-align: center
+      vertical-align: middle
+      &:disabled
+        border: 1px solid #e2e2e2
+        background-color: #a2a2a2
 </style>
 
 <script>

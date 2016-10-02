@@ -1,17 +1,23 @@
 <template>
   <div class="container admin-enroll lr" :busy="busy">
-    <ul class="list selection left">
-      <span>学校列表</span>
-      <li
-        v-for="entry in list"
-        :active="active === entry.id"
-        :disabled="busy"
-        :busy="busy"
-        @click.prevent="!busy ? edit(entry.id) : nop()"
-      >
-        {{entry.school}}
-      </li>
-    </ul>
+    <div class="left selection">
+      <h4>待审核学校列表</h4>
+      <ul class="list">
+        <li
+          v-for="entry in list | filterBy needsReview"
+          :active="active === entry.id"
+          :disabled="busy"
+          :busy="busy"
+          @click.prevent="!busy ? edit(entry.id) : nop()"
+        >
+          {{entry.school}}
+        </li>
+      </ul>
+    </div>
+    <div class="details right" v-show="active === ''">
+      <h4 v-if="untouchedEntries === 0">没有更多待审核学校</h4>
+      <h4 v-else>请选择待审核学校</h4>
+    </div>
     <div class="details right" v-show="active !== ''" v-el:detail>
       <div v-for="$ in form" class="section {{$.class}}">
         <h4 class="heading {{$.class}}">{{$.section}}</h4>
@@ -50,6 +56,24 @@
           </form>
         </validator>
       </div>
+
+      <div class="operation">
+        <button
+          class="invite"
+          :disabled="busy"
+          @click.prevent="!busy ? sendInvitation(active) : nop()"
+        >确认并发送邀请信</button> <span class="hint">
+        <button
+          class="pending"
+          :disabled="busy"
+          @click.prevent="!busy ? setToPending(active) : nop()"
+        >待定</button> <span class="hint">
+        <button
+          :disabled="busy"
+          @click.prevent="!busy ? nextToReview(getListIdx(active)) : nop()"
+        >下一个待审核学校</button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -75,35 +99,34 @@
       list-style: none
       overflow-y: scroll
       overflow-x: hidden
-      span
+      flex-shrink: 0
+      h4
         display: block
         font-size: 18px
         text-align: center
-        margin-bottom: 5px
-      li
-        cursor: pointer
-        margin-bottom: 5px
-        padding: 0 10px
-        max-width: 30ch
-        overflow: hidden
-        text-overflow: ellipsis
-        white-space: nowrap
-      &[active]
-        font-weight: bolder
-    table tbody
+        margin: 0 0 5px 0
+      .list
+        padding: 0
+        li
+          cursor: pointer
+          margin-bottom: 5px
+          padding: 0 10px
+          max-width: 30ch
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+          &[active]
+            font-weight: bolder
+    .details
       h4
         text-align: left
-      td
-        text-align: left
-        &:first-child
-          width: 20%
-          vertical-align: top
-        pre
-          margin: 0
-          width: 80%
+      .field
+        .value
+          max-width: 80ch
+        pre.value
           word-break: break-word
-          word-wrap: break-word
-          white-space: pre-line
+          word-wrap:  break-word
+          white-space: pre-wrap
     .committee
       text-align: left
       .field
@@ -114,6 +137,26 @@
         .quota
           width: 30px
           text-align: right
+    .operation
+      margin-bottom: 40px
+      button
+        cursor: pointer
+        width: 200px
+        height: 45px
+        border-radius: 10px
+        border: 1px solid #52abf3
+        background-color: #52abf3
+        color: #fff
+        font-size: 14px
+        &:disabled
+          border: 1px solid #e2e2e2
+          background-color: #a2a2a2
+      .pending
+        background-color: #cc3333
+        border: 1px solid #cc3333
+      .invite
+        background-color: #00cc33
+        border: 1px solid #00cc33
 </style>
 
 <script>
@@ -152,19 +195,30 @@
         dirty: false,
         active: '',
         activeEntry: {},
-        committee: {}
+        committee: {},
       }
     },
     computed: {
-      committeeValidate() {
-        return {
-          min: 0,
-          max: this.activeEntry.quote
-        }
+      untouchedEntries() {
+        return this.list.filter( $ => ! $.state ).length
       }
     },
     methods: {
       nop() {},
+      needsReview(entry) {
+        return !entry.state || entry.state === 'pending'
+      },
+      getListIdx(id) {
+        for (let idx=0; idx!==this.list.length;++idx)
+          if (this.list[idx].id === id)
+            return idx
+      },
+      nextToReview(idx) {
+        for (let next=idx+1; next < this.list.length; ++next)
+          if ( ! this.list[next].state )
+            return this.edit(this.list[next].id)
+        this.active = ''
+      },
       update() {
         this.busy = true
         let payload = {
@@ -177,8 +231,39 @@
                 })
                 .catch( (res) => complainError(res, this) )
       },
+      sendInvitation(id) {
+        const idx = this.getListIdx(id)
+        return this.update()
+               .then( () => this.$http.post('invitation/', {id}) )
+               .then( (res) => {
+                 alert('Invited')
+                 // TOOD: hint invitation success
+                 this.busy = false
+                 this.dirty = false
+               })
+               .catch( (res) => complainError(res, this) )
+               .then( () => this.list[idx].state = 'inviting' )
+               .then( () => this.list.$set(idx, this.list[idx]) )    // force view update
+               .then( () => this.nextToReview(idx) )
+      },
+      setToPending(id) {
+        const idx = this.getListIdx(id)
+        return this.update()
+               .then( () => this.$http.post('pending/', {id}) )
+               .then( (res) => {
+                 alert('Pending set')
+                 // TOOD: hint pending set
+                 this.busy = false
+                 this.dirty = false
+               })
+               .catch( (res) => complainError(res, this) )
+               .then( () => this.list[idx].state = 'pending' )
+               .then( () => this.list.$set(idx, this.list[idx]) )    // force view update
+               .then( () => this.nextToReview(idx) )
+      },
       load(id) {
         this.busy = true
+        this.endOfList = false
         return this.$http.get('enroll/'+id)
                    .then( (res) => {
                      console.log(res)
@@ -198,7 +283,7 @@
         }else{
           this.load(id)
         }
-      }
+      },
     },
     ready() {
       this.busy = true
