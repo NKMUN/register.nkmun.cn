@@ -30,7 +30,7 @@
                 :field="_.dbId"
                 :placeholder="_.placeholder"
                 v-validate="_.validate"
-                :disabled="busy"
+                :disabled="disabled"
               ></input>
             </label>
 
@@ -44,7 +44,7 @@
                 :field="_.dbId"
                 :placeholder="_.placeholder"
                 v-validate="_.validate"
-                :disabled="busy"
+                :disabled="disabled"
               ></input>
             </label>
 
@@ -56,7 +56,7 @@
                 :field="_.dbId"
                 :placeholder="_.placeholder"
                 v-validate="_.validate"
-                :disabled="busy"
+                :disabled="disabled"
               ></input>
             </label>
 
@@ -70,7 +70,7 @@
                     :field="_.dbId"
                     :value="r.val"
                     v-validate="_.validate"
-                    :disabled="busy"
+                    :disabled="disabled"
                   ></input>
                   {{r.text}}
                 </label>
@@ -82,14 +82,34 @@
 
         <button
           class="submit-btn"
-          :disabled=" !test && ($leaderReg.invalid || busy)"
+          :disabled=" !test && ($leaderReg.invalid || disabled)"
           :busy="busy"
-          @click.prevent="!busy ? submit() : nop()"
+          @click.prevent="!disabled ? submit() : nop()"
         >提交
         </button>
       </form>
     </validator>
-</div>
+
+    <overlay-modal v-if="success" class="modal-success">
+      <h3 slot="caption">注册成功</h3>
+      <p slot="content">
+        TODO::
+      </p>
+      <div slot="button">
+        <button @click.prevent="$router.replace('/')">返回主页</button>
+      </div>
+    </overlay-modal>
+
+    <overlay-modal v-if="error" class="modal-error">
+      <h3 slot="caption">看上去有哪里出错了</h3>
+      <div slot="content">
+        <p>{{error}}</p>
+      </div>
+      <div slot="button">
+        <button @click.prevent="error = null">关闭</button>
+      </button>
+    </overlay-modal>
+  </div>
 </template>
 
 <script>
@@ -98,11 +118,15 @@
   import getResponseMessage from '../../lib/guess-response-message'
   import FORM from '../../def/leader-reg-form'
   import validators from '../../lib/validators'
+  import OverlayModal from './../OverlayModal'
   import { forgetForm, storeForm, restoreForm, resetForm } from '../../lib/vue-persistent-form'
 
   import { FT } from '../../def/_utilities'
 
   export default {
+    components: {
+      'overlay-modal': OverlayModal
+    },
     validators,
     created() {    // bind private, non-reactive data
       this.test = TEST_FLAG    // debug flag
@@ -115,7 +139,14 @@
     },
     data() {
       return {
-        busy: false
+        busy: false,
+        success: false,
+        error: false
+      }
+    },
+    computed: {
+      disabled() {
+        return this.busy || this.success || this.error
       }
     },
     methods: {
@@ -132,7 +163,8 @@
           this.busy = false
           this.resetForm()
           this.forgetForm()
-          this.$router.replace('success')
+          this.error = null
+          this.success = true
         })
         .catch( (res) => {
           console.log(res)
@@ -140,22 +172,13 @@
           let msg = getResponseMessage(res)
           switch (res.status) {
             case 409:
-              this.$router.go({
-                path: '/generic-failure',
-                query: {status: res.status, message: `不能重复注册 / ${msg}`}
-              })
+              this.error = `不能重复注册 / ${msg}`
             break
             case 410:
-              this.$router.go({
-                path: '/generic-failure',
-                query: {status: res.status, message: `激活码无效或已使用 / ${msg}`}
-              })
+              this.error = `激活码无效或已使用 / ${msg}`
             break
             default:
-              this.$router.go({
-                path: '/generic-failure',
-                query: {status: res.status, message: msg}
-              })
+              this.error = `${res.status} / ${msg}`
             break
           }
         })

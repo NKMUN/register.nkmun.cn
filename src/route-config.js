@@ -19,9 +19,6 @@
     '/invitation/registration': {
       component: require('./components/Invitation/Registration.vue')
     },
-    '/invitation/success': {
-      component: require('./components/Invitation/Success.vue')
-    },
     '/login': {
       component: require('./components/Login.vue')
     },
