@@ -209,13 +209,14 @@
     font-size: 14px
     position: relative
     height: calc(100vh - 100px)
+    height: 100%
     width: 100%
     padding-top: 100px
     background: url("../../assets/images/form_background.jpg") no-repeat fixed top
     background-size: 100% 100%
     .form-area
       width: 80%
-      margin: autocomplete
+      margin: auto
       text-align: center
       border: 1px solid #fff
       background-color: rgba(255,255,255,0.8)
