@@ -16,7 +16,7 @@ const re_num = /[0-9]/
 const re_sym = /[^a-zA-Z0-9]/
 validators.password = function(str) {
   // length >= 8
-  if (length < 8)
+  if (str.length < 8)
     return false
   let complexity = [
     re_lwr.test(str),
