@@ -29,6 +29,7 @@ const committees = [
   ),
   G('其他', 'etc',
     L('媒体团队',  'loc_media'),
+    L('联动体系',  'loc_linkage'),
     L('指导教师',  'loc_superv'),
     L('观察员',    'loc_observer')
   )

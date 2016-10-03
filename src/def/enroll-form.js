@@ -36,6 +36,7 @@ const SECTION_QUOTE = {
     FN('中文会场',    'quote_cn',        '请输入中文名额',    ['required', 'integer']),
     FN('英文会场',    'quote_en',        '请输入英文名额',    ['required', 'integer']),
     FN('媒体团队',    'quote_press',     '请输入媒体团队名额', ['required', 'integer']),
+    FN('联动体系',    'quote_linkage',   '请输入联动体系名额', ['required', 'integer']),
     FN('指导教师',    'quote_superv',    '请输入指导教师名额', ['required', 'integer']),
     FN('观察员',      'quote_observer',  '请输入观察员名额',  ['required', 'integer'])
   ]
