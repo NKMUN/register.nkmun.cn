@@ -1,7 +1,7 @@
 <template>
   <div class="banner">
-    <img src="../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/home' }" />
-    <img src="../assets/images/nklogo.png" class="logo" alt="nklogo" @click="officialsite" />
+    <img src="../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/' }" />
+    <img src="../assets/images/nklogo.png" class="logo" alt="nklogo" href="https://nkmun.cn/" style="cursor: pointer;"/>
   </div>
   <div class="container home lr"> 
     <div class="section left">
@@ -84,17 +84,12 @@
       // access -> next route mapping
       this.ACCESS_TO_NEXT_ROUTE = {
         'admin':  '/admin',
-        'leader': '/leader'
+        'leader': '/team'
       }
     },
     data() {
       return {
         busy: false
-      }
-    },
-    methods: {
-      officialsite: function () {
-        location.href='https://nkmun.cn'
       }
     }
   }

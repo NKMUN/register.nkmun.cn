@@ -1,13 +1,10 @@
 <template>
   <div>
-    <p>确认后将不能再进行名额交换</p>
+    <h4>住宿信息</h4>
   </div>
 </template>
 
 <script>
   export default {
-    ready() {
-      
-    }
   }
 </script>

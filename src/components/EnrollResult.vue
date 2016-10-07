@@ -1,7 +1,7 @@
 <template>
   <div class="banner">
-    <img src="../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/home' }" />
-    <img src="../assets/images/nklogo.png" class="logo" alt="nklogo" @click="officialsite" />
+    <img src="../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/' }" />
+    <img src="../assets/images/nklogo.png" class="logo" alt="nklogo" href="https://nkmun.cn/" style="cursor: pointer;"/>
   </div>
   <div class="container enroll-result" :busy="busy">
     <h3>名额分配结果</h3>
@@ -24,10 +24,12 @@
         >{{group.name}}</li>
       </ul>
       <div v-for="group in groups">
-        <table :data-tab="group.id" v-show="tab === group.id" class="result-table">
+        <table :data-tab="group.id" v-show="tab === group.id" class="horz-stripe hover-effect">
           <thead>
-            <th> 学校/会场 </th>
-            <th v-for="$ in group.keys">{{$.name}}</th>
+            <tr>
+              <th> 学校/会场 </th>
+              <th v-for="$ in group.keys">{{$.name}}</th>
+            </tr>
           </thead>
           <tbody>
             <tr v-for="$ in schools">
@@ -44,6 +46,7 @@
 
 <style lang="stylus">
   @import "../styles/busy";
+  @import "../styles/table";
   .tab-name
     cursor: pointer
   .banner
@@ -89,18 +92,6 @@
         background-color: #fff
         border: 1px solid #ddd
         border-bottom-color: transparent
-    .result-table
-      width: 100%
-      border-collapse:collapse
-      border: 1px solid #ddd
-      th
-        border: 1px solid #ddd
-      td
-        border: 1px solid #ddd
-      th, td:nth-child(odd)
-        background-color: #eee
-
-
 </style>
 
 <script>
@@ -131,11 +122,6 @@
       .catch( (res) => {
         this.error = getResponseMessage(res)
       })
-    },
-    methods: {
-      officialsite: function () {
-        location.href='https://nkmun.cn'
-      }
     }
   }
 </script>
