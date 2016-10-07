@@ -207,10 +207,12 @@
     font-size: 80%
   .registration
     font-size: 14px
-    position: relative
-    height: calc(100vh - 100px)
+    position: absolute
+    top: 0
+    left: 0
     height: 100%
     width: 100%
+    box-sizing: border-box
     padding-top: 100px
     background: url("../../assets/images/form_background.jpg") no-repeat fixed top
     background-size: 100% 100%
