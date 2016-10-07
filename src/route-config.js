@@ -28,9 +28,16 @@
     '/admin': {
       component: require('./components/Admin/Home.vue'),
       subRoutes: {
-        '/enroll': {
-          component: require('./components/Admin/Enroll.vue')
-        }
+        '/enroll': { component: require('./components/Admin/Enroll.vue') }
+      }
+    },
+    'team': {
+      component: require('./components/Team/Home.vue'),
+      subRoutes: {
+        'overview': { component: require('./components/Team/Overview.vue') },
+        'exchange': { component: require('./components/Team/Exchange.vue') },
+        'confirm':  { component: require('./components/Team/Confirm.vue') },
+        'payment':  { component: require('./components/Team/Payment.vue') }
       }
     },
     // not found handler

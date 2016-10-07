@@ -100,6 +100,7 @@
       overflow-y: scroll
       overflow-x: hidden
       flex-shrink: 0
+      align-self: stretch
       h4
         display: block
         font-size: 18px

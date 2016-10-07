@@ -1,9 +1,12 @@
 <template>
-  <div class="container admin-home mgmt-ui">
+  <div class="container team-home mgmt-ui">
     <div class="menu lr">
-      <h4>组委后台</h4>
+      <h4>领队后台</h4>
       <nav>
-        <a :active="active === 'enroll'" @click="go('enroll')">预报名审核</a>
+        <a :active="active === 'overview'" @click="go('overview')">概览</a>
+        <a :active="active === 'exchange'" @click="go('exchange')">名额交换</a>
+        <a :active="active === 'confirm'" @click="go('confirm')">名额确认</a>
+        <a :active="active === 'payment'" @click="go('payment')">支付</a>
         <logout-btn></logout-btn>
       </nav>
     </div>
@@ -35,8 +38,11 @@
     },
     methods: {
       go(route, args = {}) {
-        this.$router.go( Object.assign({path: '/admin/'+route}, args) )
+        this.$router.go( Object.assign({path: '/team/'+route}, args) )
       }
+    },
+    ready() {
+      this.go('overview')
     }
   }
 </script>
