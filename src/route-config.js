@@ -36,7 +36,7 @@
       subRoutes: {
         'overview': { component: require('./components/Team/Overview.vue') },
         'exchange': { component: require('./components/Team/Exchange.vue') },
-        'confirm':  { component: require('./components/Team/Confirm.vue') },
+        'hotel':    { component: require('./components/Team/Hotel.vue') },
         'payment':  { component: require('./components/Team/Payment.vue') }
       }
     },

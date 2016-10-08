@@ -25,7 +25,7 @@
       <h4>待办事项：</h4>
       <ol>
         <li v-if="todo_exchange">申请、审核名额交换</li>
-        <li v-if="todo_confirm" >确认名额和参会信息</li>
+        <li v-if="todo_exchange">确认名额和参会信息</li>
         <li v-if="todo_hotel">   确认住宿信息</li>
         <li v-if="todo_payment"> 支付费用</li>
         <li v-if="todo_finished">参会……</li>
@@ -52,9 +52,8 @@
     computed: {
       state() { return this.data && this.data.state ? this.data.state : 'registered' },
       todo_exchange() { return this.state==='registered' },
-      todo_confirm()  { return this.state==='registered' },
       todo_hotel()    { return this.state==='registered' || this.state==='quote_confirmed' },
-      todo_hotel()    { return this.state==='registered' || this.state==='quote_confirmed' || this.state==='hotel_confirmed' },
+      todo_payment()  { return this.state==='registered' || this.state==='quote_confirmed' || this.state==='hotel_confirmed' },
       todo_attend()   { return this.state==='finished' }
     }
   }

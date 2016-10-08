@@ -8,7 +8,6 @@
           名额交换
           <span v-if="exchanges" class="badge">{{exchanges}}</span>
         </a>
-        <a v-if="show_confirm"  :active="active === 'confirm'"  @click="go('confirm')">名额确认</a>
         <a v-if="show_hotel"    :active="active === 'hotel'"    @click="go('hotel')">住宿信息</a>
         <a v-if="show_payment"  :active="active === 'payment'"  @click="go('payment')">支付</a>
         <logout-btn></logout-btn>
@@ -67,7 +66,6 @@
       state() { return this.data ? this.data.state || 'registered' : null },
       exchanges() { return this.data ? this.data.exchanges || 0 : 0 },
       show_exchange() { return this.state === 'registered' },
-      show_confirm()  { return this.state === 'registered' },
       show_hotel()    { return this.state === 'quote_confirmed' },
       show_payment()  { return this.state === 'hotel_confirmed' }
     },
@@ -78,7 +76,7 @@
     },
     ready() {
       this.busy = true
-      this.$http.get('team')
+      this.$http.get('leader')
       .then( res => {
         this.busy = false
         this.data = res.json()
