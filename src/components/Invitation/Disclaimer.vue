@@ -1,7 +1,7 @@
 <template>
   <div class="banner">
-    <img src="../../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/home' }" />
-    <img src="../../assets/images/nklogo.png" class="logo" alt="nklogo" @click="officialsite" />
+    <img src="../../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/' }" />
+    <img src="../../assets/images/nklogo.png" class="logo" alt="nklogo" href="https://nkmun.cn/" style="cursor: pointer;"/>
   </div>
   <div class="container disclaimer" :busy="busy">
     <h3>责任条款</h3>

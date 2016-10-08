@@ -80,20 +80,21 @@
             
           </div>
 
-        <button
-          class="submit-btn"
-          :disabled=" !test && ($leaderReg.invalid || disabled)"
-          :busy="busy"
-          @click.prevent="!disabled ? submit() : nop()"
-        >提交
-        </button>
-      </form>
-    </validator>
+          <button
+            class="submit-btn"
+            :disabled=" !test && ($leaderReg.invalid || disabled)"
+            :busy="busy"
+            @click.prevent="!disabled ? submit() : nop()"
+          >提交
+          </button>
+        </form>
+      </validator>
+    </div>
 
     <overlay-modal v-if="success" class="modal-success">
       <h3 slot="caption">注册成功</h3>
       <p slot="content">
-        TODO::
+        请返回主页登录
       </p>
       <div slot="button">
         <button @click.prevent="$router.replace('/')">返回主页</button>
@@ -212,7 +213,6 @@
     left: 0
     height: 100%
     width: 100%
-    box-sizing: border-box
     padding-top: 100px
     background: url("../../assets/images/form_background.jpg") no-repeat fixed top
     background-size: 100% 100%
