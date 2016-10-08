@@ -172,6 +172,7 @@
     console.log(res)
     // TODO: complain about error
     let msg = getResponseMessage(res)
+    alert('Error: '+msg)
   }
 
   function defaultCommittee() {
@@ -237,15 +238,15 @@
         return this.update()
                .then( () => this.$http.post('invitation/', {id}) )
                .then( (res) => {
-                 alert('Invited')
+                 alert('已发送邀请')
                  // TOOD: hint invitation success
                  this.busy = false
                  this.dirty = false
+                 this.list[idx].state = 'inviting'
+                 this.list.$set(idx, this.list[idx])    // force view update
+                 this.nextToReview(idx)
                })
                .catch( (res) => complainError(res, this) )
-               .then( () => this.list[idx].state = 'inviting' )
-               .then( () => this.list.$set(idx, this.list[idx]) )    // force view update
-               .then( () => this.nextToReview(idx) )
       },
       setToPending(id) {
         const idx = this.getListIdx(id)
