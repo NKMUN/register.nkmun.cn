@@ -132,9 +132,9 @@
       text-align: left
       .field
         span
-          text-align: center
+          text-align: right
           display: inline-block
-          width: 80px
+          width: 180px
         .quota
           width: 30px
           text-align: right
