@@ -9,18 +9,6 @@
       </div>
     </div>
 
-    <div class="section committee">
-      <h4>名额分配</h4>
-      <table class="horz-stripe" v-for="group in groups">
-        <thead><tr>
-          <th v-for="$ in group.keys">{{$.name}}</th>
-        </tr></thead>
-        <tbody><tr>
-          <td v-for="_ in group.keys">{{data.committee[_.dbId]}}</td>
-        </tr></tbody>
-      </table>
-    </div>
-
     <div class="section state">
       <h4>待办事项：</h4>
       <ol>

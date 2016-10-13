@@ -14,7 +14,7 @@
       <p>请稍后重试</p>
       <pre>{{error}}</pre>
     </div>
-    <div v-if="loaded">
+    <div class="tab-view" v-if="loaded">
       <ul class="tab-list">
         <li 
           v-for="group in groups" 
@@ -47,6 +47,7 @@
 <style lang="stylus">
   @import "../styles/busy";
   @import "../styles/table";
+  @import "../styles/tab-view";
   .tab-name
     cursor: pointer
   .banner
@@ -70,28 +71,6 @@
     font-size: 18px
     h3
       font-size: 24px
-    .tab-list
-      text-align: left
-      border-bottom: 1px solid #ddd
-      .tab-name
-        margin-bottom: -1px
-        text-align: center
-        width: 120px
-        height: 30px
-        color: #428bca
-        margin-right: 2px
-        line-height: 30px
-        border: 1px solid transparent
-        border-radius: 4px 4px 0 0
-      .tab-name:active
-        background-color: transparent
-      .tab-name[active]
-        vertical-align: middle
-        color: #555
-        cursor: default
-        background-color: #fff
-        border: 1px solid #ddd
-        border-bottom-color: transparent
 </style>
 
 <script>

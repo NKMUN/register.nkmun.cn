@@ -4,6 +4,9 @@ import {mergeArray} from './_utilities'
 function ungroupCommittees(groups) {
   return groups.map( $=>$.keys ).reduce( mergeArray )
 }
+function idToName(committees) {
+  return committees.reduce( (m, {name, dbId}) => { m[dbId]=name; return m }, {} )
+}
 
 /*
  * Define committees below
@@ -36,5 +39,7 @@ const committees = [
   )
 ]
 
-export default ungroupCommittees(committees)
 export const groups = committees
+export const ungrouped = ungroupCommittees(committees)
+export const idMapping = idToName(ungrouped)
+export default ungrouped

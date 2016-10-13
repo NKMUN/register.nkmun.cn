@@ -80,7 +80,7 @@
 
 <style lang="stylus">
   @import "../../styles/busy";
-  @import "../../styles/tab-list";
+  @import "../../styles/tab-view";
   @import "../../styles/flex-lr";
   .admin-enroll
     align-items: stretch
