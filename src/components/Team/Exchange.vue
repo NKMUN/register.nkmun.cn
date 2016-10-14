@@ -4,10 +4,9 @@
       <h4>已分配名额</h4>
       <ul>
         <li v-for="$ in committees | filterBy hasQuote">
-          <div v-for="n in data.committee[$.dbId]">
-            <span class="name">{{getCommitteeName($.dbId)}}</span>
-            <button >放弃</button>
-          </div>
+          <span class="name">{{ getCommitteeName($.dbId) }}</span>
+          <span class="quote">{{ data.committee[$.dbId] }}</span>
+          <button @click="giveup.committee = $.dbId">放弃...</button>
         </li>
       </ul>
     </div>
@@ -46,7 +45,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="$ in schools">
+              <tr v-for="$ in exchangableSchools">
                 <th>{{$.school}}</th>
                 <td v-for="_ in group.keys">
                   <div v-if="$.committee[_.dbId] > 0">
@@ -66,13 +65,38 @@
       <button @click="!disabled ? confirm() : nop()">确认名额</button>
     </div>
 
-    <overlay-modal v-if="giveup.committee"></overlay-modal>
+    <overlay-modal v-if="giveup.committee">
+      <h4 slot="caption">放弃名额：{{ getCommitteeName(giveup.committee) }}</h4>
+      <div slot="content">
+        <form novalidate noautocomplete>
+          <div class="field">
+            <label>
+              <span class="field-name">数量：</span>
+              <input-integer
+                class="field-value"
+                v-model="giveup.amount"
+                min="0"
+                :max="data.committee[giveup.committee]"
+                step="1"
+                :disabled="disabled"
+              ></input-integer>
+            </label>
+          </div>
+        </form>
+      </div>
+      <div slot="button">
+        <p>确认后不能撤销！</p>
+        <button @click="giveupQuote(giveup.committee, giveup.amount)" :disabled="disabled || giveup.amount < 1 || giveup.amount > data.committee[giveup.committee]">确认</button>
+        <button @click="giveup.committee = null">取消</button>
+      </div>
+    </overlay-modal>
 
     <overlay-modal v-if="exchange.target"></overlay-modal>
 
     <overlay-modal v-if="error">
-      <p>Oops. 服务器故障，请稍后再试</p>
-      <button @click="!busy ? loadList() : nop()">重试</button>
+      <p slot="content">Oops. 服务器故障，请稍后再试</p>
+      <pre>{{ error }}</pre>
+      <button slot="button" @click="error = null">关闭</button>
     </overlay-modal>
   </div>
 </template>
@@ -81,11 +105,12 @@
   import OverlayModal from '../OverlayModal'
   import getResponseMessage from '../../lib/guess-response-message'
   import {groups as COMMITTEE_GROUPS, ungrouped as committees, idMapping as committee_name} from '../../def/committee'
+  import InputInteger from '../FormInput/Integer'
 
   function getCommitteeName(dbId) { return committee_name[dbId] }
 
   export default {
-    components: { 'overlay-modal': OverlayModal },
+    components: { OverlayModal, InputInteger },
     props: ['data'],
     created() {
       this.groups = COMMITTEE_GROUPS
@@ -105,6 +130,7 @@
         tab: COMMITTEE_GROUPS[0].id,
         giveup: {
           committee: null,
+          amount: 0
         },
         exchange: {
           target: null,
@@ -114,7 +140,17 @@
     },
     computed: {
       disabled() { return this.busy || this.modal },
-      modal() { this.giveup.committee || this.exchange.target }
+      modal() { this.giveup.committee || this.exchange.target },
+      exchangableSchools() {
+        return this.schools.filter( ({ id, committee={} }) => {
+          if (id === this.data.id)
+            return false
+          let sum = 0
+          for (let k in committee)
+            sum += committee[k]
+          return sum > 0
+        } )
+      }
     },
     methods: {
       nop() {},
@@ -159,9 +195,20 @@
         })
         .catch( (res) => this.error = getResponseMessage(res) )
       },
+      giveupQuote(committee, amount) {
+        this.busy = true
+        return this.$http.post(`leader/giveup/${committee}`, {amount: amount})
+        .then( (res) => {
+          this.busy = false
+          this.data.committee = res.json()
+          alert('名额已放弃')
+          this.giveup.committee = null
+        })
+        .catch( (res) => this.error = getResponseMessage(res) )
+      },
       getCommitteeName,
       hasQuote({dbId}) {
-        return this.data.committee[dbId] > 0
+        return this.data.committee && this.data.committee[dbId] > 0
       },
       showGiveupModal(committee) {
         this.giveup.committee = committee
