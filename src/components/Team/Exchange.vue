@@ -1,6 +1,6 @@
 <template>
   <div class="quote-exchange">
-    <div class="own-quote">
+    <div class="section own-quote">
       <h4>已分配名额</h4>
       <ul>
         <li v-for="$ in committees | filterBy hasQuote">
@@ -11,9 +11,9 @@
       </ul>
     </div>
 
-    </div>
+    <div class="section requests">
       <h4>待处理申请 <button @click="!disabled ? fetchPendingRequests() : nop()">刷新</button> </h4>
-      <ul>
+      <ul v-if="requests.length">
         <li v-for="$ in requests" class="request-entry">
           <span class="from-school">{{ $.from }}</span>
           <span class="offer">{{ getCommitteeName($.offer) }}</span>
@@ -23,9 +23,12 @@
           <button class="accept" @click="!busy ? refuseExchange($.id) : nop()">拒绝</button>
         </li>
       </ul>
+      <div v-else>
+        <p>暂无</p>
+      </div>
     </div>
 
-    <div class="others-quote">
+    <div class="section others-quote">
       <h4>选择交换学校、会场 <button @click="!disabled ? fetchSchoolQuotes() : nop()">刷新</button></h4>
       <div v-if="loaded" class="tab-view">
         <ul class="tab-list">
@@ -60,8 +63,9 @@
       </div>
     </div>
 
-    <div>
-      <p>确认后不能再修改</p>
+    <div class="section confirmation">
+      <h4>名额确认</h4>
+      <p>请确认以上名额信息，确认后不能再修改</p>
       <button @click="!disabled ? confirm() : nop()">确认名额</button>
     </div>
 
