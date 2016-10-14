@@ -16,7 +16,7 @@
 
         <div class="field">
           <label>
-            <input name="password" type="password" :disabled="busy" placeholder="请输入密码"></input>
+            <input @keyup.enter="login()" name="password" type="password" :disabled="busy" placeholder="请输入密码"></input>
           </label>
         </div>
 
