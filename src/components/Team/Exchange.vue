@@ -40,7 +40,7 @@
           >{{group.name}}</li>
         </ul>
         <div v-for="group in groups">
-          <table :data-tab="group.id" v-show="tab === group.id" class="horz-stripe hover-effect">
+          <table :data-tab="group.id" v-show="tab === group.id" class="horz-stripe hover-effect" v-if="exchangableSchools.length > 0">
             <thead>
               <tr>
                 <th> 学校/会场 </th>
@@ -59,6 +59,7 @@
               </tr>
             </tbody>
           </table>
+          </div v-else><p>暂无可交换学校</p></div>
         </div>
       </div>
     </div>
@@ -146,13 +147,13 @@
       disabled() { return this.busy || this.modal },
       modal() { this.giveup.committee || this.exchange.target },
       exchangableSchools() {
-        return this.schools.filter( ({ id, committee={} }) => {
-          if (id === this.data.id)
-            return false
-          let sum = 0
+        return this.schools.filter( ({ id, state, committee={} }) => {
+          let quotes = 0
           for (let k in committee)
-            sum += committee[k]
-          return sum > 0
+            quotes += committee[k]
+          let isSelf = id === this.data.id
+          let stateIsValid = 'inviting, invited, registered'.indexOf(state)>=0    // avoid ES6/7 Array.include
+          return !isSelf && stateIsValid && quotes > 0
         } )
       }
     },
