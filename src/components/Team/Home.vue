@@ -34,8 +34,8 @@
   @import "../../styles/mgmt-ui";
   .badge
     display: inline-block
-    background-color: red
-    border: 1px solid black
+    background-color: #d9534f
+    border: 1px solid #d9534f
     border-radius: 1em
     line-height: initial
     text-align: center

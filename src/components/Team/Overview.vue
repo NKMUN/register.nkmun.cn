@@ -4,7 +4,7 @@
     <div class="section school">
       <h4>学校信息</h4>
       <div class="field">
-          <span class="name">学校</span>
+          <span class="name">学校名称</span>
           <span class="value">{{data.school}}</span>
       </div>
     </div>
@@ -16,7 +16,7 @@
         <li v-if="todo_exchange">确认名额和参会信息</li>
         <li v-if="todo_hotel">   确认住宿信息</li>
         <li v-if="todo_payment"> 支付费用</li>
-        <li v-if="todo_finished">参会……</li>
+        <li v-if="todo_finished">参会</li>
       </ol>
     </div>
   </div>
@@ -26,6 +26,9 @@
 
 <style lang="stylus">
   @import "../../styles/table";
+  .team-overview
+    width: 80%
+    margin: 20px auto
 </style>
 
 <script>
