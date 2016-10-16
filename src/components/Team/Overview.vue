@@ -3,13 +3,16 @@
 
     <div class="section own-quote">
       <h4>已分配名额</h4>
-      <ul>
-        <li v-for="$ in committees | filterBy hasQuote">
-          <span class="name">{{ committee_name[$.dbId] }}</span>
-          <span class="quote">{{ data.committee[$.dbId] }}</span>
-          <button @click="giveup.committee = $.dbId">放弃...</button>
-        </li>
-      </ul>
+      <table class="quote-detail">
+        <tr>
+          <th>名额归属</th>
+          <th>数量</th>
+        </tr>
+        <tr v-for="$ in committees | filterBy hasQuote">
+          <td><span class="name">{{ committee_name[$.dbId] }}</span></td>
+          <td><span class="quote">{{ data.committee[$.dbId] }}</span></td>
+        </tr>
+      </table>
     </div>
 
     <div class="section school">
@@ -40,7 +43,10 @@
   .team-overview
     width: 80%
     margin: 20px auto
-    overflow-y: scroll
+    .quote-detail
+      text-align: center
+      td
+        width: 25%
 </style>
 
 <script>

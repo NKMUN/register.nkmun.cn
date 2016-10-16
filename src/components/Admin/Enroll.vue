@@ -146,19 +146,43 @@
         width: 200px
         height: 45px
         border-radius: 10px
-        border: 1px solid #52abf3
-        background-color: #52abf3
+        border: 1px solid #46b8da
+        background-color: #5bc0de
         color: #fff
         font-size: 14px
         &:disabled
           border: 1px solid #e2e2e2
           background-color: #a2a2a2
+      button:hover
+        background-color: #31b0d5
+        border-color: #269abc
+      button:active
+        outline: 0
+        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+        background-color: #31b0d5
+        border-color: #269abc
       .pending
-        background-color: #cc3333
-        border: 1px solid #cc3333
+        background-color: #d9534f
+        border: 1px solid #ac2925
+      .pending:hover
+        background-color: #c9302c
+        border-color: #ac2925
+      .pending: active
+        outline: 0
+        box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+        background-color: #c9302c
+        border-color: #ac2925
       .invite
-        background-color: #00cc33
-        border: 1px solid #00cc33
+        background-color: #5cb85c
+        border: 1px solid #4cae4c
+      .invite:hover
+        background-color: #449d44
+        border-color: #398439
+      .invite:active
+        outline: 0
+        box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+        background-color: #449d44
+        border-color: #398439
 </style>
 
 <script>
@@ -257,7 +281,7 @@
         return this.update()
                .then( () => this.$http.post('pending/', {id}) )
                .then( (res) => {
-                 alert('Pending set')
+                 alert('保留在待审核列表')
                  // TOOD: hint pending set
                  this.busy = false
                  this.dirty = false

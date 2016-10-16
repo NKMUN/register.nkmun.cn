@@ -14,7 +14,7 @@
         <tr v-for="$ in committees | filterBy hasQuote">
           <td><span class="name">{{ getCommitteeName($.dbId) }}</span></td>
           <td><span class="quote">{{ data.committee[$.dbId] }}</span></td>
-          <td><button @click="giveup.committee = $.dbId" class="abandon">放弃</button></td>
+          <td><button @click="giveup.committee = $.dbId" class="no">放弃</button></td>
         </tr>
       </table>
     </div>
@@ -69,7 +69,7 @@
               <tr v-for="$ in exchangableSchools">
                 <th>{{$.school}}</th>
                 <td v-for="_ in group.keys">
-                  <div v-if="$.committee[_.dbId] > 0">
+                  <div v-if="$.committee[_.dbId] > 0" class="btn-group">
                     <button class="exchange-num"> {{$.committee[_.dbId]}} </button>
                     <button @click="!disabled ? showExchangeModal($.id, _.dbId) : nop()" class="exchange-btn">交换</button>
                   </div>
@@ -135,16 +135,40 @@
     button
       width: 45px
       height: 28px
-      background-color: #52abf3
+      background-color: #5bc0de
       color: #fff
-      border: 1px solid #52abf3
+      border: 1px solid #46b8da
       border-radius: 4px
+    button:hover
+      background-color: #31b0d5
+      border-color: #269abc
+    button:active
+      outline: 0
+      box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+      background-color: #31b0d5
+      border-color: #269abc
     .yes
       background-color: #5cb85c
       border: 1px solid #4cae4c
+    .yes:hover
+      background-color: #449d44
+      border-color: #398439
+    .yes:active
+      outline: 0
+      box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+      background-color: #449d44
+      border-color: #398439
     .no
-      background-color: #c9302c
+      background-color: #d9534f
       border: 1px solid #ac2925
+    .no:hover
+      background-color: #c9302c
+      border-color: #ac2925
+    .no:active
+      outline: 0
+      box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+      background-color: #c9302c
+      border-color: #ac2925
     .quote-detail
       text-align: center
       td
@@ -153,26 +177,33 @@
       text-align: center
       td
         width: 15%
-    .exchange-num
-      display: inline-block
-      margin: 0
-      background-color: #5cb85c
-      color: #fff
-      width: auto
-      border: 1px solid #4cae4c
-      border-top-right-radius: 0
-      border-bottom-right-radius: 0
-    .exchange-btn
-      background-color: #5cb85c
-      padding-left: 0
-      width: auto
-      border: 1px solid #4cae4c
-      border-top-left-radius: 0
-      border-bottom-left-radius: 0
-      margin-left: -5px
-    .abandon
-      background-color: #c9302c
-      border: 1px solid #ac2925
+    .btn-group
+      height: 28px
+      .exchange-num
+        display: inline-block
+        margin: 0
+        background-color: #5cb85c
+        color: #fff
+        width: auto
+        border: 1px solid #4cae4c
+        border-top-right-radius: 0
+        border-bottom-right-radius: 0
+      .exchange-btn
+        background-color: #5cb85c
+        padding-left: 0
+        width: auto
+        border: 1px solid #4cae4c
+        border-top-left-radius: 0
+        border-bottom-left-radius: 0
+        margin-left: -5px
+      .exchange-btn:hover
+        background-color: #449d44
+        border-color: #398439
+      .exchange-btn:active
+        outline: 0
+        box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+        background-color: #449d44
+        border-color: #398439
     .confirmation
       text-align: center
       h3, div
@@ -182,13 +213,21 @@
         height: 45px
         margin=top: 15px
         border-radius: 10px
-        border: 1px solid #52abf3
-        background-color: #52abf3
+        border: 1px solid #46b8da
+        background-color: #5bc0de
         color: #fff
         font-size: 14px
         &:disabled
           border: 1px solid #e2e2e2
           background-color: #a2a2a2
+      button:hover
+        background-color: #31b0d5
+        border-color: #269abc
+      button:active
+        outline: 0
+        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+        background-color: #31b0d5
+        border-color: #269abc
   .alert
     padding: 15px;
     margin-bottom: 20px;
@@ -324,8 +363,3 @@
     }
   }
 </script>
-
-<style lang="stylus">
-  .quote-exchange
-    overflow-y: scroll
-</style>

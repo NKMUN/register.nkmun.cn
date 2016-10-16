@@ -60,8 +60,8 @@
         height: 35px
         line-height: 35px
         border-radius: 8px
-        border: 1px solid #9cc974
-        background-color: #9cc974
+        background-color: #5cb85c
+        border: 1px solid #4cae4c
         color: #fff
         font-size: 14px
         text-align: center
@@ -71,6 +71,14 @@
         &:disabled
           border: 1px solid #e2e2e2
           background-color: #a2a2a2
+      .btn-group a:hover, .btn:hover
+        background-color: #449d44
+        border-color: #398439
+      .btn-group a:active, .btn:active
+        outline: 0
+        box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+        background-color: #449d44
+        border-color: #398439
 </style>
 
 <script>

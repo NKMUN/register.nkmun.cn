@@ -60,20 +60,28 @@
       vertical-align: middle
       margin: 0 0 2px 0
     .login-btn
-        display: block
-        width: 267px
-        height: 35px
-        border-radius: 8px
-        border: 1px solid #52abf3
-        background-color: #52abf3
-        color: #fff
-        font-size: 14px
-        margin-bottom: 15px
-        padding-left: 10px
-        letter-spacing: 15px
-        &:disabled
-          border: 1px solid #e2e2e2
-          background-color: #a2a2a2
+      display: block
+      width: 267px
+      height: 35px
+      border-radius: 8px
+      border: 1px solid #46b8da
+      background-color: #5bc0de
+      color: #fff
+      font-size: 14px
+      margin-bottom: 15px
+      padding-left: 10px
+      letter-spacing: 15px
+      &:disabled
+        border: 1px solid #e2e2e2
+        background-color: #a2a2a2
+    .login-btn:hover
+      background-color: #31b0d5
+      border-color: #269abc
+    .login-btn:active
+      outline: 0
+      box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+      background-color: #31b0d5
+      border-color: #269abc
 </style>
 
 <script>

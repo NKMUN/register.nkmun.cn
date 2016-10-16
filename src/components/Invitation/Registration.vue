@@ -248,10 +248,18 @@
         width: 120px
         height: 35px
         border-radius: 10px
-        border: 1px solid #52abf3
-        background-color: #52abf3
+        border: 1px solid #46b8da
+        background-color: #5bc0de
         color: #fff
         font-size: 14px
+      button:hover
+        background-color: #31b0d5
+        border-color: #269abc
+      button:active
+        outline: 0
+        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+        background-color: #31b0d5
+        border-color: #269abc
     .modal-error
       text-align: center
       p
@@ -262,8 +270,16 @@
         width: 120px
         height: 35px
         border-radius: 10px
-        border: 1px solid #52abf3
-        background-color: #52abf3
+        border: 1px solid #46b8da
+        background-color: #5bc0de
         color: #fff
         font-size: 14px
+      button:hover
+        background-color: #31b0d5
+        border-color: #269abc
+      button:active
+        outline: 0
+        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+        background-color: #31b0d5
+        border-color: #269abc
 </style>
