@@ -14,6 +14,8 @@
 <style lang="stylus">
   @import "../../styles/flex-lr";
   @import "../../styles/mgmt-ui";
+  .admin-home
+    height: 100vh
 </style>
 
 <script>
