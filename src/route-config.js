@@ -28,7 +28,8 @@
     '/admin': {
       component: require('./components/Admin/Home.vue'),
       subRoutes: {
-        '/enroll': { component: require('./components/Admin/Enroll.vue') }
+        '/enroll': { component: require('./components/Admin/Enroll.vue') },
+        '/status': { component: require('./components/Admin/Status.vue') }
       }
     },
     'team': {

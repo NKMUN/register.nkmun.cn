@@ -70,7 +70,7 @@
         >待定</button> <span class="hint">
         <button
           :disabled="busy"
-          @click.prevent="!busy ? nextToReview(getListIdx(active)) : nop()"
+          @click.prevent="!busy ? edit( nextToReview( getListIdx(active) ) ) : nop()"
         >下一个待审核学校</button>
       </div>
 
@@ -83,10 +83,12 @@
   @import "../../styles/tab-view";
   @import "../../styles/flex-lr";
   .admin-enroll
+    overflow-y: hidden
     align-items: stretch
     .details, .selection
       overflow-x: initial
       overflow-y: scroll
+      align-self: stretch
     .details
       flex-grow: 1
     .selection
@@ -100,7 +102,6 @@
       overflow-y: scroll
       overflow-x: hidden
       flex-shrink: 0
-      align-self: stretch
       h4
         display: block
         font-size: 18px
@@ -218,8 +219,11 @@
       nextToReview(idx) {
         for (let next=idx+1; next < this.list.length; ++next)
           if ( ! this.list[next].state )
-            return this.edit(this.list[next].id)
-        this.active = ''
+            return this.list[next].id
+        for (let next=0; next < idx; ++next)
+          if ( ! this.list[next].state )
+            return this.list[next].id
+        return null
       },
       update() {
         this.busy = true
@@ -244,7 +248,7 @@
                  this.dirty = false
                  this.list[idx].state = 'inviting'
                  this.list.$set(idx, this.list[idx])    // force view update
-                 this.nextToReview(idx)
+                 this.edit( this.nextToReview(idx) )
                })
                .catch( (res) => complainError(res, this) )
       },
@@ -257,15 +261,19 @@
                  // TOOD: hint pending set
                  this.busy = false
                  this.dirty = false
+                 this.list[idx].state = 'pending'
+                 this.list.$set(idx, this.list[idx])    // forve cire update
+                 this.edit( this.nextToReview(idx) )
                })
                .catch( (res) => complainError(res, this) )
-               .then( () => this.list[idx].state = 'pending' )
-               .then( () => this.list.$set(idx, this.list[idx]) )    // force view update
-               .then( () => this.nextToReview(idx) )
       },
       load(id) {
+        if (id === null) {
+          this.busy = false
+          this.active = null
+          return
+        }
         this.busy = true
-        this.endOfList = false
         return this.$http.get('enroll/'+id)
                    .then( (res) => {
                      console.log(res)
