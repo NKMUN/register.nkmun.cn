@@ -1,5 +1,5 @@
 <template>
-  <div class="team-overview">
+  <div class="container team-overview">
 
     <div class="section own-quote">
       <h4>已分配名额</h4>
@@ -37,6 +37,8 @@
 
 <style lang="stylus">
   @import "../../styles/table";
+  .team-overview
+    overflow-y: scroll
 </style>
 
 <script>

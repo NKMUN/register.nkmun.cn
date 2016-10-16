@@ -20,8 +20,9 @@
   </div>
 </template>
 
-<style>
-
+<style lang="stylus">
+  .admin-enroll-status
+    overflow-y: scroll
 </style>
 
 <script>

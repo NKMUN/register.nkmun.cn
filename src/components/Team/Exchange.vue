@@ -1,5 +1,5 @@
 <template>
-  <div class="quote-exchange">
+  <div class="container quote-exchange">
     <div class="section own-quote">
       <h4>已分配名额</h4>
       <ul>
@@ -228,3 +228,8 @@
     }
   }
 </script>
+
+<style lang="stylus">
+  .quote-exchange
+    overflow-y: scroll
+</style>

@@ -83,6 +83,7 @@
   @import "../../styles/tab-view";
   @import "../../styles/flex-lr";
   .admin-enroll
+    overflow-y: hidden
     align-items: stretch
     .details, .selection
       overflow-x: initial
