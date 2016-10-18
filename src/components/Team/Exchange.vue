@@ -194,36 +194,41 @@
       color: #fff
       border: 1px solid #46b8da
       border-radius: 4px
-    button:hover
-      background-color: #31b0d5
-      border-color: #269abc
-    button:active
-      outline: 0
-      box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
-      background-color: #31b0d5
-      border-color: #269abc
-    .yes
-      background-color: #5cb85c
-      border: 1px solid #4cae4c
-    .yes:hover
-      background-color: #449d44
-      border-color: #398439
-    .yes:active
-      outline: 0
-      box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
-      background-color: #449d44
-      border-color: #398439
-    .no
-      background-color: #d9534f
-      border: 1px solid #ac2925
-    .no:hover
-      background-color: #c9302c
-      border-color: #ac2925
-    .no:active
-      outline: 0
-      box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
-      background-color: #c9302c
-      border-color: #ac2925
+      &:hover
+        background-color: #31b0d5
+        border-color: #269abc
+      &:active
+        outline: 0
+        box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125)
+        background-color: #31b0d5
+        border-color: #269abc
+      &[disabled]
+        border: 1px solid #e2e2e2 !important
+        background-color: #a2a2a2 !important
+        &:hover
+          cursor: not-allowed !important
+      &.yes
+        background-color: #5cb85c
+        border: 1px solid #4cae4c
+        &:hover
+          background-color: #449d44
+          border-color: #398439
+        &:active
+          outline: 0
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125)
+          background-color: #449d44
+          border-color: #398439
+      &.no
+        background-color: #d9534f
+        border: 1px solid #ac2925
+        &:hover
+          background-color: #c9302c
+          border-color: #ac2925
+        &:active
+          outline: 0
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125)
+          background-color: #c9302c
+          border-color: #ac2925
     .quote-detail
       text-align: center
       td
@@ -261,14 +266,14 @@
         border-bottom-left-radius: 0
         margin-left: -5px
         padding-left: 2px
-      .exchange-btn:hover
-        background-color: #449d44
-        border-color: #398439
-      .exchange-btn:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
-        background-color: #449d44
-        border-color: #398439
+        &:hover
+          background-color: #449d44
+          border-color: #398439
+        &:active
+          outline: 0
+          box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125)
+          background-color: #449d44
+          border-color: #398439
     .confirmation
       text-align: center
       h3, div
@@ -282,17 +287,14 @@
         background-color: #5bc0de
         color: #fff
         font-size: 14px
-        &:disabled
-          border: 1px solid #e2e2e2
-          background-color: #a2a2a2
-      button:hover
-        background-color: #31b0d5
-        border-color: #269abc
-      button:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
-        background-color: #31b0d5
-        border-color: #269abc
+        &:hover
+          background-color: #31b0d5
+          border-color: #269abc
+        &:active
+          outline: 0
+          box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
+          background-color: #31b0d5
+          border-color: #269abc
   .alert
     padding: 15px;
     margin-bottom: 20px;

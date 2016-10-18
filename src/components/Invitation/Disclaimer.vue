@@ -65,7 +65,7 @@
       font-size: 14px
       text-align: center
       vertical-align: middle
-      &:disabled, &:disabled:hover
+      &[disabled], &[disabled]:hover
         border: 1px solid #e2e2e2
         background-color: #a2a2a2
     .next:hover

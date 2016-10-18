@@ -71,7 +71,7 @@
       margin-bottom: 15px
       padding-left: 10px
       letter-spacing: 15px
-      &:disabled
+      &[disabled]
         border: 1px solid #e2e2e2
         background-color: #a2a2a2
     .login-btn:hover

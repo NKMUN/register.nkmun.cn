@@ -68,7 +68,7 @@
         vertical-align: middle
         letter-spacing: 15px
         padding-left: 5px
-        &:disabled
+        &[disabled], &[disabled]:hover
           border: 1px solid #e2e2e2
           background-color: #a2a2a2
       .btn-group a:hover, .btn:hover

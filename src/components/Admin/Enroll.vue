@@ -150,7 +150,7 @@
         background-color: #5bc0de
         color: #fff
         font-size: 14px
-        &:disabled
+        &[disabled], &[disabled]:hover
           border: 1px solid #e2e2e2
           background-color: #a2a2a2
       button:hover
