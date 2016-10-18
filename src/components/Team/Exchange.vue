@@ -58,7 +58,7 @@
           >{{group.name}}</li>
         </ul>
         <div v-for="group in groups">
-          <table :data-tab="group.id" v-show="tab === group.id" class="horz-stripe hover-effect" v-if="exchangableSchools.length > 0">
+          <table :data-tab="group.id" v-show="tab === group.id" class="horz-stripe hover-effect exchange-list" v-if="exchangableSchools.length > 0">
             <thead>
               <tr>
                 <th> 学校/会场 </th>
@@ -177,25 +177,35 @@
       text-align: center
       td
         width: 15%
+    .exchange-list
+      tr
+        height: 35px
     .btn-group
-      height: 28px
+      height: 25px
+      vertical-align: middle
+      margin: auto
       .exchange-num
         display: inline-block
         margin: 0
         background-color: #5cb85c
         color: #fff
         width: auto
+        height: 25px
         border: 1px solid #4cae4c
         border-top-right-radius: 0
         border-bottom-right-radius: 0
+      .exchange-num:hover
+        cursor: default !important
       .exchange-btn
         background-color: #5cb85c
         padding-left: 0
         width: auto
+        height: 25px
         border: 1px solid #4cae4c
         border-top-left-radius: 0
         border-bottom-left-radius: 0
         margin-left: -5px
+        padding-left: 2px
       .exchange-btn:hover
         background-color: #449d44
         border-color: #398439
