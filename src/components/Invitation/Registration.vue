@@ -81,7 +81,7 @@
           </div>
 
           <button
-            class="submit-btn"
+            class="submit-btn next xlarge"
             :disabled=" !test && ($leaderReg.invalid || disabled)"
             :busy="busy"
             @click.prevent="!disabled ? submit() : nop()"
@@ -202,6 +202,7 @@
 <style lang="stylus">
   @import "../../styles/busy";
   @import "../../styles/form";
+  @import "../../styles/button";
 
   .password-hint
     opacity: .5
@@ -237,49 +238,10 @@
         .topic, .question
           text-align: left
           padding: 0 100px
-    .modal-success
+    .modal
       text-align: center
       p
         text-indent: 2em
         text-align: justify
         margin-bottom: 35px
-      button
-        cursor: pointer
-        width: 120px
-        height: 35px
-        border-radius: 10px
-        border: 1px solid #46b8da
-        background-color: #5bc0de
-        color: #fff
-        font-size: 14px
-      button:hover
-        background-color: #31b0d5
-        border-color: #269abc
-      button:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
-        background-color: #31b0d5
-        border-color: #269abc
-    .modal-error
-      text-align: center
-      p
-        text-align: center
-        margin-bottom: 35px
-      button
-        cursor: pointer
-        width: 120px
-        height: 35px
-        border-radius: 10px
-        border: 1px solid #46b8da
-        background-color: #5bc0de
-        color: #fff
-        font-size: 14px
-      button:hover
-        background-color: #31b0d5
-        border-color: #269abc
-      button:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
-        background-color: #31b0d5
-        border-color: #269abc
 </style>

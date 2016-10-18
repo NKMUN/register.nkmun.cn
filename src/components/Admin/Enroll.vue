@@ -59,16 +59,17 @@
 
       <div class="operation">
         <button
-          class="invite"
+          class="xlarge next"
           :disabled="busy"
           @click.prevent="!busy ? sendInvitation(active) : nop()"
         >确认并发送邀请信</button> <span class="hint">
         <button
-          class="pending"
+          class="xlarge warn"
           :disabled="busy"
           @click.prevent="!busy ? setToPending(active) : nop()"
         >待定</button> <span class="hint">
         <button
+          class="xlarge"
           :disabled="busy"
           @click.prevent="!busy ? edit( nextToReview( getListIdx(active) ) ) : nop()"
         >下一个待审核学校</button>
@@ -82,6 +83,7 @@
   @import "../../styles/busy";
   @import "../../styles/tab-view";
   @import "../../styles/flex-lr";
+  @import "../../styles/button";
   .admin-enroll
     overflow-y: hidden
     align-items: stretch
@@ -141,48 +143,8 @@
           text-align: right
     .operation
       margin-bottom: 40px
-      button
-        cursor: pointer
+      button.xlarge
         width: 200px
-        height: 45px
-        border-radius: 10px
-        border: 1px solid #46b8da
-        background-color: #5bc0de
-        color: #fff
-        font-size: 14px
-        &[disabled], &[disabled]:hover
-          border: 1px solid #e2e2e2
-          background-color: #a2a2a2
-      button:hover
-        background-color: #31b0d5
-        border-color: #269abc
-      button:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
-        background-color: #31b0d5
-        border-color: #269abc
-      .pending
-        background-color: #d9534f
-        border: 1px solid #ac2925
-      .pending:hover
-        background-color: #c9302c
-        border-color: #ac2925
-      .pending: active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
-        background-color: #c9302c
-        border-color: #ac2925
-      .invite
-        background-color: #5cb85c
-        border: 1px solid #4cae4c
-      .invite:hover
-        background-color: #449d44
-        border-color: #398439
-      .invite:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
-        background-color: #449d44
-        border-color: #398439
 </style>
 
 <script>

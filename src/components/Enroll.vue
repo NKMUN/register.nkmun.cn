@@ -87,7 +87,7 @@
           </div>
 
           <button
-            class="submit-btn"
+            class="submit-btn xlarge next"
             :disabled="!test && ($prereg.invalid || disabled)"
             @click.prevent="!disabled ? submit() : nop()"
           >提交
@@ -102,7 +102,7 @@
         组委已收到您提交的报名表，将于审核后通过邮件向您通知学测结果以及后续事项，请静候佳音。
       </p>
       <div slot="button">
-        <button @click.prevent="$router.replace('/')">返回主页</button>
+        <button class="middle next" @click.prevent="$router.replace('/')">返回主页</button>
       </div>
     </overlay-modal>
 
@@ -112,7 +112,7 @@
         <p>{{error}}</p>
       </div>
       <div slot="button">
-        <button @click.prevent="error = null">关闭</button>
+        <button class="middle" @click.prevent="error = null">关闭</button>
       </button>
     </overlay-modal>
   </div>
@@ -191,6 +191,7 @@
 <style lang="stylus">
   @import "../styles/form";
   @import "../styles/busy";
+  @import "../styles/button";
 
   .enroll
     font-size: 14px
@@ -221,49 +222,10 @@
         .topic, .question
           text-align: left
           padding: 0 100px
-    .modal-success
+    .modal
       text-align: center
       p
         text-indent: 2em
         text-align: justify
         margin-bottom: 35px
-      button
-        cursor: pointer
-        width: 120px
-        height: 35px
-        border-radius: 10px
-        border: 1px solid #46b8da
-        background-color: #5bc0de
-        color: #fff
-        font-size: 14px
-      button:hover
-        background-color: #31b0d5
-        border-color: #269abc
-      button:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
-        background-color: #31b0d5
-        border-color: #269abc
-    .modal-error
-      text-align: center
-      p
-        text-align: center
-        margin-bottom: 35px
-      button
-        cursor: pointer
-        width: 120px
-        height: 35px
-        border-radius: 10px
-        border: 1px solid #46b8da
-        background-color: #5bc0de
-        color: #fff
-        font-size: 14px
-      button:hover
-        background-color: #31b0d5
-        border-color: #269abc
-      button:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
-        background-color: #31b0d5
-        border-color: #269abc
 </style>

@@ -23,7 +23,7 @@
       </div>
 
       <button
-        class="submit-btn"
+        class="submit-btn xlarge next"
         @click.prevent="verifyInvitation()"
         :disabled="!invitation || busy"
       >下一步</button>
@@ -35,6 +35,7 @@
 <style lang="stylus">
   @import "../../styles/busy";
   @import "../../styles/form";
+  @import "../../styles/button";
   .error
     color: red
   .banner
@@ -56,26 +57,6 @@
     margin: auto
     padding-top: 100px
     text-align: center
-    .submit-btn
-      cursor: pointer
-      width: 260px
-      height: 35px
-      border-radius: 10px
-      border: 1px solid #46b8da
-      background-color: #5bc0de
-      color: #fff
-      font-size: 14px
-      &[disabled], &[disabled]:hover
-        border: 1px solid #e2e2e2
-        background-color: #a2a2a2
-    .submit-btn:hover
-      background-color: #31b0d5
-      border-color: #269abc
-    .submit-btn:active
-      outline: 0
-      box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
-      background-color: #31b0d5
-      border-color: #269abc
 </style>
 
 <script>

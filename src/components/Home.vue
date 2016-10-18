@@ -10,9 +10,9 @@
     <div class="right">
       <login-ctrl :busy.sync="busy" :next-route="ACCESS_TO_NEXT_ROUTE"></login-ctrl>
       <div class="btn-group">
-        <a @click.prevent="!busy && $router.go('/enroll')">报名</a>
-        <a @click.prevent="!busy && $router.go('/enroll/result')" class="hide">报名结果</a>
-        <a @click.prevent="!busy && $router.go('/invitation')" class="hide">领队注册</a>
+        <button class="large" @click.prevent="!busy && $router.go('/enroll')">报名</a>
+        <!--<button class="large" @click.prevent="!busy && $router.go('/enroll/result')">报名结果</a>-->
+        <!--<button class="large" @click.prevent="!busy && $router.go('/invitation')">领队注册</a>-->
       </div>
     </div>
   </div>
@@ -53,32 +53,9 @@
       border-left: 1px solid #e3e3e3
       .hide
         display: none !important
-      .btn-group a, .btn
-        display: block
-        cursor: pointer
-        width: 260px
-        height: 35px
-        line-height: 35px
-        border-radius: 8px
-        background-color: #5cb85c
-        border: 1px solid #4cae4c
-        color: #fff
-        font-size: 14px
-        text-align: center
-        vertical-align: middle
-        letter-spacing: 15px
-        padding-left: 5px
-        &[disabled], &[disabled]:hover
-          border: 1px solid #e2e2e2
-          background-color: #a2a2a2
-      .btn-group a:hover, .btn:hover
-        background-color: #449d44
-        border-color: #398439
-      .btn-group a:active, .btn:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
-        background-color: #449d44
-        border-color: #398439
+      .btn-group
+        button
+          margin: 1em 0
 </style>
 
 <script>

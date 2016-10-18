@@ -15,7 +15,7 @@
 </script>
 
 <style lang="stylus">
-  .logout
+  .logout, .logout:hover, .logout:active
     display: inline-block
     height: 60px
     font-size: 18px

@@ -14,7 +14,7 @@
         <tr v-for="$ in committees | filterBy hasQuote">
           <td><span class="name">{{ getCommitteeName($.dbId) }}</span></td>
           <td><span class="quote">{{ data.committee[$.dbId] }}</span></td>
-          <td><button @click="showGiveupModal($.dbId)" class="no">放弃</button></td>
+          <td><button @click="showGiveupModal($.dbId)" class="warn">放弃</button></td>
         </tr>
       </table>
     </div>
@@ -34,8 +34,10 @@
           <td><span class="offer">{{ getCommitteeName($.offer) }}</span></td>
           <td><td><span class="amount">{{ $.amount }}</span></td>
           <td><span class="wanted">{{ getCommitteeName($.wanted) }}</span></td>
-          <td><button class="accept yes" @click="!busy ? acceptExchange($.id) : nop()">接受</button>
-          <button class="accept no" @click="!busy ? refuseExchange($.id) : nop()">拒绝</button></td>
+          <td>
+            <button class="accept next" @click="!busy ? acceptExchange($.id) : nop()">接受</button>
+            <button class="accept warn" @click="!busy ? refuseExchange($.id) : nop()">拒绝</button>
+          </td>
         </tr>
       </table>
       <div v-else>
@@ -87,7 +89,7 @@
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请于名额交换完成后确认最上方“已分配名额”栏目中的名额信息，确认后不能再放弃或交换</span>
       </div>
-      <button @click="!disabled ? confirm() : nop()">确认名额</button>
+      <button class="xlarge next" @click="!disabled ? confirm() : nop()">确认名额</button>
     </div>
 
     <overlay-modal v-if="giveup.committee" class="giveup">
@@ -113,11 +115,11 @@
         <div class="alert alert-danger" role="alert">
           <span class="danger">警告：名额放弃后不可撤销！</span>
         </div>
-        <button class="yes"
+        <button class="next"
           @click="!disabled && validGiveup ? giveupQuote(giveup.committee, giveup.amount) : nop()"
           :disabled="disabled || !validGiveup"
         >确认</button>
-        <button class="no" @click="clearGiveupModal()">取消</button>
+        <button class="warn" @click="clearGiveupModal()">取消</button>
       </div>
     </overlay-modal>
 
@@ -166,12 +168,12 @@
         <div class="alert alert-danger" role="alert">
           <span class="danger">警告：名额交换确认后不可撤销！</span>
         </div>
-        <button class="yes"
+        <button class="next"
           @click="!disabled && validExchange ? exchangeQuote(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
           :disabled="disabled || !validExchange"
         >确认
         </button>
-        <button class="no" @click="clearExchangeModal()">取消</button>
+        <button class="warn" @click="clearExchangeModal()">取消</button>
       </div>
     </overlay-modal>
 
@@ -184,51 +186,10 @@
 </template>
 
 <style lang="stylus">
+  @import "../../styles/button";
   .quote-exchange
     width: 80%
     margin: 15px auto
-    button
-      width: 45px
-      height: 28px
-      background-color: #5bc0de
-      color: #fff
-      border: 1px solid #46b8da
-      border-radius: 4px
-      &:hover
-        background-color: #31b0d5
-        border-color: #269abc
-      &:active
-        outline: 0
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125)
-        background-color: #31b0d5
-        border-color: #269abc
-      &[disabled]
-        border: 1px solid #e2e2e2 !important
-        background-color: #a2a2a2 !important
-        &:hover
-          cursor: not-allowed !important
-      &.yes
-        background-color: #5cb85c
-        border: 1px solid #4cae4c
-        &:hover
-          background-color: #449d44
-          border-color: #398439
-        &:active
-          outline: 0
-          box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125)
-          background-color: #449d44
-          border-color: #398439
-      &.no
-        background-color: #d9534f
-        border: 1px solid #ac2925
-        &:hover
-          background-color: #c9302c
-          border-color: #ac2925
-        &:active
-          outline: 0
-          box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125)
-          background-color: #c9302c
-          border-color: #ac2925
     .quote-detail
       text-align: center
       td
@@ -266,35 +227,10 @@
         border-bottom-left-radius: 0
         margin-left: -5px
         padding-left: 2px
-        &:hover
-          background-color: #449d44
-          border-color: #398439
-        &:active
-          outline: 0
-          box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125)
-          background-color: #449d44
-          border-color: #398439
     .confirmation
       text-align: center
       h3, div
         text-align: left
-      button
-        width: 200px
-        height: 45px
-        margin=top: 15px
-        border-radius: 10px
-        border: 1px solid #46b8da
-        background-color: #5bc0de
-        color: #fff
-        font-size: 14px
-        &:hover
-          background-color: #31b0d5
-          border-color: #269abc
-        &:active
-          outline: 0
-          box-shadow: inset 0 3px 5px rgba(0,0,0,.125)
-          background-color: #31b0d5
-          border-color: #269abc
   .alert
     padding: 15px;
     margin-bottom: 20px;

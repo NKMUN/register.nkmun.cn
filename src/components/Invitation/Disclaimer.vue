@@ -12,16 +12,18 @@
       <p>请阅读以下责任条款：</p>
       {{{disclaimer}}}
     </div>
-    <div>
+    <div class="agreement-input">
       <label>
         <input type="checkbox" v-model="agreed"></input>我同意以上条款
       </label>
     </div>
-    <button
-      class="next"
-      :disabled="!agreed"
-      @click.prevent="(agreed && !busy) ? next() : nop()"
-    >下一步</button>
+    <div class="buttons">
+      <button
+        class="next xlarge"
+        :disabled="!agreed"
+        @click.prevent="(agreed && !busy) ? next() : nop()"
+      >下一步</button>
+    </div>
   </div>
 </template>
 
@@ -44,38 +46,15 @@
   .disclaimer
     width: 80%
     margin: auto
-    text-align: center
     padding-bottom: 50px
-    div
-      text-align: justify
-    div:last-of-type
+    h3
       text-align: center
+    .agreement-input
+      text-align: center
+      margin-top: 40px
       margin-bottom: 20px
-    .next
-      display: block
-      cursor: pointer
-      width: 260px
-      height: 35px
-      margin: auto
-      line-height: 35px
-      border-radius: 8px
-      background-color: #5cb85c
-      border: 1px solid #4cae4c
-      color: #fff
-      font-size: 14px
+    .buttons
       text-align: center
-      vertical-align: middle
-      &[disabled], &[disabled]:hover
-        border: 1px solid #e2e2e2
-        background-color: #a2a2a2
-    .next:hover
-      background-color: #449d44
-      border-color: #398439
-    .next:active
-      outline: 0
-      box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
-      background-color: #449d44
-      border-color: #398439
 </style>
 
 <script>
