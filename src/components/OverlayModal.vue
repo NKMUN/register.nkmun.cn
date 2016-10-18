@@ -28,14 +28,11 @@
     background-color: rgba(255,255,255,0.7)
     display: flex
     flex-direction: row
-    align-items: middle
-    justify-content: middle
+    align-items: center
+    justify-content: center
     .modal
-      position: absolute
-      top: 35%
-      left: 35%
-      width: 30%
       padding: 15px
       background-color: #fff
       border: 1px solid #232323
+      min-width: 30%
 </style>
