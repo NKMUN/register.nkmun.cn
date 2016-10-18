@@ -50,7 +50,7 @@
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请慎重选择对方学校及名额，建议提前完成沟通，一旦交换成功，不可撤销。</span>
       </div>
-      <div v-if="loaded" class="tab-view">
+      <div v-if="schools" class="tab-view">
         <ul class="tab-list">
           <li
             v-for="group in groups"
@@ -144,7 +144,11 @@
               <span class="field-name">己方会场：</span>
               <select v-model="exchange.selfCommittee">
                 <option value="" disabled hidden selected>[请选择会场]</option>
-                <option v-for="$ in committees | filterBy hasQuote" :value="$.dbId">{{ getCommitteeName($.dbId) }}</option>
+                <option
+                  v-for="$ in committees | filterBy hasQuote"
+                  :disabled="$.dbId===exchange.targetCommittee"
+                  :value="$.dbId"
+                >{{ getCommitteeName($.dbId) }}</option>
               </select>
             </label>
           </div>
@@ -272,9 +276,8 @@
     data() {
       return {
         busy: false,
-        loaded: false,
         error: null,
-        schools: [],
+        schools: null,
         requests: [],
         tab: COMMITTEE_GROUPS[0].id,
         giveup: {
@@ -328,12 +331,16 @@
       fetchSchoolQuotes() {
         this.busy = true
         return this.$http.get('enroll?committee=1')
-        .then( (res) => {
-          this.busy = false
-          this.schools = res.json()
-          this.loaded = true
-        })
-        .catch( (res) => this.error = getResponseMessage(res) )
+        .then( res => this.schools = res.json() )
+        .catch( res => this.error = getResponseMessage(res) )
+        .then( () => this.busy = false )
+      },
+      fetchSelfQuote() {
+        this.busy = true
+        return this.$http.get('leader')
+        .then( res => this.data = res.json() )
+        .catch( res => this.error = getResponseMessage(res) )
+        .then( () => this.busy = false )
       },
       fetchPendingRequests() {
         this.busy = true
@@ -378,13 +385,33 @@
         .catch( (res) => this.error = getResponseMessage(res) )
       },
       exchangeQuote(selfCommittee, target, targetCommittee, amount) {
-        return this.$http.post('leader/exchange', { target, targetCommittee, selfCommittee, amount })
+        return this.$http.post('leader/exchange-request', {
+          from:   this.data.id,
+          to:     target,
+          offer:  selfCommittee,
+          wanted: targetCommittee,
+          amount: amount
+        })
         .then( (res) => {
-          this.busy = false
           alert('交换申请已发送')
           this.clearExchangeModal()
         })
-        .catch( (res) => this.error = getResponseMessage(res) )
+        .catch( (res) => {
+          if (!res)
+            this.error = getResponseMessage(res)
+          else
+            switch (res.status) {
+              case 409:
+                return this.fetchSchoolQuotes()
+                      .then( this.fetchSelfQuote() )
+                      .then( () => this.error = '名额不足，请重试' )
+              break
+              default:
+                this.error = getResponseMessage(res)
+              break
+            }
+        })
+        .then( () => this.busy = false)
       },
       getCommitteeName,
       hasQuote({dbId}) {
