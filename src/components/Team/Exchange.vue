@@ -1,5 +1,5 @@
 <template>
-  <div class="container quote-exchange">
+  <div class="container quote-exchange" :busy="busy">
     <div class="section own-quote">
       <h3>已分配名额</h3>
       <div class="alert alert-danger" role="alert">
@@ -14,13 +14,13 @@
         <tr v-for="$ in committees | filterBy hasQuote">
           <td><span class="name">{{ getCommitteeName($.dbId) }}</span></td>
           <td><span class="quote">{{ data.committee[$.dbId] }}</span></td>
-          <td><button @click="showGiveupModal($.dbId)" class="warn">放弃</button></td>
+          <td><button class="warn" :disabled="disabled" @click="showGiveupModal($.dbId)">放弃</button></td>
         </tr>
       </table>
     </div>
 
     <div class="section requests">
-      <h3>待处理申请 <button @click="!disabled ? fetchPendingRequests() : nop()">刷新</button> </h3>
+      <h3>待处理申请 <button :disabled="disabled" @click="!disabled ? fetchPendingRequests() : nop()">刷新</button> </h3>
       <table v-if="requests.length" class="waiting-apply">
         <tr>
           <th>来源学校</th>
@@ -35,8 +35,8 @@
           <td><td><span class="amount">{{ $.amount }}</span></td>
           <td><span class="wanted">{{ getCommitteeName($.wanted) }}</span></td>
           <td>
-            <button class="accept next" @click="!busy ? acceptExchange($.id) : nop()">接受</button>
-            <button class="accept warn" @click="!busy ? refuseExchange($.id) : nop()">拒绝</button>
+            <button class="accept next" :disabled="disabled" @click="!busy ? acceptExchange($.id) : nop()">接受</button>
+            <button class="accept warn" :disabled="disabled" @click="!busy ? refuseExchange($.id) : nop()">拒绝</button>
           </td>
         </tr>
       </table>
@@ -46,7 +46,7 @@
     </div>
 
     <div class="section others-quote">
-      <h3>选择交换学校、会场 <button @click="!disabled ? fetchSchoolQuotes() : nop()">刷新</button></h3>
+      <h3>选择交换学校、会场 <button :disabled="disabled" @click="!disabled ? fetchSchoolQuotes() : nop()">刷新</button></h3>
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请慎重选择对方学校及名额，建议提前完成沟通，一旦交换成功，不可撤销。</span>
       </div>
@@ -72,8 +72,8 @@
                 <th>{{$.school}}</th>
                 <td v-for="_ in group.keys">
                   <div v-if="$.committee[_.dbId] > 0" class="btn-group">
-                    <button class="exchange-num"> {{$.committee[_.dbId]}} </button>
-                    <button @click="!disabled ? showExchangeModal($.id, _.dbId) : nop()" class="exchange-btn">交换</button>
+                    <button class="exchange-num" :disabled="disabled" > {{$.committee[_.dbId]}} </button>
+                    <button class="exchange-btn" :disabled="disabled" @click="!disabled ? showExchangeModal($.id, _.dbId) : nop()">交换</button>
                   </div>
                 </td>
               </tr>
@@ -89,7 +89,7 @@
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请于名额交换完成后确认最上方“已分配名额”栏目中的名额信息，确认后不能再放弃或交换</span>
       </div>
-      <button class="xlarge next" @click="!disabled ? confirm() : nop()">确认名额</button>
+      <button class="xlarge next" :disabled="disabled" @click="!disabled ? confirm() : nop()">确认名额</button>
     </div>
 
     <overlay-modal v-if="giveup.committee" class="giveup">
@@ -119,7 +119,7 @@
           @click="!disabled && validGiveup ? giveupQuote(giveup.committee, giveup.amount) : nop()"
           :disabled="disabled || !validGiveup"
         >确认</button>
-        <button class="warn" @click="clearGiveupModal()">取消</button>
+        <button class="warn" :disabled="disabled" @click="clearGiveupModal()">取消</button>
       </div>
     </overlay-modal>
 
@@ -177,19 +177,20 @@
           :disabled="disabled || !validExchange"
         >确认
         </button>
-        <button class="warn" @click="clearExchangeModal()">取消</button>
+        <button class="warn" :disabled="disabled" @click="clearExchangeModal()">取消</button>
       </div>
     </overlay-modal>
 
     <overlay-modal v-if="error" class="error">
-      <p slot="content">Oops. 服务器故障，请稍后再试</p>
-      <pre>{{ error }}</pre>
-      <button slot="button" @click="error = null">关闭</button>
+      <p slot="content">{{ error }}</p>
+      <button slot="button" :disabled="disabled" @click="error = null">关闭</button>
     </overlay-modal>
   </div>
 </template>
 
 <style lang="stylus">
+  @import "../../styles/busy";
+  @import "../../styles/form";
   @import "../../styles/button";
   .quote-exchange
     width: 80%
@@ -261,6 +262,21 @@
 
   function getCommitteeName(dbId) { return committee_name[dbId] }
   function find( pred ) { return (res, $) => res || (pred($) ? $ : null) }
+  function handleExchangeError(res) {
+    if (!res) {
+      this.error = getResponseMessage(res)
+    } else {
+      switch (res.status) {
+        case 410:
+          this.error = '名额不足，请重试'
+          return this.fetchSelfQuote().then( this.fetchSchoolQuotes() )
+        break
+        default:
+          this.error = getResponseMessage(res)
+        break
+      }
+    }
+  }
 
   export default {
     components: { OverlayModal, InputInteger },
@@ -310,6 +326,8 @@
       },
       maxExchangeAmount() {
         const {targetCommittee, selfCommittee} = this.exchange
+        if (!this.exchangeTargetSchool)
+          return undefined
         const amountSelfCommittee = this.data.committee[selfCommittee]
         const amountTargCommittee = this.exchangeTargetSchool.committee[targetCommittee]
         return Math.min( amountSelfCommittee, amountTargCommittee )
@@ -345,44 +363,40 @@
       fetchPendingRequests() {
         this.busy = true
         return this.$http.get('leader/exchange-request')
-        .then( (res)=>{
-          this.busy = false
-          this.requests = res.json()
-        })
+        .then( res => this.requests = res.json() )
+        .catch( res => this.error = getResponseMessage(res) )
+        .then( () => this.busy = false)
       },
       acceptExchange(id) {
         this.busy = true
         return this.$http.post(`leader/exchange-request/${id}`)
         .then( (res) => {
-          this.busy = false
-          this.data.committee = res.json()
-          this.requests.filter( $=>$.id === id)[0].state = 'accepted'
-          this.fetchPendingRequests()
           alert('名额交换已接受')
+          return this.fetchPendingRequests().then( this.fetchSelfQuote() ).then( this.fetchSchoolQuotes() ) 
         })
-        .catch( (res) => this.error = getResponseMessage(res) )
+        .catch( handleExchangeError.bind(this) )
+        .then( () => this.busy = false)
       },
       refuseExchange(id) {
         this.busy = true
         return this.$http.delete(`leader/exchange-request/${id}`)
         .then( (res) => {
-          this.busy = false
-          this.requests.filter( $=>$.id === id)[0].state = 'refused'
-          this.fetchPendingRequests()
           alert('名额交换已拒绝')
+          return this.fetchPendingRequests()
         })
         .catch( (res) => this.error = getResponseMessage(res) )
+        .then( () => this.busy = false)
       },
       giveupQuote(committee, amount) {
         this.busy = true
         return this.$http.post(`leader/giveup/${committee}`, {amount: amount})
         .then( (res) => {
-          this.busy = false
           this.data.committee = res.json()
           alert('名额已放弃')
           this.clearGiveupModal()
         })
-        .catch( (res) => this.error = getResponseMessage(res) )
+        .catch( handleExchangeError.bind(this) )
+        .then( () => this.busy = false )
       },
       exchangeQuote(selfCommittee, target, targetCommittee, amount) {
         return this.$http.post('leader/exchange-request', {
@@ -396,21 +410,7 @@
           alert('交换申请已发送')
           this.clearExchangeModal()
         })
-        .catch( (res) => {
-          if (!res)
-            this.error = getResponseMessage(res)
-          else
-            switch (res.status) {
-              case 409:
-                return this.fetchSchoolQuotes()
-                      .then( this.fetchSelfQuote() )
-                      .then( () => this.error = '名额不足，请重试' )
-              break
-              default:
-                this.error = getResponseMessage(res)
-              break
-            }
-        })
+        .catch( handleExchangeError.bind(this) )
         .then( () => this.busy = false)
       },
       getCommitteeName,
