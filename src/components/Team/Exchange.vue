@@ -14,7 +14,7 @@
         <tr v-for="$ in committees | filterBy hasQuote">
           <td><span class="name">{{ getCommitteeName($.dbId) }}</span></td>
           <td><span class="quote">{{ data.committee[$.dbId] }}</span></td>
-          <td><button @click="giveup.committee = $.dbId" class="no">放弃</button></td>
+          <td><button @click="showGiveupModal($.dbId)" class="no">放弃</button></td>
         </tr>
       </table>
     </div>
@@ -90,7 +90,7 @@
       <button @click="!disabled ? confirm() : nop()">确认名额</button>
     </div>
 
-    <overlay-modal v-if="giveup.committee">
+    <overlay-modal v-if="giveup.committee" class="giveup">
       <h3 slot="caption">放弃名额：{{ getCommitteeName(giveup.committee) }}</h3>
       <div slot="content">
         <form novalidate noautocomplete>
@@ -98,10 +98,10 @@
             <label>
               <span class="field-name">数量：</span>
               <input-integer
-                class="field-value"
+                class="field-value small"
                 v-model="giveup.amount"
                 min="0"
-                :max="data.committee[giveup.committee]"
+                :max="maxGiveupAmount"
                 step="1"
                 :disabled="disabled"
               ></input-integer>
@@ -111,16 +111,71 @@
       </div>
       <div slot="button">
         <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：名额放弃后不可撤销！</span>
-      </div>
-        <button class="yes" @click="giveupQuote(giveup.committee, giveup.amount)" :disabled="disabled || giveup.amount < 1 || giveup.amount > data.committee[giveup.committee]">确认</button>
-        <button class="no" @click="giveup.committee = null">取消</button>
+          <span class="danger">警告：名额放弃后不可撤销！</span>
+        </div>
+        <button class="yes"
+          @click="!disabled && validGiveup ? giveupQuote(giveup.committee, giveup.amount) : nop()"
+          :disabled="disabled || !validGiveup"
+        >确认</button>
+        <button class="no" @click="clearGiveupModal()">取消</button>
       </div>
     </overlay-modal>
 
-    <overlay-modal v-if="exchange.target"></overlay-modal>
+    <overlay-modal v-if="exchange.target" class="exchange">
+      <h3 slot="caption">交换名额</h3>
+      <div slot="content">
+        <form novalidate noautocomplete>
+          <div class="field">
+            <label>
+              <span class="field-name">对方学校：</span>
+              <span class="field-value">{{ exchangeTargetSchool.school }}</span>
+            </label>
+          </div>
+          <div class="field">
+            <label>
+              <span class="field-name">对方会场：</span>
+              <span class="field-value">{{ getCommitteeName(exchange.targetCommittee) }}</span>
+            </label>
+          </div>
+          <div class="field">
+            <label>
+              <span class="field-name">己方会场：</span>
+              <select v-model="exchange.selfCommittee">
+                <option value="" disabled hidden selected>[请选择会场]</option>
+                <option v-for="$ in committees | filterBy hasQuote" :value="$.dbId">{{ getCommitteeName($.dbId) }}</option>
+              </select>
+            </label>
+          </div>
+          <div class="field">
+            <label>
+              <span class="field-name">数量：</span>
+              <input-integer
+                class="field-value small"
+                v-model="exchange.amount"
+                min="0"
+                :max="maxExchangeAmount"
+                step="1"
+                :disabled="disabled || !exchange.selfCommittee"
+                :placeholder="exchange.selfCommittee ? '请输入交换数量' : '请选择己方会场'"
+              ></input-integer>
+            </label>
+          </div>
+        </form>
+      </div>
+      <div slot="button">
+        <div class="alert alert-danger" role="alert">
+          <span class="danger">警告：名额交换确认后不可撤销！</span>
+        </div>
+        <button class="yes"
+          @click="!disabled && validExchange ? exchangeQuote(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
+          :disabled="disabled || !validExchange"
+        >确认
+        </button>
+        <button class="no" @click="clearExchangeModal()">取消</button>
+      </div>
+    </overlay-modal>
 
-    <overlay-modal v-if="error">
+    <overlay-modal v-if="error" class="error">
       <p slot="content">Oops. 服务器故障，请稍后再试</p>
       <pre>{{ error }}</pre>
       <button slot="button" @click="error = null">关闭</button>
@@ -249,6 +304,11 @@
     border-color: #ebccd1;
   .danger
     color: #d9534f
+  .overlay.exchange
+    form
+      .field
+        .field-name
+          width: 80px
 </style>
 
 <script>
@@ -258,6 +318,7 @@
   import InputInteger from '../FormInput/Integer'
 
   function getCommitteeName(dbId) { return committee_name[dbId] }
+  function find( pred ) { return (res, $) => res || (pred($) ? $ : null) }
 
   export default {
     components: { OverlayModal, InputInteger },
@@ -284,7 +345,9 @@
         },
         exchange: {
           target: null,
-          committee: null
+          targetCommittee: null,
+          selfCommittee: null,
+          amount: null
         }
       }
     },
@@ -300,6 +363,26 @@
           let stateIsValid = 'inviting, invited, registered'.indexOf(state)>=0    // avoid ES6/7 Array.include
           return !isSelf && stateIsValid && quotes > 0
         } )
+      },
+      exchangeTargetSchool() {
+        return this.schools.reduce( find( $ => $.id === this.exchange.target ), null )
+      },
+      maxExchangeAmount() {
+        const {targetCommittee, selfCommittee} = this.exchange
+        const amountSelfCommittee = this.data.committee[selfCommittee]
+        const amountTargCommittee = this.exchangeTargetSchool.committee[targetCommittee]
+        return Math.min( amountSelfCommittee, amountTargCommittee )
+      },
+      maxGiveupAmount() {
+        return this.data.committee[this.giveup.committee]
+      },
+      validExchange() {
+        const {target, targetCommittee, selfCommittee, amount} = this.exchange
+        return target && targetCommittee && selfCommittee && amount > 0 && amount <= this.maxExchangeAmount
+      },
+      validGiveup() {
+        const {committee, amount} = this.giveup
+        return committee && amount > 0 && amount <= this.maxGiveupAmount
       }
     },
     methods: {
@@ -352,7 +435,16 @@
           this.busy = false
           this.data.committee = res.json()
           alert('名额已放弃')
-          this.giveup.committee = null
+          this.clearGiveupModal()
+        })
+        .catch( (res) => this.error = getResponseMessage(res) )
+      },
+      exchangeQuote(selfCommittee, target, targetCommittee, amount) {
+        return this.$http.post('leader/exchange', { target, targetCommittee, selfCommittee, amount })
+        .then( (res) => {
+          this.busy = false
+          alert('交换申请已发送')
+          this.clearExchangeModal()
         })
         .catch( (res) => this.error = getResponseMessage(res) )
       },
@@ -363,9 +455,18 @@
       showGiveupModal(committee) {
         this.giveup.committee = committee
       },
+      clearGiveupModal() {
+        this.giveup.committee = null
+      },
       showExchangeModal(target, committee) {
         this.exchange.target = target
-        this.exchange.committee = committee
+        this.exchange.targetCommittee = committee
+        this.exchange.selfCommittee = null
+      },
+      clearExchangeModal(target, committee) {
+        this.exchange.target = null
+        this.exchange.targetCommittee = null
+        this.exchange.selfCommittee = null
       },
       confirm() {
 
