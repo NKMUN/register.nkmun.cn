@@ -1,19 +1,19 @@
 <template>
-  <div class="container quote-exchange" :busy="busy">
-    <div class="section own-quote">
+  <div class="container quota-exchange" :busy="busy">
+    <div class="section own-quota">
       <h3>已分配名额</h3>
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请在确认名额不进行交换且不进行报名后，再点击放弃按钮。一旦放弃，不可撤销。</span>
       </div>
-      <table class="quote-detail">
+      <table class="quota-detail">
         <tr>
           <th>名额归属</th>
           <th>数量</th>
           <th>操作</th>
         </tr>
-        <tr v-for="$ in committees | filterBy hasQuote">
+        <tr v-for="$ in committees | filterBy hasQuota">
           <td><span class="name">{{ getCommitteeName($.dbId) }}</span></td>
-          <td><span class="quote">{{ data.committee[$.dbId] }}</span></td>
+          <td><span class="quota">{{ data.committee[$.dbId] }}</span></td>
           <td><button class="warn" :disabled="disabled" @click="showGiveupModal($.dbId)">放弃</button></td>
         </tr>
       </table>
@@ -45,8 +45,8 @@
       </div>
     </div>
 
-    <div class="section others-quote">
-      <h3>选择交换学校、会场 <button :disabled="disabled" @click="!disabled ? fetchSchoolQuotes() : nop()">刷新</button></h3>
+    <div class="section others-quota">
+      <h3>选择交换学校、会场 <button :disabled="disabled" @click="!disabled ? fetchSchoolQuotas() : nop()">刷新</button></h3>
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请慎重选择对方学校及名额，建议提前完成沟通，一旦交换成功，不可撤销。</span>
       </div>
@@ -116,7 +116,7 @@
           <span class="danger">警告：名额放弃后不可撤销！</span>
         </div>
         <button class="next"
-          @click="!disabled && validGiveup ? giveupQuote(giveup.committee, giveup.amount) : nop()"
+          @click="!disabled && validGiveup ? giveupQuota(giveup.committee, giveup.amount) : nop()"
           :disabled="disabled || !validGiveup"
         >确认</button>
         <button class="warn" :disabled="disabled" @click="clearGiveupModal()">取消</button>
@@ -145,7 +145,7 @@
               <select v-model="exchange.selfCommittee">
                 <option value="" disabled hidden selected>[请选择会场]</option>
                 <option
-                  v-for="$ in committees | filterBy hasQuote"
+                  v-for="$ in committees | filterBy hasQuota"
                   :disabled="$.dbId===exchange.targetCommittee"
                   :value="$.dbId"
                 >{{ getCommitteeName($.dbId) }}</option>
@@ -173,7 +173,7 @@
           <span class="danger">警告：名额交换确认后不可撤销！</span>
         </div>
         <button class="next"
-          @click="!disabled && validExchange ? exchangeQuote(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
+          @click="!disabled && validExchange ? exchangeQuota(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
           :disabled="disabled || !validExchange"
         >确认
         </button>
@@ -192,10 +192,10 @@
   @import "../../styles/busy";
   @import "../../styles/form";
   @import "../../styles/button";
-  .quote-exchange
+  .quota-exchange
     width: 80%
     margin: 15px auto
-    .quote-detail
+    .quota-detail
       text-align: center
       td
         width: 15%
@@ -269,7 +269,7 @@
       switch (res.status) {
         case 410:
           this.error = '名额不足，请重试'
-          return this.fetchSelfQuote().then( this.fetchSchoolQuotes() )
+          return this.fetchSelfQuota().then( this.fetchSchoolQuotas() )
         break
         default:
           this.error = getResponseMessage(res)
@@ -287,7 +287,7 @@
     },
     ready() {
       this.fetchPendingRequests()
-      .then( this.fetchSchoolQuotes() )
+      .then( this.fetchSchoolQuotas() )
     },
     data() {
       return {
@@ -313,12 +313,12 @@
       modal() { this.giveup.committee || this.exchange.target },
       exchangableSchools() {
         return this.schools.filter( ({ id, state, committee={} }) => {
-          let quotes = 0
+          let quotas = 0
           for (let k in committee)
-            quotes += committee[k]
+            quotas += committee[k]
           let isSelf = id === this.data.id
           let stateIsValid = 'inviting, invited, registered'.indexOf(state)>=0    // avoid ES6/7 Array.include
-          return !isSelf && stateIsValid && quotes > 0
+          return !isSelf && stateIsValid && quotas > 0
         } )
       },
       exchangeTargetSchool() {
@@ -346,14 +346,14 @@
     },
     methods: {
       nop() {},
-      fetchSchoolQuotes() {
+      fetchSchoolQuotas() {
         this.busy = true
         return this.$http.get('enroll?committee=1')
         .then( res => this.schools = res.json() )
         .catch( res => this.error = getResponseMessage(res) )
         .then( () => this.busy = false )
       },
-      fetchSelfQuote() {
+      fetchSelfQuota() {
         this.busy = true
         return this.$http.get('leader')
         .then( res => this.data = res.json() )
@@ -372,7 +372,7 @@
         return this.$http.post(`leader/exchange-request/${id}`)
         .then( (res) => {
           alert('名额交换已接受')
-          return this.fetchPendingRequests().then( this.fetchSelfQuote() ).then( this.fetchSchoolQuotes() ) 
+          return this.fetchPendingRequests().then( this.fetchSelfQuota() ).then( this.fetchSchoolQuotas() ) 
         })
         .catch( handleExchangeError.bind(this) )
         .then( () => this.busy = false)
@@ -387,7 +387,7 @@
         .catch( (res) => this.error = getResponseMessage(res) )
         .then( () => this.busy = false)
       },
-      giveupQuote(committee, amount) {
+      giveupQuota(committee, amount) {
         this.busy = true
         return this.$http.post(`leader/giveup/${committee}`, {amount: amount})
         .then( (res) => {
@@ -398,7 +398,7 @@
         .catch( handleExchangeError.bind(this) )
         .then( () => this.busy = false )
       },
-      exchangeQuote(selfCommittee, target, targetCommittee, amount) {
+      exchangeQuota(selfCommittee, target, targetCommittee, amount) {
         return this.$http.post('leader/exchange-request', {
           from:   this.data.id,
           to:     target,
@@ -414,7 +414,7 @@
         .then( () => this.busy = false)
       },
       getCommitteeName,
-      hasQuote({dbId}) {
+      hasQuota({dbId}) {
         return this.data.committee && this.data.committee[dbId] > 0
       },
       showGiveupModal(committee) {
@@ -437,9 +437,9 @@
         this.busy = true
         let answer = window.confirm('确认名额后不能再进行修改')
         if (answer) {
-          return this.$http.post('leader/confirm-quote', {})
+          return this.$http.post('leader/confirm-quota', {})
           .then( res => {
-            this.data.state = 'quote_confirmed'
+            this.data.state = 'quota_confirmed'
             alert('名额已确认，请填写住宿信息并付款')
             this.$router.replace('hotel')
           })

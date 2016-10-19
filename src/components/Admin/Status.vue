@@ -33,7 +33,7 @@
     'inviting':   '已邀请',
     'invited':    '已邀请',
     'registered': '已注册',
-    'quote_confirmed': '名额已确认'
+    'quota_confirmed': '名额已确认'
   }
 
   function complainError(res) {

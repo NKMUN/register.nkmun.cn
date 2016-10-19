@@ -1,16 +1,16 @@
 <template>
   <div class="container team-overview">
 
-    <div class="section own-quote">
+    <div class="section own-quota">
       <h4>已分配名额</h4>
-      <table class="quote-detail">
+      <table class="quota-detail">
         <tr>
           <th>名额归属</th>
           <th>数量</th>
         </tr>
-        <tr v-for="$ in committees | filterBy hasQuote">
+        <tr v-for="$ in committees | filterBy hasQuota">
           <td><span class="name">{{ committee_name[$.dbId] }}</span></td>
-          <td><span class="quote">{{ data.committee[$.dbId] }}</span></td>
+          <td><span class="quota">{{ data.committee[$.dbId] }}</span></td>
         </tr>
       </table>
     </div>
@@ -43,7 +43,7 @@
   .team-overview
     width: 80%
     margin: 20px auto
-    .quote-detail
+    .quota-detail
       text-align: center
       td
         width: 25%
@@ -63,12 +63,12 @@
     computed: {
       state() { return this.data && this.data.state ? this.data.state : 'registered' },
       todo_exchange() { return this.state==='registered' },
-      todo_hotel()    { return this.state==='registered' || this.state==='quote_confirmed' },
-      todo_payment()  { return this.state==='registered' || this.state==='quote_confirmed' || this.state==='hotel_confirmed' },
+      todo_hotel()    { return this.state==='registered' || this.state==='quota_confirmed' },
+      todo_payment()  { return this.state==='registered' || this.state==='quota_confirmed' || this.state==='hotel_confirmed' },
       todo_attend()   { return this.state==='finished' }
     },
     methods: {
-      hasQuote({dbId}) {
+      hasQuota({dbId}) {
         return this.data.committee && this.data.committee[dbId] > 0
       }
     }
