@@ -434,7 +434,18 @@
         this.exchange.selfCommittee = null
       },
       confirm() {
-
+        this.busy = true
+        let answer = window.confirm('确认名额后不能再进行修改')
+        if (answer) {
+          return this.$http.post('leader/confirm-quote', {})
+          .then( res => {
+            this.data.state = 'quote_confirmed'
+            alert('名额已确认，请填写住宿信息并付款')
+            this.$router.replace('hotel')
+          })
+          .catch( res => this.error = getResponseMessage(res) )
+          .then( () => this.busy = false )
+        }
       }
     }
   }
