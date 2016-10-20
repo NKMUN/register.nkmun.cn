@@ -32,7 +32,7 @@
         <tr v-for="$ in requests" class="request-entry">
           <td><span class="from-school">{{ $.from }}</span></td>
           <td><span class="offer">{{ getCommitteeName($.offer) }}</span></td>
-          <td><td><span class="amount">{{ $.amount }}</span></td>
+          <td><span class="amount">{{ $.amount }}</span></td>
           <td><span class="wanted">{{ getCommitteeName($.wanted) }}</span></td>
           <td>
             <button class="accept next" :disabled="disabled" @click="!busy ? acceptExchange($.id) : nop()">接受</button>
