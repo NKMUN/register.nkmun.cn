@@ -53,13 +53,13 @@
       <div v-if="schools" class="tab-view">
         <ul class="tab-list">
           <li
-            v-for="group in groups"
+            v-for="group in xchgGroups"
             class="tab-name"
             @click.prevent="tab = group.id"
             :active="group.id === tab"
           >{{group.name}}</li>
         </ul>
-        <div v-for="group in groups">
+        <div v-for="group in xchgGroups">
           <table :data-tab="group.id" v-show="tab === group.id" class="horz-stripe hover-effect exchange-list" v-if="exchangableSchools.length > 0">
             <thead>
               <tr>
@@ -145,7 +145,7 @@
               <select v-model="exchange.selfCommittee">
                 <option value="" disabled hidden selected>[请选择会场]</option>
                 <option
-                  v-for="$ in committees | filterBy hasQuota"
+                  v-for="$ in xchgCommittees | filterBy hasQuota"
                   :disabled="$.dbId===exchange.targetCommittee"
                   :value="$.dbId"
                 >{{ getCommitteeName($.dbId) }}</option>
@@ -272,7 +272,13 @@
 <script>
   import OverlayModal from '../OverlayModal'
   import getResponseMessage from '../../lib/guess-response-message'
-  import {groups as COMMITTEE_GROUPS, ungrouped as committees, idMapping as committee_name} from '../../def/committee'
+  import {
+    groups as COMMITTEE_GROUPS,
+    ungrouped as committees,
+    exchangableGroups as XCHG_COMMITTEE_GROUPS,
+    exchangableUngrouped as XCHG_COMMITTEES,
+    idMapping as committee_name
+  } from '../../def/committee'
   import InputInteger from '../FormInput/Integer'
 
   function getCommitteeName(dbId) { return committee_name[dbId] }
@@ -299,6 +305,8 @@
     created() {
       this.groups = COMMITTEE_GROUPS
       this.committees = committees
+      this.xchgGroups = XCHG_COMMITTEE_GROUPS,
+      this.xchgCommittees = XCHG_COMMITTEES
     },
     ready() {
       this.fetchPendingRequests()
