@@ -396,7 +396,7 @@
           return this.fetchPendingRequests().then( this.fetchSelfQuota() ).then( this.fetchSchoolQuotas() ) 
         })
         .catch( handleExchangeError.bind(this) )
-        .then( () => this.busy = false)
+        .then( () => this.busy = false )
       },
       refuseExchange(id) {
         this.busy = true
@@ -406,7 +406,7 @@
           return this.fetchPendingRequests()
         })
         .catch( (res) => this.error = getResponseMessage(res) )
-        .then( () => this.busy = false)
+        .then( () => this.busy = false )
       },
       giveupQuota(committee, amount) {
         this.busy = true
