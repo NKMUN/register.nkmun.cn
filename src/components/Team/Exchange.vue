@@ -448,11 +448,13 @@
         this.exchange.target = target
         this.exchange.targetCommittee = committee
         this.exchange.selfCommittee = null
+        this.exchange.amount = null
       },
       clearExchangeModal(target, committee) {
         this.exchange.target = null
         this.exchange.targetCommittee = null
         this.exchange.selfCommittee = null
+        this.exchange.amount = null
       },
       confirm() {
         this.busy = true
