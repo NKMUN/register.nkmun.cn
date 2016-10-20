@@ -59,8 +59,8 @@
             :active="group.id === tab"
           >{{group.name}}</li>
         </ul>
-        <div v-for="group in xchgGroups">
-          <table :data-tab="group.id" v-show="tab === group.id" class="horz-stripe hover-effect exchange-list" v-if="exchangableSchools.length > 0">
+        <div v-for="group in xchgGroups" v-show="tab === group.id">
+          <table :data-tab="group.id" class="horz-stripe hover-effect exchange-list" v-if="exchangableSchools.length > 0">
             <thead>
               <tr>
                 <th> 学校/会场 </th>
