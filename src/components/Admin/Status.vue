@@ -76,7 +76,7 @@
       .catch( complainError.bind(this) )
       .then( () => this.busy = false )
     },
-    method: {
+    methods: {
       nop() {},
       sendInvitation(id) {
         this.busy = true
