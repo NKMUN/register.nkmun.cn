@@ -71,9 +71,9 @@
               <tr v-for="$ in exchangableSchools">
                 <th>{{$.school}}</th>
                 <td v-for="_ in group.keys">
-                  <div v-if="$.committee[_.dbId] > 0" class="btn-group">
-                    <button class="exchange-num" :disabled="disabled" > {{$.committee[_.dbId]}} </button>
-                    <button class="exchange-btn" :disabled="disabled" @click="!disabled ? showExchangeModal($.id, _.dbId) : nop()">交换</button>
+                  <div v-if="$.committee[_.dbId] > 0" class="quota">
+                    <span class="number"> {{$.committee[_.dbId]}} </span>
+                    <button class="next" :disabled="disabled" @click="!disabled ? showExchangeModal($.id, _.dbId) : nop()">交换</button>
                   </div>
                 </td>
               </tr>
@@ -206,32 +206,29 @@
     .exchange-list
       tr
         height: 35px
-    .btn-group
-      height: 25px
-      vertical-align: middle
-      margin: auto
-      .exchange-num
-        display: inline-block
-        margin: 0
-        background-color: #5cb85c
-        color: #fff
-        width: auto
-        height: 25px
-        border: 1px solid #4cae4c
-        border-top-right-radius: 0
-        border-bottom-right-radius: 0
-      .exchange-num:hover
-        cursor: default !important
-      .exchange-btn
-        background-color: #5cb85c
-        padding-left: 0
-        width: auto
-        height: 25px
-        border: 1px solid #4cae4c
-        border-top-left-radius: 0
-        border-bottom-left-radius: 0
-        margin-left: -5px
-        padding-left: 2px
+      .quota
+        display: flex
+        flex-direction: row
+        justify-content: center
+        align-items: stretch
+        .number, button
+          margin: 0
+          display: inline-block
+          border-radius: 4px
+          border-collapse: saperate
+          font: inherit
+          font-size: 80%
+        .number
+          background-color: #5cb85c
+          color: #fff
+          border: 1px solid #4cae4c
+          padding: 0 .5ch 0 1ch
+          border-top-right-radius: 0
+          border-bottom-right-radius: 0
+        button
+          padding: 0 1ch 0 .5ch
+          border-top-left-radius: 0
+          border-bottom-left-radius: 0
     .confirmation
       text-align: center
       h3, div
