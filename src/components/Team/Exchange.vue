@@ -457,9 +457,8 @@
         this.exchange.amount = null
       },
       confirm() {
-        this.busy = true
-        let answer = window.confirm('确认名额后不能再进行修改')
-        if (answer) {
+        if ( window.confirm('确认名额后不能再进行修改') ) {
+          this.busy = true
           return this.$http.post('leader/confirm-quota', {})
           .then( res => {
             this.data.state = 'quota_confirmed'
