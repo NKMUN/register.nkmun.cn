@@ -47,6 +47,7 @@
 <script>
   import Logout from '../Logout'
   import Overview from './Overview'
+  import getResponseMessage from '../../lib/guess-response-message'
   export default {
     components: {
       'logout-btn': Logout,
