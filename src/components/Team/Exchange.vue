@@ -458,16 +458,20 @@
       },
       confirm() {
         this.busy = true
-        let answer = window.confirm('确认名额后不能再进行修改')
-        if (answer) {
-          return this.$http.post('leader/confirm-quota', {})
-          .then( res => {
-            this.data.state = 'quota_confirmed'
-            alert('名额已确认，请填写住宿信息并付款')
-            this.$router.replace('hotel')
-          })
-          .catch( res => this.error = getResponseMessage(res) )
-          .then( () => this.busy = false )
+        if(this.data.committee.loc_cn_3 % 2 == 0 && this.data.committee.loc_en_1 % 2 == 0 && this.data.committee.loc_en_2 % 2 == 0 && this.data.committee.loc_en_3 % 2 == 0){
+          let answer = window.confirm('确认名额后不能再进行修改')
+          if (answer) {
+            return this.$http.post('leader/confirm-quota', {})
+            .then( res => {
+              this.data.state = 'quota_confirmed'
+              alert('名额已确认，请填写住宿信息并付款')
+              this.$router.replace('hotel')
+            })
+            .catch( res => this.error = getResponseMessage(res) )
+            .then( () => this.busy = false )
+          }
+        }else{
+          window.alert('请检查双代会场名额数量是否为偶数！')
         }
       }
     }
