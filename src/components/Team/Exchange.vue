@@ -457,6 +457,13 @@
         this.exchange.amount = null
       },
       confirm() {
+        if ( this.data.committee.loc_cn_3 % 2
+          || this.data.committee.loc_en_1 % 2
+          || this.data.committee.loc_en_2 % 2
+          || this.data.committee.loc_en_3 % 2
+        ) {    // Condemn Improper Requirement Document!
+          return window.alert('请检查双代会场名额数量是否为偶数！')
+        }
         if ( window.confirm('确认名额后不能再进行修改') ) {
           this.busy = true
           return this.$http.post('leader/confirm-quota', {})
