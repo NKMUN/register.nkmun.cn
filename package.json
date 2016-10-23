@@ -14,7 +14,9 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "array-uniq": "^1.0.3",
     "babel-runtime": "^6.0.0",
+    "dateformat": "^1.0.12",
     "email-regex": "^1.0.0",
     "id-validator": "^1.2.1",
     "is-integer": "^1.0.6",

@@ -8,7 +8,7 @@
           名额交换
           <span v-if="exchanges" class="badge">{{exchanges}}</span>
         </a>
-        <a v-if="show_hotel"    :active="active === 'hotel'"    @click="go('hotel')">住宿信息</a>
+        <a v-if="show_hotel"    :active="active === 'accommodation'" @click="go('accommodation')">住宿信息</a>
         <a v-if="show_payment"  :active="active === 'payment'"  @click="go('payment')">支付</a>
         <logout-btn></logout-btn>
       </nav>

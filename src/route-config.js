@@ -35,10 +35,10 @@
     'team': {
       component: require('./components/Team/Home.vue'),
       subRoutes: {
-        'overview': { component: require('./components/Team/Overview.vue') },
-        'exchange': { component: require('./components/Team/Exchange.vue') },
-        'hotel':    { component: require('./components/Team/Hotel.vue') },
-        'payment':  { component: require('./components/Team/Payment.vue') }
+        'overview':      { component: require('./components/Team/Overview.vue') },
+        'exchange':      { component: require('./components/Team/Exchange.vue') },
+        'accommodation': { component: require('./components/Team/Accommodation.vue') },
+        'payment':       { component: require('./components/Team/Payment.vue') }
       }
     },
     // not found handler
