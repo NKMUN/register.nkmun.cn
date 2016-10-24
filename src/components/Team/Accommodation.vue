@@ -132,6 +132,10 @@
         const MAX_NUM_OF_RESERVATION = Math.ceil(this.numOfRepresentatives / 2) + 1
         return this.reservation.length >= MAX_NUM_OF_RESERVATION
       },
+      validate() {
+        let fails = this.reservation.filter( $ => !$.id || !$.checkIn || !$.checkOut )
+        return fails.length === 0
+      },
       hotels() {
         return uniq( this.accommodationList.map( $ => $.name ) )
                .map( name => ({
