@@ -77,7 +77,9 @@
     </div>
 
     <div class="section confirm">
-      <p>确认后不能修改！</p>
+      <div class="alert alert-danger" role="alert">
+        <p>警告：住宿确认后将进入缴费环节，房间数量不能修改！</p>
+      </div>
       <button class="xlarge next" @click="(!busy && validate) ? confirm() : nop()" :disabled="disabled">确认住宿信息</button>
     </div>
 
@@ -90,6 +92,55 @@
 
 <style lang="stylus">
   @import "../../styles/busy";
+  .accommodation
+    width: 80%
+    margin: auto
+  .accommodation-list
+    table
+      width: 40%
+      text-align: center
+      border-collapse: collapse
+      td,th
+        border: 1px solid #ddd
+  .quota-detail
+      text-align: center
+      width: 20%
+  select
+    display: inline-block
+    width: auto
+    height: 34px
+    margin: 5px
+    padding: 5px 12px
+    font-size: 14px
+    line-height: 16px
+    outline: 0
+    color: #000
+    background-color: #fff
+    background-image: none
+    border: 1px solid #aaa
+    border-radius: 8px
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
+  input
+    display: inline-block
+    height: 24px
+    width: 220px
+    padding: 5px 8px
+    margin: 5px
+    line-height: normal
+    border: 1px solid #aaa
+    border-radius: 8px
+  .alert
+    margin-top: 20px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  .alert-danger
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+  .danger
+    color: #d9534f
 </style>
 
 <script>

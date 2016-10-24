@@ -198,12 +198,10 @@
     margin: 15px auto
     .quota-detail
       text-align: center
-      td
-        width: 15%
+      width: 20%
     .waiting-apply
       text-align: center
-      td
-        width: 15%
+      width: 20%
     .exchange-list
       tr
         height: 35px
