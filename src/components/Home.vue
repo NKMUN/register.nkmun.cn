@@ -10,9 +10,9 @@
     <div class="right">
       <login-ctrl :busy.sync="busy" :next-route="ACCESS_TO_NEXT_ROUTE"></login-ctrl>
       <div class="btn-group">
-        <button class="large" @click.prevent="!busy && $router.go('/enroll')">报名</a>
+        <!--<button class="large" @click.prevent="!busy && $router.go('/enroll')">报名</a>-->
         <!--<button class="large" @click.prevent="!busy && $router.go('/enroll/result')">报名结果</a>-->
-        <!--<button class="large" @click.prevent="!busy && $router.go('/invitation')">领队注册</a>-->
+        <button class="large" @click.prevent="!busy && $router.go('/invitation')">领队注册</a>
       </div>
     </div>
   </div>
