@@ -68,7 +68,7 @@
       exchanges() { return this.data ? this.data.exchanges || 0 : 0 },
       show_exchange() { return this.state === 'registered' },
       show_hotel()    { return this.state === 'quota-confirmed' },
-      show_payment()  { return this.state === 'hotel-confirmed' }
+      show_payment()  { return this.state === 'accommodation-confirmed' }
     },
     methods: {
       go(route, args = {}) {

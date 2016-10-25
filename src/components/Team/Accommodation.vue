@@ -27,7 +27,7 @@
       <h4>住宿信息</h4>
       <p>
         入住时间最早为：{{date_checkInMin}}，最迟为：{{date_checkInMax}}<br>
-        退房时间最迟为：{{date_checkOutMax}}
+        退房时间最早为：{{date_checkOutMin}}，最迟为：{{date_checkOutMax}}
       </p>
       <table class="list">
         <thead>
@@ -40,17 +40,17 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="(idx, $) in reservation">
+          <tr v-for="(idx, $) in reservations">
             <td>
               <select v-model="$.hotel" @change="$.id=''">
                 <option disabled hidden selected value="">[请选择酒店]</option>
-                <option v-for="_ in hotels" :value="_.name" :disabled="_.available < 1">{{ _.name }}</option>
+                <option v-for="_ in hotels" :value="_.name" :disabled="_.available < 1 && _.name !== $.hotel">{{ _.name }}</option>
               </select>
             </td>
             <td>
               <select v-model="$.id" :disabled="!$.hotel">
                 <option disabled hidden selected value="">{{ $.hotel ? "[请选择房型]" : "[请先选择酒店]" }}</option>
-                <option v-for="_ in hotelRoomTypes[$.hotel]" :value="_.id" :disabled="_.available < 1">{{_.type}}</option>
+                <option v-for="_ in hotelRoomTypes[$.hotel]" :value="_.id" :disabled="_.available < 1 && _.id !== $.id">{{_.type}}</option>
               </select>
             </td>
             <td>
@@ -60,16 +60,16 @@
               <input v-model="$.checkOut" type="date" :min="getCheckOutDateMin($.checkIn)" :max="date_checkOutMax" :disabled="!$.checkIn"></input>
             </td>
             <td>
-              <button class="warn" @click="reservation.splice(idx, 1)">删除</button>
+              <button class="warn" @click="reservations.splice(idx, 1)">删除</button>
             </td>
           </tr>
         </tbody>
       </table>
       <button
-        @click='!maxReservationReached ? reservation.push({ hotel: null, id: null, checkIn: null, checkOut: null }) : nop()'
+        @click='!maxReservationReached ? reservations.push({ hotel: null, id: null, checkIn: null, checkOut: null }) : nop()'
         :disabled="maxReservationReached"
         :class="[ maxReservationReached ? 'warn' : 'next']"
-      >{{ !maxReservationReached ? "新增" : "已达到预定上限" }}</button>
+      >{{ !maxReservationReached ? "增加房间" : "已达到预定上限" }}</button>
     </div>
 
     <div class="section accommodation" v-else>
@@ -79,8 +79,9 @@
     <div class="section confirm">
       <div class="alert alert-danger" role="alert">
         <p>警告：住宿确认后将进入缴费环节，房间数量不能修改！</p>
+        <p>如有奇怪的需求，请与组委联系。</p>
       </div>
-      <button class="xlarge next" @click="(!busy && validate) ? confirm() : nop()" :disabled="disabled">确认住宿信息</button>
+      <button class="xlarge next" @click="(!busy && validate) ? confirm() : nop()" :disabled="disabled || !validate">确认住宿信息</button>
     </div>
 
     <overlay-modal v-if="error" class="error">
@@ -95,52 +96,49 @@
   .accommodation
     width: 80%
     margin: auto
-  .accommodation-list
-    table
-      width: 40%
-      text-align: center
-      border-collapse: collapse
-      td,th
-        border: 1px solid #ddd
-  .quota-detail
-      text-align: center
-      width: 20%
-  select
-    display: inline-block
-    width: auto
-    height: 34px
-    margin: 5px
-    padding: 5px 12px
-    font-size: 14px
-    line-height: 16px
-    outline: 0
-    color: #000
-    background-color: #fff
-    background-image: none
-    border: 1px solid #aaa
-    border-radius: 8px
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
-  input
-    display: inline-block
-    height: 24px
-    width: 220px
-    padding: 5px 8px
-    margin: 5px
-    line-height: normal
-    border: 1px solid #aaa
-    border-radius: 8px
-  .alert
-    margin-top: 20px;
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-  .alert-danger
-    color: #a94442;
-    background-color: #f2dede;
-    border-color: #ebccd1;
-  .danger
-    color: #d9534f
+    .accommodation-list
+      table
+        width: 40%
+        text-align: center
+        border-collapse: collapse
+        td,th
+          border: 1px solid #ddd
+    .quota-detail
+        text-align: center
+        width: 20%
+    select
+      display: inline-block
+      width: auto
+      height: 34px
+      margin: 5px
+      padding: 5px 12px
+      font-size: 14px
+      line-height: 16px
+      outline: 0
+      border: 1px solid #aaa
+      border-radius: 8px
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
+    input
+      display: inline-block
+      height: 24px
+      width: 220px
+      padding: 5px 8px
+      margin: 5px
+      line-height: normal
+      border: 1px solid #aaa
+      border-radius: 8px
+    .alert
+      margin-top: 20px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    .alert-danger
+      color: #a94442;
+      background-color: #f2dede;
+      border-color: #ebccd1;
+    .danger
+      color: #d9534f
 </style>
 
 <script>
@@ -153,6 +151,7 @@
 
   const CHECKIN_DATE_MIN = '2017-01-19'
   const CHECKIN_DATE_MAX = '2017-01-24'
+  const CHECKOUT_DATE_MIN = '2017-01-25'
   const CHECKOUT_DATE_MAX = '2017-01-31'
 
   export default {
@@ -164,13 +163,14 @@
     data() {
       return {
         busy: true,
-        reservation: [],
+        reservations: [],
         accommodationList: null
       }
     },
     computed: {
       date_checkInMin() { return CHECKIN_DATE_MIN },
       date_checkInMax() { return CHECKIN_DATE_MAX },
+      date_checkOutMin() { return CHECKOUT_DATE_MIN },
       date_checkOutMax() { return CHECKOUT_DATE_MAX },
       disabled() { return this.busy },
       numOfRepresentatives() { 
@@ -180,18 +180,18 @@
         return s
       },
       maxReservationReached() {
-        const MAX_NUM_OF_RESERVATION = Math.ceil(this.numOfRepresentatives / 2) + 1
-        return this.reservation.length >= MAX_NUM_OF_RESERVATION
+        const MAX_NUM_OF_RESERVATION = Math.ceil(this.numOfRepresentatives / 2)
+        return this.reservations.length >= MAX_NUM_OF_RESERVATION
       },
       validate() {
-        let fails = this.reservation.filter( $ => !$.id || !$.checkIn || !$.checkOut )
+        let fails = this.reservations.filter( $ => !$.id || !$.checkIn || !$.checkOut )
         return fails.length === 0
       },
       hotels() {
         return uniq( this.accommodationList.map( $ => $.name ) )
                .map( name => ({
                  name,
-                 available: this.hotelRoomTypes[name].map( $ => $.stock ).reduce( (l,r) => l+r )
+                 available: this.hotelRoomTypes[name].map( $ => $.available ).reduce( (l,r) => l+r )
                }) )
       },
       hotelRoomTypes() {
@@ -204,7 +204,7 @@
                              .map( ({id, type, stock}) => ({
                                id,
                                type,
-                               available: stock - this.reservation.filter( $ => $.id === id ).length
+                               available: stock - this.reservations.filter( $ => $.id === id ).length
                               }) )
         })
         return hotelRoom
@@ -217,7 +217,9 @@
         return this.data.committee && this.data.committee[dbId] > 0
       },
       getCheckOutDateMin(checkIn) {
-        return dateFormat(new Date(checkIn).valueOf() + 24*60*60*1000, 'yyyy-mm-dd')
+        let checkoutMin = new Date(CHECKOUT_DATE_MIN).valueOf()
+        let checkoutMin_1day = new Date(checkIn).valueOf() + 24*60*60*1000    // stay for at least 1 day
+        return dateFormat( Math.max(checkoutMin, checkoutMin_1day), 'yyyy-mm-dd')
       },
       fetchAccommodationStock() {
         this.busy = true
@@ -227,13 +229,21 @@
         .then( () => this.busy = false )
       },
       confirm() {
-        let payload = this.reservation.map( ({id, checkIn, checkOut}) => ({ id, checkIn, checkOut }) )
-        return this.$http.post('accommodation')
+        let reservations = this.reservations.map( ({id, checkIn, checkOut}) => ({ id, checkIn, checkOut }) )
+        return this.$http.post('accommodation', { reservations })
         .then( res => {
           alert('酒店预订成功')
+          this.data.state = 'accommodation-confirmed'
           this.$router.replace('payment')
         })
-        .catch( res => this.error = getResponseMessage(res) )
+        .catch( res => {
+          if (res && res.status === 410) {
+            this.error = '酒店已被他人抢订，请修改预订信息'
+            return this.fetchAccommodationStock()
+          } else {
+            this.error = getResponseMessage(res)
+          }
+        })
         .then( () => this.busy = false )
       }
     },
