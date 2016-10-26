@@ -178,7 +178,6 @@
         return s
       },
       maxReservationReached() {
-        return false
         const MAX_NUM_OF_RESERVATION = Math.ceil(this.numOfRepresentatives / 2)
         return this.reservations.length >= MAX_NUM_OF_RESERVATION
       },
