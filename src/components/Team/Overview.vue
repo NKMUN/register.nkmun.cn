@@ -64,7 +64,7 @@
       state() { return this.data && this.data.state ? this.data.state : 'registered' },
       todo_exchange() { return this.state==='registered' },
       todo_hotel()    { return this.state==='registered' || this.state==='quota-confirmed' },
-      todo_payment()  { return this.state==='registered' || this.state==='quota-confirmed' || this.state==='hotel-confirmed' },
+      todo_payment()  { return this.state==='registered' || this.state==='quota-confirmed' || this.state==='accommodation-confirmed' },
       todo_attend()   { return this.state==='finished' }
     },
     methods: {

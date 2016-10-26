@@ -27,7 +27,7 @@
       <h4>住宿信息</h4>
       <p>
         入住时间最早为：{{date_checkInMin}}，最迟为：{{date_checkInMax}}<br>
-        退房时间最迟为：{{date_checkOutMax}}
+        退房时间最早为：{{date_checkOutMin}}，最迟为：{{date_checkOutMax}}
       </p>
       <table class="list">
         <thead>
@@ -151,6 +151,7 @@
 
   const CHECKIN_DATE_MIN = '2017-01-19'
   const CHECKIN_DATE_MAX = '2017-01-24'
+  const CHECKOUT_DATE_MIN = '2017-01-25'
   const CHECKOUT_DATE_MAX = '2017-01-31'
 
   export default {
@@ -169,6 +170,7 @@
     computed: {
       date_checkInMin() { return CHECKIN_DATE_MIN },
       date_checkInMax() { return CHECKIN_DATE_MAX },
+      date_checkOutMin() { return CHECKOUT_DATE_MIN },
       date_checkOutMax() { return CHECKOUT_DATE_MAX },
       disabled() { return this.busy },
       numOfRepresentatives() { 
@@ -215,7 +217,9 @@
         return this.data.committee && this.data.committee[dbId] > 0
       },
       getCheckOutDateMin(checkIn) {
-        return dateFormat(new Date(checkIn).valueOf() + 24*60*60*1000, 'yyyy-mm-dd')
+        let checkoutMin = new Date(CHECKOUT_DATE_MIN).valueOf()
+        let checkoutMin_1day = new Date(checkIn).valueOf() + 24*60*60*1000    // stay for at least 1 day
+        return dateFormat( Math.max(checkoutMin, checkoutMin_1day), 'yyyy-mm-dd')
       },
       fetchAccommodationStock() {
         this.busy = true
@@ -229,6 +233,7 @@
         return this.$http.post('accommodation', { reservations })
         .then( res => {
           alert('酒店预订成功')
+          this.data.state = 'accommodation-confirmed'
           this.$router.replace('payment')
         })
         .catch( res => {
