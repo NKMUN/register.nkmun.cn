@@ -170,8 +170,8 @@
         </form>
       </div>
       <div slot="button">
-        <div class="alert alert-danger" role="alert">
-          <span class="danger">警告：名额交换确认后不可撤销！</span>
+        <div class="confirm-exchange">
+          <input type="checkbox" v-model="exchange.confirm"></input><span>我已确认进行交换并知晓该操作不可撤销</span>
         </div>
         <button class="next"
           @click="!disabled && validExchange ? exchangeQuota(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
@@ -263,6 +263,11 @@
         border: 1px solid #aaa
         border-radius: 8px
         box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
+    .confirm-exchange
+      margin: 1em 0
+      input[type=checkbox]
+        height: 14px
+        width: 14px
 </style>
 
 <script>
@@ -323,7 +328,8 @@
           target: null,
           targetCommittee: null,
           selfCommittee: null,
-          amount: null
+          amount: null,
+          confirm: false
         }
       }
     },
@@ -355,8 +361,8 @@
         return this.data.committee[this.giveup.committee]
       },
       validExchange() {
-        const {target, targetCommittee, selfCommittee, amount} = this.exchange
-        return target && targetCommittee && selfCommittee && amount > 0 && amount <= this.maxExchangeAmount
+        const {target, targetCommittee, selfCommittee, amount, confirm} = this.exchange
+        return target && targetCommittee && selfCommittee && amount > 0 && amount <= this.maxExchangeAmount && confirm
       },
       validGiveup() {
         const {committee, amount} = this.giveup
@@ -447,12 +453,10 @@
         this.exchange.targetCommittee = committee
         this.exchange.selfCommittee = null
         this.exchange.amount = null
+        this.exchange.confirm = false
       },
       clearExchangeModal(target, committee) {
         this.exchange.target = null
-        this.exchange.targetCommittee = null
-        this.exchange.selfCommittee = null
-        this.exchange.amount = null
       },
       confirm() {
         if ( this.data.committee.loc_cn_3 % 2
