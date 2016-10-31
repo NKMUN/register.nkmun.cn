@@ -3,7 +3,7 @@
     <div class="section own-quota">
       <h3>已分配名额</h3>
       <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：由于名额放弃后不可撤销，请在确认该名额不进行交换且不进行报名后再点击放弃。放弃双代会场名额时请填写偶数数量，如只存有奇数数量名额，将不能确认。</span>
+        <span class="danger">警告：由于名额放弃后不可撤销，请在确认不需要且不交换该名额后再点击放弃。放弃双代会场名额时请填写偶数数量，如只存有奇数数量名额，将不能确认。</span>
       </div>
       <table class="quota-detail">
         <tr>
