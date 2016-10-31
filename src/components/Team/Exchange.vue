@@ -336,7 +336,8 @@
         confirmQuota: false,
         giveup: {
           committee: null,
-          amount: 0
+          amount: 0,
+          confirm: false
         },
         exchange: {
           target: null,
