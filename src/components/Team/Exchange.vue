@@ -3,7 +3,7 @@
     <div class="section own-quota">
       <h3>已分配名额</h3>
       <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：请在确认名额不进行交换且不进行报名后，再点击放弃按钮。一旦放弃，不可撤销。放弃双代名额时请填写偶数数量，如有奇数数量名额，将不能确认名额。</span>
+        <span class="danger">警告：由于名额放弃后不可撤销，请在确认该名额不进行交换且不进行报名后再点击放弃。放弃双代会场名额时请填写偶数数量，如只存有奇数数量名额，将不能确认。</span>
       </div>
       <table class="quota-detail">
         <tr>
@@ -21,7 +21,9 @@
 
     <div class="section requests">
       <h3>待处理申请 <button :disabled="disabled" @click="!disabled ? fetchPendingRequests() : nop()">刷新</button> </h3>
-      <span class="danger">警告：请不要确认来自双代会场的奇数数量名额，这将导致您不能确认名额。</span>
+      <div class="alert alert-danger" role="alert">
+        <span class="danger">警告：请只接受来自双代会场的偶数数量名额，否则将导致您不能确认名额。</span>
+      </div>
       <table v-if="requests.length" class="waiting-apply">
         <tr>
           <th>来源学校</th>
@@ -88,9 +90,13 @@
     <div class="section confirmation">
       <h3>名额确认</h3>
       <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：请于名额交换全部完成后确认最上方“已分配名额”栏目中的名额信息，确认后不能再放弃或交换。如双代会场名额为奇数，将不能确认名额。</span>
+        <span class="danger">警告：请于名额交换全部完成后确认最上方“已分配名额”栏目中的名额信息，确认后不能再进行交换。如双代会场名额为奇数，将不能确认名额。</span>
       </div>
-      <button class="xlarge next" :disabled="disabled" @click="!disabled ? confirm() : nop()">确认名额</button>
+      <div class="confirm-checkbox">
+        <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
+        <input type="checkbox" v-model="confirmQuota"></input><span>我已确认所有名额正确无误并知晓确认后不可修改</span>
+      </div>
+      <button class="xlarge next" :disabled="disabled || !confirmQuota" @click="!disabled && confirmQuota ? confirm() : nop()">确认名额</button>
     </div>
 
     <overlay-modal v-if="giveup.committee" class="giveup">
@@ -146,7 +152,7 @@
               <select v-model="exchange.selfCommittee">
                 <option value="" disabled hidden selected>[请选择会场]</option>
                 <option
-                  v-for="$ in xchgCommittees | filterBy hasQuota"
+                  v-for="$ in xchgCommittees | filterBy isExchangableCommittee"
                   :disabled="$.dbId===exchange.targetCommittee"
                   :value="$.dbId"
                 >{{ getCommitteeName($.dbId) }}</option>
@@ -170,12 +176,13 @@
         </form>
       </div>
       <div slot="button">
-        <div class="alert alert-danger" role="alert">
-          <span class="danger">警告：名额交换确认后不可撤销！</span>
+        <div class="confirm-checkbox center">
+          <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
+          <input type="checkbox" v-model="exchange.confirm"></input><span>我已确认进行交换并知晓该操作不可撤销</span>
         </div>
         <button class="next"
-          @click="!disabled && validExchange ? exchangeQuota(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
-          :disabled="disabled || !validExchange"
+          @click="!disabled && validExchange && exchange.confirm ? exchangeQuota(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
+          :disabled="disabled || !validExchange || !exchange.confirm"
         >确认
         </button>
         <button class="warn" :disabled="disabled" @click="clearExchangeModal()">取消</button>
@@ -198,12 +205,12 @@
     margin: 15px auto
     .quota-detail
       text-align: center
-      td
-        width: 15%
+      width: 40%
+      th, td
+        width: 33%
     .waiting-apply
       text-align: center
-      td
-        width: 15%
+      width: 20%
     .exchange-list
       tr
         height: 35px
@@ -232,7 +239,7 @@
           border-bottom-left-radius: 0
     .confirmation
       text-align: center
-      h3, div
+      h3
         text-align: left
   .alert
     padding: 15px;
@@ -245,6 +252,13 @@
     border-color: #ebccd1;
   .danger
     color: #d9534f
+  .confirm-checkbox
+    margin: 1em 0
+    &.center
+      text-align: center
+    input[type=checkbox]
+      height: 14px
+      width: 14px
   .overlay.exchange
     form
       .field
@@ -317,6 +331,7 @@
         schools: null,
         requests: [],
         tab: COMMITTEE_GROUPS[0].id,
+        confirmQuota: false,
         giveup: {
           committee: null,
           amount: 0
@@ -325,7 +340,8 @@
           target: null,
           targetCommittee: null,
           selfCommittee: null,
-          amount: null
+          amount: null,
+          confirm: false
         }
       }
     },
@@ -438,6 +454,9 @@
       hasQuota({dbId}) {
         return this.data.committee && this.data.committee[dbId] > 0
       },
+      isExchangableCommittee({dbId}) {
+        return this.hasQuota({dbId}) && dbId!=='loc_observer' && dbId!=='loc_superv'
+      },
       showGiveupModal(committee) {
         this.giveup.committee = committee
       },
@@ -449,18 +468,18 @@
         this.exchange.targetCommittee = committee
         this.exchange.selfCommittee = null
         this.exchange.amount = null
+        this.exchange.confirm = false
       },
       clearExchangeModal(target, committee) {
         this.exchange.target = null
-        this.exchange.targetCommittee = null
-        this.exchange.selfCommittee = null
-        this.exchange.amount = null
       },
       confirm() {
         if ( this.data.committee.loc_cn_3 % 2
           || this.data.committee.loc_en_1 % 2
           || this.data.committee.loc_en_2 % 2
           || this.data.committee.loc_en_3 % 2
+          || this.data.committee.loc_en_4 % 2
+          || this.data.committee.loc_en_5 % 2
         ) {    // Condemn Improper Requirement Document!
           return window.alert('请检查双代会场名额数量是否为偶数！')
         }

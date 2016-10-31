@@ -42,6 +42,10 @@
     alert('Error: '+msg)
   }
 
+  function bySchoolName(a, b) {
+    return String(a.school).localeCompare(b.school)
+  }
+
   function valueInSet(val, ...vals) {
     for (let v of vals)
       if (val === v)
@@ -68,6 +72,7 @@
             state:  STATE_NAME[$.state] || STATE_NAME['*'],
             canResendInvitation: valueInSet($.state, 'inviting', 'invited')
           }))
+          .sort( bySchoolName )
       }
     },
     ready() {

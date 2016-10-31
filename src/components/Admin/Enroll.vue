@@ -4,7 +4,7 @@
       <h4>待审核学校列表</h4>
       <ul class="list">
         <li
-          v-for="entry in list | filterBy needsReview"
+          v-for="entry in displayList"
           :active="active === entry.id"
           :disabled="busy"
           :busy="busy"
@@ -71,7 +71,7 @@
         <button
           class="xlarge"
           :disabled="busy"
-          @click.prevent="!busy ? edit( nextToReview( getListIdx(active) ) ) : nop()"
+          @click.prevent="!busy ? edit( nextToReview( getDisplayListIdx(active) ) ) : nop()"
         >下一个待审核学校</button>
       </div>
 
@@ -168,6 +168,10 @@
     return obj
   }
 
+  function bySchoolName(a, b) {
+    return String(a.school).localeCompare(b.school)
+  }
+
   export default {
     components: {
       'input-integer': InputInteger
@@ -190,6 +194,9 @@
     computed: {
       untouchedEntries() {
         return this.list.filter( $ => ! $.state ).length
+      },
+      displayList() {
+        return this.list.filter( this.needsReview ).sort( bySchoolName )
       }
     },
     methods: {
@@ -202,13 +209,18 @@
           if (this.list[idx].id === id)
             return idx
       },
+      getDisplayListIdx(id) {
+        for (let idx=0; idx!==this.displayList.length; ++idx)
+          if (this.displayList[idx].id === id)
+            return idx
+      },
       nextToReview(idx) {
-        for (let next=idx+1; next < this.list.length; ++next)
-          if ( ! this.list[next].state )
-            return this.list[next].id
+        for (let next=idx+1; next < this.displayList.length; ++next)
+          if ( ! this.displayList[next].state )
+            return this.displayList[next].id
         for (let next=0; next < idx; ++next)
-          if ( ! this.list[next].state )
-            return this.list[next].id
+          if ( ! this.displayList[next].state )
+            return this.displayList[next].id
         return null
       },
       update() {
@@ -232,9 +244,9 @@
                  // TOOD: hint invitation success
                  this.busy = false
                  this.dirty = false
+                 this.edit( this.nextToReview(this.getDisplayListIdx(id)) )
                  this.list[idx].state = 'inviting'
                  this.list.$set(idx, this.list[idx])    // force view update
-                 this.edit( this.nextToReview(idx) )
                })
                .catch( (res) => complainError(res, this) )
       },
@@ -247,9 +259,9 @@
                  // TOOD: hint pending set
                  this.busy = false
                  this.dirty = false
+                 this.edit( this.nextToReview(this.getDisplayListIdx(id)) )
                  this.list[idx].state = 'pending'
                  this.list.$set(idx, this.list[idx])    // forve cire update
-                 this.edit( this.nextToReview(idx) )
                })
                .catch( (res) => complainError(res, this) )
       },
