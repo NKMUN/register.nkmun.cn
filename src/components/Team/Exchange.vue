@@ -146,7 +146,7 @@
               <select v-model="exchange.selfCommittee">
                 <option value="" disabled hidden selected>[请选择会场]</option>
                 <option
-                  v-for="$ in xchgCommittees | filterBy hasQuota"
+                  v-for="$ in xchgCommittees | filterBy isExchangableCommittee"
                   :disabled="$.dbId===exchange.targetCommittee"
                   :value="$.dbId"
                 >{{ getCommitteeName($.dbId) }}</option>
@@ -441,6 +441,9 @@
       getCommitteeName,
       hasQuota({dbId}) {
         return this.data.committee && this.data.committee[dbId] > 0
+      },
+      isExchangableCommittee({dbId}) {
+        return this.hasQuota({dbId}) && dbId!=='loc_observer' && dbId!=='loc_superv'
       },
       showGiveupModal(committee) {
         this.giveup.committee = committee
