@@ -180,7 +180,7 @@
         return s
       },
       maxReservationReached() {
-        const MAX_NUM_OF_RESERVATION = Math.ceil(this.numOfRepresentatives / 2)
+        const MAX_NUM_OF_RESERVATION = Math.ceil(this.numOfRepresentatives / 2) + 3
         return this.reservations.length >= MAX_NUM_OF_RESERVATION
       },
       validate() {
