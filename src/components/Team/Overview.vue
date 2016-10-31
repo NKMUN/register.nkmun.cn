@@ -47,6 +47,8 @@
       text-align: center
       td
         width: 25%
+      tr
+        height: 30px
 </style>
 
 <script>

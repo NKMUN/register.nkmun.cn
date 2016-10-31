@@ -202,7 +202,7 @@
   @import "../../styles/busy";
   @import "../../styles/form";
   @import "../../styles/button";
-  quota-exchange
+  .quota-exchange
     width: 80%
     margin: 15px auto
     .quota-detail
