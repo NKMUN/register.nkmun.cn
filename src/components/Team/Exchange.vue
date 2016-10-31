@@ -92,7 +92,11 @@
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请于名额交换全部完成后确认最上方“已分配名额”栏目中的名额信息，确认后不能再进行交换。如双代会场名额为奇数，将不能确认名额。</span>
       </div>
-      <button class="xlarge next" :disabled="disabled" @click="!disabled ? confirm() : nop()">确认名额</button>
+      <div class="confirm-checkbox">
+        <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
+        <input type="checkbox" v-model="confirmQuota"></input><span>我已确认所有名额正确无误并知晓确认后不可修改</span>
+      </div>
+      <button class="xlarge next" :disabled="disabled || !confirmQuota" @click="!disabled && confirmQuota ? confirm() : nop()">确认名额</button>
     </div>
 
     <overlay-modal v-if="giveup.committee" class="giveup">
@@ -172,12 +176,13 @@
         </form>
       </div>
       <div slot="button">
-        <div class="confirm-exchange">
+        <div class="confirm-checkbox center">
+          <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
           <input type="checkbox" v-model="exchange.confirm"></input><span>我已确认进行交换并知晓该操作不可撤销</span>
         </div>
         <button class="next"
-          @click="!disabled && validExchange ? exchangeQuota(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
-          :disabled="disabled || !validExchange"
+          @click="!disabled && validExchange && exchange.confirm ? exchangeQuota(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
+          :disabled="disabled || !validExchange || !exchange.confirm"
         >确认
         </button>
         <button class="warn" :disabled="disabled" @click="clearExchangeModal()">取消</button>
@@ -234,7 +239,7 @@
           border-bottom-left-radius: 0
     .confirmation
       text-align: center
-      h3, div
+      h3
         text-align: left
   .alert
     padding: 15px;
@@ -247,6 +252,13 @@
     border-color: #ebccd1;
   .danger
     color: #d9534f
+  .confirm-checkbox
+    margin: 1em 0
+    &.center
+      text-align: center
+    input[type=checkbox]
+      height: 14px
+      width: 14px
   .overlay.exchange
     form
       .field
@@ -267,11 +279,6 @@
         border: 1px solid #aaa
         border-radius: 8px
         box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
-    .confirm-exchange
-      margin: 1em 0
-      input[type=checkbox]
-        height: 14px
-        width: 14px
 </style>
 
 <script>
@@ -324,6 +331,7 @@
         schools: null,
         requests: [],
         tab: COMMITTEE_GROUPS[0].id,
+        confirmQuota: false,
         giveup: {
           committee: null,
           amount: 0
@@ -365,8 +373,8 @@
         return this.data.committee[this.giveup.committee]
       },
       validExchange() {
-        const {target, targetCommittee, selfCommittee, amount, confirm} = this.exchange
-        return target && targetCommittee && selfCommittee && amount > 0 && amount <= this.maxExchangeAmount && confirm
+        const {target, targetCommittee, selfCommittee, amount} = this.exchange
+        return target && targetCommittee && selfCommittee && amount > 0 && amount <= this.maxExchangeAmount
       },
       validGiveup() {
         const {committee, amount} = this.giveup
