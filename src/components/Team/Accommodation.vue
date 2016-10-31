@@ -149,10 +149,10 @@
   import dateFormat from 'dateformat'
   function getCommitteeName(dbId) { return committee_name[dbId] }
 
-  const CHECKIN_DATE_MIN = '2017-01-19'
-  const CHECKIN_DATE_MAX = '2017-01-24'
+  const CHECKIN_DATE_MIN = '2017-01-18'
+  const CHECKIN_DATE_MAX = '2017-01-21'
   const CHECKOUT_DATE_MIN = '2017-01-25'
-  const CHECKOUT_DATE_MAX = '2017-01-31'
+  const CHECKOUT_DATE_MAX = '2017-01-28'
 
   export default {
     components: { OverlayModal },
