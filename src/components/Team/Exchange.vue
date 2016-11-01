@@ -31,6 +31,7 @@
           <th>数量</th>
           <th>需求会场</th>
           <th>操作</th>
+          <th>备注</th>
         </tr>
         <tr v-for="$ in requests" class="request-entry">
           <td><span class="from-school">{{ $.from }}</span></td>
@@ -41,6 +42,7 @@
             <button class="accept next" :disabled="disabled" @click="!busy ? acceptExchange($.id) : nop()">接受</button>
             <button class="accept warn" :disabled="disabled" @click="!busy ? refuseExchange($.id) : nop()">拒绝</button>
           </td>
+          <td><span class="note">{{ $.note ? $.note : '' }}</span></td>
         </tr>
       </table>
       <div v-else>
@@ -175,6 +177,19 @@
               ></input-integer>
             </label>
           </div>
+          <div class="field">
+            <label>
+              <span class="field-name">备注：</span>
+              <input
+                class="field-value"
+                v-model="exchange.note"
+                maxlength="2048"
+                type="text"
+                placeholder="备注"
+                :disabled="disabled"
+              ></input>
+            </label>
+          </div>
         </form>
       </div>
       <div slot="button">
@@ -183,7 +198,7 @@
           <input type="checkbox" v-model="exchange.confirm"></input><span>我已确认进行交换并知晓该操作不可撤销</span>
         </div>
         <button class="next"
-          @click="!disabled && validExchange && exchange.confirm ? exchangeQuota(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount) : nop()"
+          @click="!disabled && validExchange && exchange.confirm ? exchangeQuota(exchange.selfCommittee, exchange.target, exchange.targetCommittee, exchange.amount, exchange.note) : nop()"
           :disabled="disabled || !validExchange || !exchange.confirm"
         >确认
         </button>
@@ -212,7 +227,7 @@
         width: auto
     .waiting-apply
       text-align: center
-      width: 70%
+      width: 100%
       th, td
         width: auto
     .exchange-list
@@ -346,7 +361,8 @@
           targetCommittee: null,
           selfCommittee: null,
           amount: null,
-          confirm: false
+          confirm: false,
+          note: null
         }
       }
     },
@@ -440,13 +456,14 @@
         .catch( handleExchangeError.bind(this) )
         .then( () => this.busy = false )
       },
-      exchangeQuota(selfCommittee, target, targetCommittee, amount) {
+      exchangeQuota(selfCommittee, target, targetCommittee, amount, note) {
         return this.$http.post('leader/exchange-request', {
           from:   this.data.id,
           to:     target,
           offer:  selfCommittee,
           wanted: targetCommittee,
-          amount: amount
+          amount: amount,
+          note:   note
         })
         .then( (res) => {
           alert('交换申请已发送')
@@ -476,6 +493,7 @@
         this.exchange.selfCommittee = null
         this.exchange.amount = null
         this.exchange.confirm = false
+        this.exchange.note = null
       },
       clearExchangeModal(target, committee) {
         this.exchange.target = null
