@@ -20,7 +20,7 @@ const CN = G('中文会场', 'cn',
 )
 
 const CS = G('中国系统', 'chn_system',
-  L('中国系统-省政府', 'loc_cs_1'),
+  L('中国系统-政府', 'loc_cs_1'),
   L('中国系统-人大', 'loc_cs_2'),
   L('中国系统-公众', 'loc_cs_3'),
 )
