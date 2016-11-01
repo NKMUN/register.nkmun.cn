@@ -3,7 +3,7 @@
     <div class="section own-quota">
       <h3>已分配名额</h3>
       <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：由于名额放弃后不可撤销，请在确认该名额不进行交换且不进行报名后再点击放弃。放弃双代会场名额时请填写偶数数量，如只存有奇数数量名额，将不能确认。</span>
+        <span class="danger">警告：由于名额放弃后不可撤销，请在确认不需要且不交换该名额后再点击放弃。放弃双代会场名额时请填写偶数数量，如只存有奇数数量名额，将不能确认。</span>
       </div>
       <table class="quota-detail">
         <tr>
@@ -92,7 +92,7 @@
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请于名额交换全部完成后确认最上方“已分配名额”栏目中的名额信息，确认后不能再进行交换。如双代会场名额为奇数，将不能确认名额。</span>
       </div>
-      <div class="confirm-checkbox">
+      <div class="confirm-checkbox center">
         <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
         <input type="checkbox" v-model="confirmQuota"></input><span>我已确认所有名额正确无误并知晓确认后不可修改</span>
       </div>
@@ -113,18 +113,20 @@
                 :max="maxGiveupAmount"
                 step="1"
                 :disabled="disabled"
+                placeholder="请输入放弃数量"
               ></input-integer>
             </label>
           </div>
         </form>
       </div>
       <div slot="button">
-        <div class="alert alert-danger" role="alert">
-          <span class="danger">警告：名额放弃后不可撤销！</span>
+        <div class="confirm-checkbox">
+          <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
+          <input type="checkbox" v-model="giveup.confirm"></input><span>我已确认放弃名额并知晓该操作不可撤销</span>
         </div>
         <button class="next"
-          @click="!disabled && validGiveup ? giveupQuota(giveup.committee, giveup.amount) : nop()"
-          :disabled="disabled || !validGiveup"
+          @click="!disabled && validGiveup && giveup.confirm ? giveupQuota(giveup.committee, giveup.amount) : nop()"
+          :disabled="disabled || !validGiveup || !giveup.confirm"
         >确认</button>
         <button class="warn" :disabled="disabled" @click="clearGiveupModal()">取消</button>
       </div>
@@ -176,7 +178,7 @@
         </form>
       </div>
       <div slot="button">
-        <div class="confirm-checkbox center">
+        <div class="confirm-checkbox">
           <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
           <input type="checkbox" v-model="exchange.confirm"></input><span>我已确认进行交换并知晓该操作不可撤销</span>
         </div>
@@ -336,7 +338,8 @@
         confirmQuota: false,
         giveup: {
           committee: null,
-          amount: 0
+          amount: 0,
+          confirm: false
         },
         exchange: {
           target: null,
@@ -461,6 +464,8 @@
       },
       showGiveupModal(committee) {
         this.giveup.committee = committee
+        this.giveup.amount = null
+        this.giveup.confirm = false
       },
       clearGiveupModal() {
         this.giveup.committee = null
