@@ -209,12 +209,12 @@
       text-align: center
       width: 40%
       th, td
-        width: 33%
+        width: auto
     .waiting-apply
       text-align: center
-      width: 40%
+      width: 70%
       th, td
-        width: 33%
+        width: auto
     .exchange-list
       tr
         height: 35px
