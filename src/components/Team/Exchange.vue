@@ -96,9 +96,20 @@
       </div>
       <div class="confirm-checkbox center">
         <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
-        <input type="checkbox" v-model="confirmQuota"></input><span>我已确认所有名额正确无误并知晓确认后不可修改</span>
+        <div class="field">
+          <label>领队是否参会：
+            <select v-model="optLeaderAttend">
+              <option selected disabled hidden :value="null">[请选择]</option>
+              <option :value="true">参会</option>
+              <option :value="false">不参会</option>
+            </select>
+          </label>
+        </div>
+        <div class="field">
+          <input type="checkbox" v-model="confirmQuota"></input><span>我已确认所有名额正确无误并知晓确认后不可修改</span>
+        </div>
       </div>
-      <button class="xlarge next" :disabled="disabled || !confirmQuota" @click="!disabled && confirmQuota ? confirm() : nop()">确认名额</button>
+      <button class="xlarge next" :disabled="disabled || !confirmQuota || optLeaderAttend===null" @click="!disabled && confirmQuota && optLeaderAttend!==null ? confirm() : nop()">确认名额</button>
     </div>
 
     <overlay-modal v-if="giveup.committee" class="giveup">
@@ -275,6 +286,8 @@
     margin: 1em 0
     &.center
       text-align: center
+    div.field
+      margin: .5em 0
     input[type=checkbox]
       height: 14px
       width: 14px
@@ -351,6 +364,7 @@
         requests: [],
         tab: COMMITTEE_GROUPS[0].id,
         confirmQuota: false,
+        optLeaderAttend: null,
         giveup: {
           committee: null,
           amount: 0,
@@ -510,7 +524,9 @@
         }
         if ( window.confirm('确认名额后不能再进行修改') ) {
           this.busy = true
-          return this.$http.post('leader/confirm-quota', {})
+          return this.$http.post('leader/confirm-quota', {
+            leaderAttend: this.optLeaderAttend
+          })
           .then( res => {
             this.data.state = 'quota_confirmed'
             alert('名额已确认，请填写住宿信息并付款')
