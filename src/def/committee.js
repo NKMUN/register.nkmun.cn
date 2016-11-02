@@ -41,6 +41,7 @@ const SP = G('特殊会场', 'special',
 const ETC = G('其他', 'etc',
   L('指导教师',  'loc_superv'),
   L('观察员',    'loc_observer')
+  // NOTE: loc_absent_leader: 不参会领队
 )
 
 const committees = [CN, CS, EN, SP, ETC]
