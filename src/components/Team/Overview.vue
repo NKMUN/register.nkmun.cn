@@ -30,6 +30,7 @@
         <li v-if="todo_exchange">确认名额和参会信息</li>
         <li v-if="todo_hotel">   确认住宿信息</li>
         <li v-if="todo_payment"> 支付费用</li>
+        <li v-if="todo_wait">    等待审核</li>
         <li v-if="todo_finished">参会</li>
       </ol>
     </div>
@@ -65,6 +66,7 @@
       todo_exchange() { return this.state==='registered' },
       todo_hotel()    { return this.state==='registered' || this.state==='quota-confirmed' },
       todo_payment()  { return this.state==='registered' || this.state==='quota-confirmed' || this.state==='accommodation-confirmed' },
+      todo_wait()     { return this.state==='paid' },
       todo_attend()   { return this.state==='finished' }
     },
     methods: {

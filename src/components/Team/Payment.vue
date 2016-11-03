@@ -62,10 +62,11 @@
           <p>仅接受jpg和png格式，文件需小于1MB</p>
           <label>
             支付凭证：
-            <input v-el:file type="file" accept="image/jpeg, image/png, .jpg, .jpeg, .png" required></input>
+            <input v-el:file @change="changeFile()" type="file" accept="image/jpeg, image/png, .jpg, .jpeg, .png" required></input>
           </label>
+          <span class="hint"> {{ validError }} </span>
         </form>
-        <button class="next xlarge">提交</button>
+        <button class="next xlarge" :disabled="disabled || !valid" @click.prevent="!disabled && valid ? sumbitPaymentCred() : nop()">提交</button>
       </li>
 
       <li>
@@ -74,20 +75,42 @@
 
     </ol>
 
+    <overlay-modal v-if="error" class="error">
+      <h4>出错了。</h4>
+      <div slot="content">
+        <p>{{ error }}</p>
+        <p>请稍后再试</p>
+      </div>
+      <button slot="button" :disabled="disabled" @click="error = null">关闭</button>
+    </overlay-modal>
+
   </div>
 </template>
 
 <script>
   import BankTransferCred from '../BankTransferCred'
+  import OverlayModal from '../OverlayModal'
   import getResponseMessage from '../../lib/guess-response-message'
 
+  function guessMime(name) {
+    if (name.match(/\.(jpg|jpeg)$/i))
+      return 'image/jpeg'
+    if (name.match(/\.png$/i))
+      return 'image/png'
+    return 'application/octet-stream'
+  }
+
   export default {
-    components: { BankTransferCred },
+    props: ['data'],
+    components: { BankTransferCred, OverlayModal },
     data() {
       return {
         tab: 'bank',
         busy: false,
-        billing: null
+        error: null,
+        billing: null,
+        credFile: null,
+        validError: null
       }
     },
     computed: {
@@ -99,6 +122,40 @@
           ... committee,
           ... accommodation.sort( (a,b) => a.name.localeCompare(b.name) )
         ]
+      },
+      valid() {
+        return this.credFile
+      }
+    },
+    methods: {
+      nop() {},
+      sumbitPaymentCred() {
+        this.busy = true
+        let mime = guessMime(this.credFile.name)
+        let form = new FormData()
+        form.append('cred', this.credFile)
+        form.append('mime', mime)
+        this.$http.post('payment', form)
+        .then( (res) => {
+          alert('支付凭据上传成功，请等待组委审核。')
+          this.data.state = 'paid'
+          this.$router.replace('overview')
+        })
+        .catch( (e) => this.error = getResponseMessage(e) )
+        .then( () => this.busy = false )
+      },
+      changeFile() {
+        let files = this.$els.file.files
+        let file = files[0]
+        this.credFile = null
+        this.validError = null
+        if (files.length !== 1)
+          return this.validError = '请浏览并选择支付凭证'
+        if ( ! file.name.match(/\.(jpg|jpeg|png)$/i) )
+          return this.validError = '文件必须是jpg或png图像'
+        if ( file.size > 1024*1024 )
+          return this.validError = '文件必须小于1MB'
+        this.credFile = file
       }
     },
     ready() {
@@ -116,5 +173,7 @@
   .container.payment
     .currency
       font-weight: bolder
+      color: red
+    .hint
       color: red
 </style>
