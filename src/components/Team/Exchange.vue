@@ -528,7 +528,7 @@
             leaderAttend: this.optLeaderAttend
           })
           .then( res => {
-            this.data.state = 'quota_confirmed'
+            this.data.state = 'quota-confirmed'
             alert('名额已确认，请填写住宿信息并付款')
             this.$router.replace('accommodation')
           })
