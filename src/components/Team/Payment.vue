@@ -141,7 +141,7 @@
           this.data.state = 'paid'
           this.$router.replace('overview')
         })
-        .catch( (e) => this.error = getResponseMessage(e) )
+        .catch( (res) => getResponseMessage(res).then( msg => this.error = msg ) )
         .then( () => this.busy = false )
       },
       changeFile() {
@@ -163,7 +163,7 @@
       return this.$http.get('leader/billing')
       .then( (res) => res.json() )
       .then( (json) => this.billing = json )
-      .catch( (e) => this.error = getResponseMessage(e) )
+      .catch( (res) => getResponseMessage(res).then( msg => this.error = msg ) )
       .then( () => this.busy = false )
     }
   }
