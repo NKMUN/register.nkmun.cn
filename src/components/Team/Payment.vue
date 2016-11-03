@@ -114,6 +114,8 @@
 <style lang="stylus">
   @import "../../styles/button";
   .container.payment
+    width: 80%
+    margin: auto
     .currency
       font-weight: bolder
       color: red
