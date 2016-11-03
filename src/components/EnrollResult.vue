@@ -34,7 +34,7 @@
           <tbody>
             <tr v-for="$ in schools">
               <th>{{$.school}}</th>
-              <td v-for="_ in group.keys">{{$.committee[_.dbId]}}</td>
+              <td v-for="_ in group.keys">{{$.committee ? $.committee[_.dbId] : 0}}</td>
             </tr>
           </tbody>
         </table>
@@ -98,8 +98,7 @@
         this.schools = json
         this.loaded = true
       })
-      .catch( (res) => getResponseMessage(res) )
-      .then( (msg) => this.error = msg )
+      .catch( (res) => getResponseMessage(res).then( msg => this.error = msg ) )
       .then( () => this.busy = false )
     }
   }
