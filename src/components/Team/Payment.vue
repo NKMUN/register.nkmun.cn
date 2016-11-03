@@ -62,7 +62,7 @@
           <p>仅接受jpg和png格式，文件需小于1MB</p>
           <label>
             支付凭证：
-            <input v-el:file @change="changeFile()" type="file" accept="image/jpeg, image/png, .jpg, .jpeg, .png" required></input>
+            <input :disabled="disabled" v-el:file @change="changeFile()" type="file" accept="image/jpeg, image/png, .jpg, .jpeg, .png" required></input>
           </label>
           <span class="hint"> {{ validError }} </span>
         </form>
@@ -122,6 +122,9 @@
           ... committee,
           ... accommodation.sort( (a,b) => a.name.localeCompare(b.name) )
         ]
+      },
+      disabled() {
+        return this.busy
       },
       valid() {
         return this.credFile
