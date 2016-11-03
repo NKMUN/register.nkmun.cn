@@ -329,7 +329,7 @@
   function find( pred ) { return (res, $) => res || (pred($) ? $ : null) }
   function handleExchangeError(res) {
     if (!res) {
-      this.error = getResponseMessage(res)
+      getResponseMessage(res).then( msg => this.error = msg )
     } else {
       switch (res.status) {
         case 410:
@@ -337,7 +337,7 @@
           return this.fetchSelfQuota().then( this.fetchSchoolQuotas() )
         break
         default:
-          this.error = getResponseMessage(res)
+          getResponseMessage(res).then( msg => this.error = msg )
         break
       }
     }
@@ -421,22 +421,25 @@
       fetchSchoolQuotas() {
         this.busy = true
         return this.$http.get('enroll?committee=1')
-        .then( res => this.schools = res.json() )
-        .catch( res => this.error = getResponseMessage(res) )
+        .then( res => res.json() )
+        .then( json => this.schools = json )
+        .catch( res => getResponseMessage(res).then( msg => this.error = msg ) )
         .then( () => this.busy = false )
       },
       fetchSelfQuota() {
         this.busy = true
         return this.$http.get('leader')
-        .then( res => this.data = res.json() )
-        .catch( res => this.error = getResponseMessage(res) )
+        .then( res => res.json() )
+        .then( json => this.data = json )
+        .catch( res => getResponseMessage(res).then( msg => this.error = msg ) )
         .then( () => this.busy = false )
       },
       fetchPendingRequests() {
         this.busy = true
         return this.$http.get('leader/exchange-request')
-        .then( res => this.requests = res.json() )
-        .catch( res => this.error = getResponseMessage(res) )
+        .then( res => res.json() )
+        .then( json => this.requests = json )
+        .catch( res => getResponseMessage(res).then( msg => this.error = msg ) )
         .then( () => this.busy = false)
       },
       acceptExchange(id) {
@@ -452,18 +455,19 @@
       refuseExchange(id) {
         this.busy = true
         return this.$http.delete(`leader/exchange-request/${id}`)
-        .then( (res) => {
+        .then( res => {
           alert('名额交换已拒绝')
           return this.fetchPendingRequests()
         })
-        .catch( (res) => this.error = getResponseMessage(res) )
+        .catch( res => getResponseMessage(res).then( msg => this.error = msg ) )
         .then( () => this.busy = false )
       },
       giveupQuota(committee, amount) {
         this.busy = true
         return this.$http.post(`leader/giveup/${committee}`, {amount: amount})
-        .then( (res) => {
-          this.data.committee = res.json()
+        .then( (res) => res.json() )
+        .then( (json) => {
+          this.data.committee = json
           alert('名额已放弃')
           this.clearGiveupModal()
         })
@@ -532,7 +536,7 @@
             alert('名额已确认，请填写住宿信息并付款')
             this.$router.replace('accommodation')
           })
-          .catch( res => this.error = getResponseMessage(res) )
+          .catch( res => getResponseMessage(res).then( msg => this.error = msg ) )
           .then( () => this.busy = false )
         }
       }

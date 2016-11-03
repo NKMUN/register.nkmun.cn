@@ -92,9 +92,10 @@
         this.busy = true
         setToken(token)
         this.$http.get('login')
-        .then( (res) => {
+        .then( (res) => res.json() )
+        .then( ({token}) => {
           this.busy = false
-          this.loginSuccess( res.json().token )
+          this.loginSuccess( token )
           this.remember = false
           this.tryStored = false
         })
@@ -103,8 +104,6 @@
           this.remember = false
           this.tryStored = false
           clearToken()
-          let msg = getResponseMessage(res)
-          // TODO: complain about error
         })
       }
     },
@@ -117,10 +116,11 @@
       login() {
         this.busy = true
         this.$http.post('login', new FormData(this.$els.form))
-        .then( (res) => {
+        .then( (res) => res.json() )
+        .then( ({token}) => {
           this.busy = false
           this.wrongCred = false
-          this.loginSuccess( res.json().token )
+          this.loginSuccess( token )
         })
         .catch( (res) => {
           this.busy = false
@@ -129,7 +129,7 @@
               this.wrongCred = true
             break
             default:
-              this.$router.go({ path: '/generic-failure', query: {status: res.status, message: getResponseMessage(res)} })
+              this.$router.go({ path: '/generic-failure', query: {status: res.status, message: 'Internal Server Error'} })
             break
           }
         })

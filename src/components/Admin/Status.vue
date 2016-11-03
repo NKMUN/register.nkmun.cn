@@ -38,8 +38,7 @@
 
   function complainError(res) {
     // TODO: complain about error
-    let msg = getResponseMessage(res)
-    alert('Error: '+msg)
+    getResponseMessage(res).then( msg => alert('Error: '+msg) )
   }
 
   function bySchoolName(a, b) {
@@ -77,7 +76,8 @@
     },
     ready() {
       this.$http.get('enroll/status')
-      .then( (res) => this.rawList = res.json() )
+      .then( (res) => res.json() )
+      .then( (json) => this.rawList = json )
       .catch( complainError.bind(this) )
       .then( () => this.busy = false )
     },

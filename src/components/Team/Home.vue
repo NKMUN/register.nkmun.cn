@@ -78,14 +78,10 @@
     ready() {
       this.busy = true
       this.$http.get('leader')
-      .then( res => {
-        this.busy = false
-        this.data = res.json()
-      })
-      .catch( res => {
-        this.error = getResponseMessage(res)
-        this.busy = false
-      })
+      .then( res => res.json() )
+      .then( json => this.data = json )
+      .catch( res => getResponseMessage(res).then( msg => this.error = msg ) )
+      .then( () => this.busy = false )
     }
   }
 </script>

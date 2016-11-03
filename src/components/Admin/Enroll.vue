@@ -158,8 +158,7 @@
     vm.busy = false
     console.log(res)
     // TODO: complain about error
-    let msg = getResponseMessage(res)
-    alert('Error: '+msg)
+    getResponseMessage(res).then( msg => alert('Error: '+msg) )
   }
 
   function defaultCommittee() {
@@ -273,10 +272,10 @@
         }
         this.busy = true
         return this.$http.get('enroll/'+id)
-                   .then( (res) => {
-                     console.log(res)
+                   .then( (res) => res.json() )
+                   .then( (json) => {
                      this.busy = false
-                     this.activeEntry = res.json()
+                     this.activeEntry = json
                      this.active = id
                      this.committee = this.activeEntry.committee || defaultCommittee()
                      this.dirty = false
@@ -296,8 +295,9 @@
     ready() {
       this.busy = true
       this.$http.get('enroll')
-      .then( (res) => {
-        this.list = res.json()
+      .then( (res) => res.json() )
+      .then( (json) => {
+        this.list = json
         this.busy = false
       })
       .catch( (res) => complainError(res, this) )

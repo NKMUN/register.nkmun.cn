@@ -93,14 +93,14 @@
     },
     ready() {
       Vue.http.get('enroll?committee=1')
-      .then( (res) => {
-        this.busy = false
-        this.schools = res.json()
+      .then( (res) => res.json() )
+      .then( (json) => {
+        this.schools = json
         this.loaded = true
       })
-      .catch( (res) => {
-        this.error = getResponseMessage(res)
-      })
+      .catch( (res) => getResponseMessage(res) )
+      .then( (msg) => this.error = msg )
+      .then( () => this.busy = false )
     }
   }
 </script>

@@ -161,7 +161,8 @@
     ready() {
       this.busy = true
       return this.$http.get('leader/billing')
-      .then( (res) => this.billing = res.json() )
+      .then( (res) => res.json() )
+      .then( (json) => this.billing = json )
       .catch( (e) => this.error = getResponseMessage(e) )
       .then( () => this.busy = false )
     }

@@ -224,8 +224,9 @@
       fetchAccommodationStock() {
         this.busy = true
         return this.$http.get('accommodation')
-        .then( res => this.accommodationList = res.json() )
-        .catch( res => this.error = getResponseMessage(res) )
+        .then( res => res.json() )
+        .then( json => this.accommodationList = json )
+        .catch( res => getResponseMessage(res).then( msg => this.error = msg ) )
         .then( () => this.busy = false )
       },
       confirm() {
@@ -241,7 +242,7 @@
             this.error = '酒店已被他人抢订，请修改预订信息'
             return this.fetchAccommodationStock()
           } else {
-            this.error = getResponseMessage(res)
+            return getResponseMessage(res).then( msg => this.error = msg )
           }
         })
         .then( () => this.busy = false )

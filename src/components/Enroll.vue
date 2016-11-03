@@ -168,7 +168,7 @@
               this.error = '409 / 不能重复预注册'
             break
             default:
-              this.error = `${res.status} / ${getResponseMessage(res)}`
+              return getResponseMessage(res).then( msg => this.error = `${res.status} / ${msg}`)
             break
           }
         })

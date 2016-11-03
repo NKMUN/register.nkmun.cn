@@ -80,15 +80,11 @@
     ready() {
       this.busy = true
       Vue.http.get('disclaimer')
-      .then( (res) => {
-        this.disclaimer = res.text()
-        this.busy = false
-      })
-      .catch( (res) => {
-        this.busy = false
-        let msg = getResponseMessage(res)
-        // TODO: complain about error
-      })
+      .then( (res) => res.text() )
+      .then( (text) => this.disclaimer = text )
+      .catch( (res) => getResponseMessage(res) )
+      .then( (msg) => this.error = msg )
+      .then( () => this.busy = false )
     }
   }
 </script>

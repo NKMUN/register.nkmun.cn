@@ -82,26 +82,24 @@
         this.busy = true
         this.error = false
         Vue.http.get('invitation/'+encodeURI(this.invitation))
-        .then( (res) => {
-          this.busy = false
+        .then( (res) => res.json() )
+        .then( (json) => { 
           this.$router.replace({
             path:  '/invitation/disclaimer',
-            query: res.json()
+            query: json
           })
         })
         .catch( (res) => {
-          this.busy = false
-          let msg
           switch(res.status) {
             case 404:
-              msg = '邀请码不存在'
+              this.error = '邀请码不存在'
             break
             default:
-              msg = getResponseMessage(res)
+              getResponseMessage(res).then( msg => this.error = msg )
             break
           }
-          this.error = msg
         })
+        .then( () => this.busy = false )
       }
     }
   }

@@ -161,28 +161,25 @@
           { params: { invitation: this.$route.query.invitation } }
         )
         .then( (res) => {
-          this.busy = false
           this.resetForm()
           this.forgetForm()
           this.error = null
           this.success = true
         })
         .catch( (res) => {
-          console.log(res)
-          this.busy = false
-          let msg = getResponseMessage(res)
           switch (res.status) {
             case 409:
-              this.error = `不能重复注册 / ${msg}`
+              this.error = `不能重复注册`
             break
             case 410:
-              this.error = `激活码无效或已使用 / ${msg}`
+              this.error = `激活码无效或已使用`
             break
             default:
-              this.error = `${res.status} / ${msg}`
+              return getReponseMessage.then( msg => this.error = `${res.status} / ${msg}` )
             break
           }
         })
+        .then( () => this.busy = false )
       },
     },
     ready() {
