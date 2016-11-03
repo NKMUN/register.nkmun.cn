@@ -1,5 +1,5 @@
 <template>
-  <div class="container payment">
+  <div class="container payment" :busy="busy">
     <h4>支付</h4>
 
     <ol>
@@ -171,6 +171,7 @@
 
 <style lang="stylus">
   @import "../../styles/button";
+  @import "../../styles/busy";
   .container.payment
     width: 80%
     margin: auto
