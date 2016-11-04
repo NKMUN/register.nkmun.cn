@@ -33,7 +33,9 @@
     'inviting':   '已邀请',
     'invited':    '已邀请',
     'registered': '已注册',
-    'quota-confirmed': '名额已确认'
+    'quota-confirmed': '名额已确认',
+    'accommodation-confirmed': '住宿信息已确认',
+    'paid': '已付款，待审核'
   }
 
   function complainError(res) {
