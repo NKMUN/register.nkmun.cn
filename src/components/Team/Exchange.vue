@@ -2,27 +2,22 @@
   <div class="container quota-exchange" :busy="busy">
     <div class="section own-quota">
       <h3>已分配名额</h3>
-      <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：放弃的名额将进入二轮分配！放弃名额后不可恢复！交换名额请不要点击放弃！放弃双代会场名额时请填写偶数数量，如只存有奇数数量名额，将不能确认。</span>
-      </div>
       <table class="quota-detail">
         <tr>
           <th>名额归属</th>
           <th>数量</th>
-          <th>操作</th>
         </tr>
         <tr v-for="$ in committees | filterBy hasQuota">
           <td><span class="name">{{ getCommitteeName($.dbId) }}</span></td>
           <td><span class="quota">{{ data.committee[$.dbId] }}</span></td>
-          <td><button class="warn" :disabled="disabled" @click="showGiveupModal($.dbId)">放弃</button></td>
         </tr>
       </table>
     </div>
 
     <div class="section requests">
-      <h3>待处理申请 <button :disabled="disabled" @click="!disabled ? fetchPendingRequests() : nop()">刷新</button> </h3>
+      <h3>待处理交换申请 <button :disabled="disabled" @click="!disabled ? fetchPendingRequests() : nop()">刷新</button> </h3>
       <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：来自双代会场的交换申请请只接受偶数数量名额，否则将导致您不能确认名额。</span>
+        <span class="danger">警告：请谨慎处理来自双代会场的名额。名额确认时，双代会场名额必须为偶数。</span>
       </div>
       <table v-if="requests.length" class="waiting-apply">
         <tr>
@@ -51,7 +46,7 @@
     </div>
 
     <div class="section others-quota">
-      <h3>选择交换学校、会场 <button :disabled="disabled" @click="!disabled ? fetchSchoolQuotas() : nop()">刷新</button></h3>
+      <h3>名额交换 <button :disabled="disabled" @click="!disabled ? fetchSchoolQuotas() : nop()">刷新</button></h3>
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请慎重选择对方学校及名额，建议提前完成沟通，一旦交换成功，不可撤销。</span>
       </div>
@@ -89,10 +84,29 @@
       </div>
     </div>
 
+    <div class="section giveup">
+      <h3>放弃名额</h3>
+      <div class="alert alert-danger" role="alert">
+        <span class="danger">警告：放弃的名额将进入二轮分配！放弃后不可恢复！名额确认时，双代会场名额必须为偶数。</span>
+      </div>
+      <table class="quota-detail">
+        <tr>
+          <th>名额归属</th>
+          <th>数量</th>
+          <th>操作</th>
+        </tr>
+        <tr v-for="$ in committees | filterBy hasQuota">
+          <td><span class="name">{{ getCommitteeName($.dbId) }}</span></td>
+          <td><span class="quota">{{ data.committee[$.dbId] }}</span></td>
+          <td><button class="warn" :disabled="disabled" @click="showGiveupModal($.dbId)">放弃</button></td>
+        </tr>
+      </table>
+    </div>
+
     <div class="section confirmation">
       <h3>名额确认</h3>
       <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：请于名额交换全部完成后确认最上方“已分配名额”栏目中的名额信息，确认后不能再进行交换。如双代会场名额为奇数，将不能确认名额。</span>
+        <span class="danger">警告：请确认以上名额信息，确认后不能再进行交换或放弃。双代会场名额必须为偶数。</span>
       </div>
       <div class="confirm-checkbox center">
         <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
