@@ -1,7 +1,7 @@
 <template>
   <div class="banner">
-    <img src="../assets/images/hilogo.png" class="logo" alt="hilogo" v-link="{ path: '/' }" />
-    <img src="../assets/images/nklogo.png" class="logo" alt="nklogo" href="https://nkmun.cn/" style="cursor: pointer;"/>
+    <a href="https://hi.nkmun.cn/"><img src="../assets/images/hilogo.png" class="logo" alt="hilogo"/></a>
+    <a href="https://nkmun.cn/"><img src="../assets/images/nklogo.png" class="logo" alt="nklogo" style="cursor: pointer;"/></a>
   </div>
   <div class="container home lr"> 
     <div class="section left">
