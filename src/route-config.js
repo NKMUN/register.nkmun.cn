@@ -29,7 +29,8 @@
       component: require('./components/Admin/Home.vue'),
       subRoutes: {
         '/enroll': { component: require('./components/Admin/Enroll.vue') },
-        '/status': { component: require('./components/Admin/Status.vue') }
+        '/status': { component: require('./components/Admin/Status.vue') },
+        '/payment': {component: require('./components/Admin/PaymentReview.vue') }
       }
     },
     'team': {

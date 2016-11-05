@@ -31,7 +31,7 @@
         <li v-if="todo_hotel">   确认住宿信息</li>
         <li v-if="todo_payment"> 支付费用</li>
         <li v-if="todo_wait">    等待组委审核缴费凭证</li>
-        <li v-if="todo_finished">参会</li>
+        <li v-if="todo_attend">  参会</li>
       </ol>
     </div>
   </div>
@@ -67,7 +67,7 @@
       todo_hotel()    { return this.state==='registered' || this.state==='quota-confirmed' },
       todo_payment()  { return this.state==='registered' || this.state==='quota-confirmed' || this.state==='accommodation-confirmed' },
       todo_wait()     { return this.state==='paid' },
-      todo_attend()   { return this.state==='finished' }
+      todo_attend()   { return this.state==='payment-confirmed' }
     },
     methods: {
       hasQuota({dbId}) {
