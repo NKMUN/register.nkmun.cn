@@ -14,11 +14,11 @@
         </li>
       </ul>
     </div>
-    <div class="details right" v-show="active === ''">
+    <div class="details right" v-show="!active">
       <h4 v-if="untouchedEntries === 0">没有更多待审核学校</h4>
       <h4 v-else>请选择待审核学校</h4>
     </div>
-    <div class="details right" v-show="active !== ''" v-el:detail>
+    <div class="details right" v-show="active" v-el:detail>
       <div v-for="$ in form" class="section {{$.class}}">
         <h4 class="heading {{$.class}}">{{$.section}}</h4>
         <div class="field" v-for="_ in $.fields">
@@ -62,12 +62,12 @@
           class="xlarge next"
           :disabled="busy"
           @click.prevent="!busy ? sendInvitation(active) : nop()"
-        >确认并发送邀请信</button> <span class="hint">
+        >确认并发送邀请信</button>
         <button
           class="xlarge warn"
           :disabled="busy"
           @click.prevent="!busy ? setToPending(active) : nop()"
-        >待定</button> <span class="hint">
+        >待定</button>
         <button
           class="xlarge"
           :disabled="busy"
