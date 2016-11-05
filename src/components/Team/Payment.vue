@@ -4,25 +4,8 @@
 
     <ol>
       <li>
-        <div v-if="billing">
-          <h4>应付款项：<span class="currency"> ¥ {{billing.total}} (CNY)</span></h4>
-          <table>
-            <thead>
-              <tr><th>项目</th> <th>数量 / 单价</th> <th>总额</th></tr>
-            </thead>
-            <tbody>
-              <tr v-for="$ in billingEntries">
-                <td>{{ $.name }}</td>
-                <td>{{ $.amount }} × {{ $.price }}</td>
-                <td>{{ $.amount * $.price }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="danger">请于预订酒店三日内完成付款</p>
-        </div>
-        <h4 v-else="!billing">
-          正在计算应付款...
-        </h4>
+        <h4 v-if="billing">应付款项：<span class="currency">{{billing.total}} ¥ (CNY)</span></h4>
+        <h4 v-else="!billing">正在计算应付款...</h4>
       </li>
       <li>
         <h4>请选择以下一种手段完成支付：</h4>
