@@ -567,7 +567,7 @@
         if ( window.confirm('确认名额后不能再进行修改') ) {
           this.busy = true
           return this.$http.post('leader/confirm-quota', {
-            leaderAttend: this.optLeaderAttend
+            optLeaderAttend: this.optLeaderAttend
           })
           .then( res => {
             this.data.state = 'quota-confirmed'
