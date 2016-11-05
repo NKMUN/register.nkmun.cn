@@ -34,7 +34,7 @@
           </div>
           <div v-if="tab === 'alipay'">
             <p>请用支付宝扫描以下二维码转账：</p>
-            <img alt="支付宝二维码" src="../../assets/images/nkmun-alipay-qr.jpg"><img>
+            <img id="alipay" alt="支付宝二维码" src="../../assets/images/nkmun-alipay-qr.jpg"><img>
           </div>
         </div>
       </li>
@@ -167,4 +167,10 @@
       color: red
     .hint
       color: red
+    .danger
+      color: red
+      font-size: 30px
+  #alipay
+    width: 300px
+    height: auto
 </style>

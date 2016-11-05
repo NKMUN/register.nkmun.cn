@@ -27,7 +27,8 @@
       <h4>住宿信息</h4>
       <p>
         入住时间最早为：{{date_checkInMin}}，最迟为：{{date_checkInMax}}<br>
-        退房时间最早为：{{date_checkOutMin}}，最迟为：{{date_checkOutMax}}
+        退房时间最早为：{{date_checkOutMin}}，最迟为：{{date_checkOutMax}}<br>
+        为方便代表，入住退房时间按间计算，请在每间房间后选择时间
       </p>
       <table class="list">
         <thead>
@@ -79,7 +80,7 @@
     <div class="section confirm">
       <div class="alert alert-danger" role="alert">
         <p>警告：住宿确认后将进入缴费环节，房间数量不能修改！</p>
-        <p>如有奇怪的需求，请与组委联系。</p>
+        <p>如有额外需求，请与组委联系。</p>
       </div>
       <button class="xlarge next" @click="(!busy && validate) ? confirm() : nop()" :disabled="disabled || !validate">确认住宿信息</button>
     </div>
