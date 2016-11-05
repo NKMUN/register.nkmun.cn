@@ -30,7 +30,7 @@
         <li v-if="todo_exchange">确认名额和参会信息</li>
         <li v-if="todo_hotel">   确认住宿信息</li>
         <li v-if="todo_payment"> 支付费用</li>
-        <li v-if="todo_wait">    等待审核</li>
+        <li v-if="todo_wait">    等待组委审核缴费凭证</li>
         <li v-if="todo_finished">参会</li>
       </ol>
     </div>

@@ -248,6 +248,10 @@
   .quota-exchange
     width: 80%
     margin: 15px auto
+    .section
+      margin-top: 100px
+    .section:first-child
+      margin-top: 0
     .quota-detail
       text-align: center
       width: 40%
@@ -330,6 +334,21 @@
         box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
   .huge
     font-size: 30px
+  select
+    display: inline-block
+    width: auto
+    height: 34px
+    margin: 5px
+    padding: 5px 12px
+    font-size: 14px
+    line-height: 16px
+    outline: 0
+    color: #000
+    background-color: #fff
+    background-image: none
+    border: 1px solid #aaa
+    border-radius: 8px
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
 </style>
 
 <script>

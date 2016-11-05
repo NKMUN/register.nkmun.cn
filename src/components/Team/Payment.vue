@@ -5,7 +5,7 @@
     <ol>
       <li>
         <div v-if="billing">
-          <h4>应付款项：<span class="currency">{{billing.total}} ¥ (CNY)</span></h4>
+          <h4>应付款项：<span class="currency"> ¥ {{billing.total}} (CNY)</span></h4>
           <table>
             <thead>
               <tr><th>项目</th> <th>数量 / 单价</th> <th>总额</th></tr>
@@ -18,6 +18,7 @@
               </tr>
             </tbody>
           </table>
+          <p class="danger">请于预订酒店三日内完成付款</p>
         </div>
         <h4 v-else="!billing">
           正在计算应付款...
@@ -50,7 +51,7 @@
           </div>
           <div v-if="tab === 'alipay'">
             <p>请用支付宝扫描以下二维码转账：</p>
-            <img alt="支付宝二维码" src="../../assets/images/nkmun-alipay-qr.jpg"><img>
+            <img id="alipay" alt="支付宝二维码" src="../../assets/images/nkmun-alipay-qr.jpg"><img>
           </div>
         </div>
       </li>
@@ -183,4 +184,10 @@
       color: red
     .hint
       color: red
+    .danger
+      color: red
+      font-size: 30px
+  #alipay
+    width: 300px
+    height: auto
 </style>
