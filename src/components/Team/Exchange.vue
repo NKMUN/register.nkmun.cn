@@ -14,7 +14,7 @@
       </table>
     </div>
 
-    <div class="section requests">
+    <div class="section requests" v-if="timeout">
       <h3>待处理交换申请 <button :disabled="disabled" @click="!disabled ? fetchPendingRequests() : nop()">刷新</button> </h3>
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请谨慎处理来自双代会场的名额。名额确认时，双代会场名额必须为偶数。</span>
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div class="section others-quota">
+    <div class="section others-quota" v-if="timeout">
       <h3>名额交换 <button :disabled="disabled" @click="!disabled ? fetchSchoolQuotas() : nop()">刷新</button></h3>
       <div class="alert alert-danger" role="alert">
         <span class="danger">警告：请慎重选择对方学校及名额，建议提前完成沟通，一旦交换成功，不可撤销。</span>
@@ -82,6 +82,10 @@
           <div v-else><p>暂无可交换学校</p></div>
         </div>
       </div>
+    </div>
+
+    <div class="section others-quota" v-if="!timeout">
+      <h3>名额交换已经结束</h3>
     </div>
 
     <div class="section giveup">
@@ -145,7 +149,7 @@
             </label>
           </div>
         </form>
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger" role="alert" v-if="timeout">
           <span class="danger huge">警告：交换名额请不要点击下面的确定！交换名额请不要点击下面的确定！交换名额请不要点击下面的确定！</span>
         </div>
       </div>
@@ -162,7 +166,7 @@
       </div>
     </overlay-modal>
 
-    <overlay-modal v-if="exchange.target" class="exchange">
+    <overlay-modal v-if="exchange.target" class="exchange" v-if="timeout">
       <h3 slot="caption">交换名额</h3>
       <div slot="content">
         <form novalidate noautocomplete>
@@ -396,6 +400,7 @@
     },
     data() {
       return {
+        timeout: false,
         busy: false,
         error: null,
         schools: null,
