@@ -4,7 +4,7 @@
 
     <ol>
       <li>
-        <h4 v-if="billing">应付款项：<span class="currency">{{billing.total}} ¥ (CNY)</span></h4>
+        <h4 v-if="billing">应付款项：<span class="currency">CNY ¥ {{billing.total}}</span></h4>
         <h4 v-else="!billing">正在计算应付款...</h4>
       </li>
       <li>

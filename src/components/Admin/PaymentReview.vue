@@ -24,7 +24,7 @@
       </div>
 
       <div class="billing-detail">
-        <h4>应付款项：{{ billing ? billing.total : 'Error'}} ¥</h4>
+        <h4>应付款项： ¥ {{ billing ? billing.total : 'Error'}}</h4>
       </div>
 
       <div class="operation ok">
