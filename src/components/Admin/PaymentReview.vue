@@ -20,7 +20,7 @@
     </div>
     <div class="details right" v-show="active" v-el:detail>
       <div class="credential">
-        <img :src="imageURL"></img>
+        <img class="credential-img" :src="imageURL"></img>
       </div>
 
       <div class="billing-detail">
@@ -41,12 +41,12 @@
       </div>
 
       <div class="operation fail">
+        <label class="reason">不通过理由：<input type="text" v-model="rejectReason"></input></label>
         <button
           class="xlarge warn"
           :disabled="busy || !rejectReason"
           @click.prevent="!busy && rejectReason ? reject(active) : nop()"
         >审核不通过{{ !rejectReason ? '（先填写理由）' : ''}}</button>
-        <label>不通过理由：<input v-model="rejectReason"></input></label>
       </div>
 
     </div>
@@ -189,4 +189,29 @@
   @import "../../styles/tab-view";
   @import "../../styles/flex-lr";
   @import "../../styles/button";
+  .credential
+    margin-top: 30px
+  .credential-img
+    width: 500px
+  .billing-detail
+    font-size: 24px
+  .operation.fail
+    input[type="text"]
+      display: inline-block
+      height: 20px
+      width: 220px
+      padding: 5px 8px
+      margin: 5px
+      line-height: normal
+      border: 1px solid #aaa
+      border-radius: 8px
+      &:focus
+        border: 1px solid #52abf3
+        outline: 0
+      &[readonly]
+        border: none
+        vertical-align: middle
+    .reason
+      display: block
+      margin-bottom: 20px
 </style>
