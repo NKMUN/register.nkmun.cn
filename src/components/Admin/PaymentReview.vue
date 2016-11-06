@@ -152,11 +152,12 @@
         return this.$http.post(`payment/${id}`, { accept: this.billing.total })
         .then( (res) => res.json() )
         .then( () => {
+          alert('审核成功，已发送邮件')
           this.load( this.nextToReview(this.getDisplayListIdx(id)) )
           this.list[idx].state = 'payment-confirmed'
           this.list.$set(idx, this.list[idx])    // force view update
         })
-        .catch( (res) => getResponseMessage(res).then( msg => this.error = msg ) )
+        .catch( (res) => complainError(res, this) )
         .then( () => this.busy = false )
       },
       reject(id) {
@@ -165,11 +166,12 @@
         return this.$http.post(`payment/${id}`, { reject: this.rejectReason })
         .then( (res) => res.json() )
         .then( () => {
+          alert('审核成功，已发送邮件')
           this.load( this.nextToReview(this.getDisplayListIdx(id)) )
-          this.list[idx].state = 'accommodation-confirmed'
+          this.list[idx].state = 'payment-rejected'
           this.list.$set(idx, this.list[idx])    // force view update
         })
-        .catch( (res) => getResponseMessage(res).then( msg => this.error = msg ) )
+        .catch( (res) => complainError(res, this) )
         .then( () => this.busy = false )
       }
     },
