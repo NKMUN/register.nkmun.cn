@@ -20,18 +20,18 @@
     </div>
     <div class="details right" v-show="active" v-el:detail>
       <div class="billing-detail">
+        <h4>{{active}} 应付款项：¥ {{ billing ? billing.total : 'Error'}}</h4>
         <table>
           <thead>
-            <tr><th>项目</th><th></th></tr>
+            <tr><th>项目</th><th>细则</th></tr>
           </thead>
           <tr v-for="$ in displayCommittee">
-            <td>{{$.name}}</td> <td>{{$.amount}}</td>
+            <td>{{$.name}}</td> <td>{{$.amount}}人</td>
           </tr>
           <tr v-for="$ in displayReservation">
-            <td>{{$.name}} {{$.type}}</td> <td>{{$.checkIn}} – {{$.checkOut}}</td>
+            <td>{{$.name}} {{$.type}} 1间</td> <td>{{$.checkIn}} 至 {{$.checkOut}}</td>
           </tr>
         </table>
-        <h4>{{active}} 应付款项： ¥ {{ billing ? billing.total : 'Error'}}</h4>
       </div>
 
       <div class="credential">
@@ -107,7 +107,7 @@
         for (let k in this.committee)
           if (this.committee[k] > 0)
             if (k==='loc_absent_leader')
-              arr.push({ name: '领队不参会', amount: 1 })
+              arr.push({ name: '不参会领队', amount: 1 })
             else
               arr.push({ name: committee_name[k], amount: this.committee[k] })
         return arr.sort( (a, b) => a.name.localeCompare(b.name) )
@@ -245,8 +245,13 @@
     margin-top: 30px
   .credential-img
     width: 500px
+    margin-bottom: 30px
   .billing-detail
-    font-size: 24px
+    font-size: 18px
+    margin-top: 35px
+    text-align: center
+    td
+      padding: 15px
   .operation.fail
     input[type="text"]
       display: inline-block
