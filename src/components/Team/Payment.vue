@@ -41,7 +41,7 @@
 
       <li>
         <h4>上传支付凭证</h4>
-        <p>请包含 转账人、金额、时间</p>
+        <p>请上传 银行转账凭证 或 支付宝转账截图，包含 转账人、金额、时间</p>
         <form novalidate enctype="multipart/form-data">
           <p>仅接受jpg和png格式，文件需小于1MB</p>
           <label>
