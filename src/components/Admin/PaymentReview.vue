@@ -251,7 +251,7 @@
     margin-top: 35px
     text-align: center
     td
-      padding: 15px
+      padding: 0 10px
   .operation.fail
     input[type="text"]
       display: inline-block
