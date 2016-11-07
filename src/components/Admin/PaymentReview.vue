@@ -19,12 +19,23 @@
       <h4 v-else>请选择待审核学校</h4>
     </div>
     <div class="details right" v-show="active" v-el:detail>
-      <div class="credential">
-        <img class="credential-img" :src="imageURL"></img>
+      <div class="billing-detail">
+        <table>
+          <thead>
+            <tr><th>项目</th><th></th></tr>
+          </thead>
+          <tr v-for="$ in displayCommittee">
+            <td>{{$.name}}</td> <td>{{$.amount}}</td>
+          </tr>
+          <tr v-for="$ in displayReservation">
+            <td>{{$.name}} {{$.type}}</td> <td>{{$.checkIn}} – {{$.checkOut}}</td>
+          </tr>
+        </table>
+        <h4>{{active}} 应付款项： ¥ {{ billing ? billing.total : 'Error'}}</h4>
       </div>
 
-      <div class="billing-detail">
-        <h4>应付款项： ¥ {{ billing ? billing.total : 'Error'}}</h4>
+      <div class="credential">
+        <img class="credential-img" :src="imageURL"></img>
       </div>
 
       <div class="operation ok">
@@ -55,6 +66,7 @@
 
 <script>
   import getResponseMessage from '../../lib/guess-response-message'
+  import {groups as COMMITTEE_GROUPS, ungrouped as committees, idMapping as committee_name} from '../../def/committee'
   
   function complainError(res, vm) {
     vm.busy = false
@@ -76,7 +88,9 @@
         active: null,
         billing: null,
         imageURL: null,
-        rejectReason: null
+        rejectReason: null,
+        committee: null,
+        reservation: null
       }
     },
     computed: {
@@ -85,6 +99,23 @@
       },
       displayList() {
         return this.list.filter( this.needsReview ).sort( byId )
+      },
+      displayCommittee() {
+        if (!this.committee)
+          return []
+        let arr = []
+        for (let k in this.committee)
+          if (this.committee[k] > 0)
+            if (k==='loc_absent_leader')
+              arr.push({ name: '领队不参会', amount: 1 })
+            else
+              arr.push({ name: committee_name[k], amount: this.committee[k] })
+        return arr.sort( (a, b) => a.name.localeCompare(b.name) )
+      },
+      displayReservation() {
+        if (!this.reservation)
+          return []
+        return this.reservation.sort( (a,b) => a.name.localeCompare(b.name) )
       }
     },
     methods: {
@@ -130,6 +161,22 @@
         .catch( (res) => getResponseMessage(res).then( msg => this.error = msg ) )
         .then( () => this.busy = false )
       },
+      loadCommittee(id) {
+        this.busy = true
+        return this.$http.get('enroll/committee/'+id)
+        .then( (res) => res.json() )
+        .then( (json) => this.committee = json )
+        .catch( (res) => complainError(res, this) )
+        .then( this.busy = false )
+      },
+      loadReservation(id) {
+        this.busy = true
+        return this.$http.get('accommodation/'+id)
+        .then( (res) => res.json() )
+        .then( (json) => this.reservation = json )
+        .catch( (res) => complainError(res, this) )
+        .then( this.busy = false )
+      },
       load(id) {
         if (id === null) {
           this.active = null
@@ -138,7 +185,10 @@
           return
         }
         this.active = id
-        return this.loadBilling(id).then( this.loadCredential(id) )
+        return this.loadBilling(id)
+        .then( this.loadCredential(id) )
+        .then( this.loadCommittee(id) )
+        .then( this.loadReservation(id) )
       },
       clearImageURL() {
         if (this.imageURL) {
