@@ -1,5 +1,5 @@
 <template>
-  <div class="container admin-enroll lr" :busy="busy">
+  <div class="container admin-payment-review lr" :busy="busy">
     <div class="left selection">
       <h4>待审核学校列表</h4>
       <ul class="list">
@@ -8,7 +8,17 @@
           :active="active === entry.id"
           :disabled="busy"
           :busy="busy"
-          @click.prevent="!busy ? load(entry.id) : nop()"
+          @click.prevent="!busy ? load(entry.id, entry.state) : nop()"
+        >
+          {{entry.id}}
+        </li>
+        <li class="hint">--- 以下学校已审核 ---</li>
+        <li
+          v-for="entry in reviewedList"
+          :active="active === entry.id"
+          :disabled="busy"
+          :busy="busy"
+          @click.prevent="!busy ? load(entry.id, entry.state) : nop()"
         >
           {{entry.id}}
         </li>
@@ -38,7 +48,7 @@
         <img class="credential-img" :src="imageURL"></img>
       </div>
 
-      <div class="operation ok">
+      <div class="operation ok" v-if="!activeEntryState">
         <button
           class="xlarge next"
           :disabled="busy"
@@ -51,13 +61,17 @@
         >下一个待审核学校</button>
       </div>
 
-      <div class="operation fail">
+      <div class="operation fail" v-if="!activeEntryState">
         <label class="reason">不通过理由：<input type="text" v-model="rejectReason"></input></label>
         <button
           class="xlarge warn"
           :disabled="busy || !rejectReason"
           @click.prevent="!busy && rejectReason ? reject(active) : nop()"
         >审核不通过{{ !rejectReason ? '（先填写理由）' : ''}}</button>
+      </div>
+
+      <div class="operation reviewed" v-if="activeEntryState">
+        <h4>已审核</h4>
       </div>
 
     </div>
@@ -86,6 +100,7 @@
         list: [],
         dirty: false,
         active: null,
+        activeEntryState: null,
         billing: null,
         imageURL: null,
         rejectReason: null,
@@ -99,6 +114,9 @@
       },
       displayList() {
         return this.list.filter( this.needsReview ).sort( byId )
+      },
+      reviewedList() {
+        return this.list.filter( (...arg) => !this.needsReview(...arg) ).sort( byId )
       },
       displayCommittee() {
         if (!this.committee)
@@ -121,7 +139,7 @@
     methods: {
       nop() {},
       needsReview(entry) {
-        return !entry.state || entry.state === 'paid'
+        return !entry.state
       },
       getListIdx(id) {
         for (let idx=0; idx!==this.list.length;++idx)
@@ -177,7 +195,7 @@
         .catch( (res) => complainError(res, this) )
         .then( this.busy = false )
       },
-      load(id) {
+      load(id, state) {
         if (id === null) {
           this.active = null
           this.billing = null
@@ -185,6 +203,7 @@
           return
         }
         this.active = id
+        this.activeEntryState = state
         return this.loadBilling(id)
         .then( this.loadCredential(id) )
         .then( this.loadCommittee(id) )
@@ -241,34 +260,50 @@
   @import "../../styles/tab-view";
   @import "../../styles/flex-lr";
   @import "../../styles/button";
-  .credential
-    margin-top: 30px
-  .credential-img
-    width: 500px
-    margin-bottom: 30px
-  .billing-detail
-    font-size: 18px
-    margin-top: 35px
-    text-align: center
-    td
-      padding: 0 10px
-  .operation.fail
-    input[type="text"]
-      display: inline-block
-      height: 20px
-      width: 220px
-      padding: 5px 8px
-      margin: 5px
-      line-height: normal
-      border: 1px solid #aaa
-      border-radius: 8px
-      &:focus
-        border: 1px solid #52abf3
-        outline: 0
-      &[readonly]
-        border: none
-        vertical-align: middle
-    .reason
-      display: block
-      margin-bottom: 20px
+  @import "../../styles/list-selection";
+  .admin-payment-review
+    overflow-y: hidden
+    align-items: stretch
+    .details, .selection
+      overflow-x: initial
+      overflow-y: scroll
+      align-self: stretch
+    .details
+      flex-grow: 1
+      .credential
+        margin-top: 30px
+      .credential-img
+        width: 500px
+      .billing-detail
+        font-size: 18px
+        margin-top: 35px
+        text-align: center
+        td
+          padding: 0 10px
+    .operation
+      margin: 2em 0
+      &.fail
+        input[type="text"]
+          display: inline-block
+          height: 20px
+          width: 220px
+          padding: 5px 8px
+          margin: 5px
+          line-height: normal
+          border: 1px solid #aaa
+          border-radius: 8px
+          &:focus
+            border: 1px solid #52abf3
+            outline: 0
+          &[readonly]
+            border: none
+            vertical-align: middle
+        .reason
+          display: block
+          margin-bottom: .5em
+      &.reviewed
+        color: green
+        font-size: 1.5em
+        width: 500px
+        text-align: center
 </style>

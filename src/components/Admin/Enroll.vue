@@ -84,6 +84,7 @@
   @import "../../styles/tab-view";
   @import "../../styles/flex-lr";
   @import "../../styles/button";
+  @import "../../styles/list-selection";
   .admin-enroll
     overflow-y: hidden
     align-items: stretch
@@ -93,34 +94,6 @@
       align-self: stretch
     .details
       flex-grow: 1
-    .selection
-      margin: 0 4ch 0 0
-      padding: 16px 14px 16px 10px
-      font-size: 14px
-      line-height: 24px
-      background: #293038
-      color: #fff
-      list-style: none
-      overflow-y: scroll
-      overflow-x: hidden
-      flex-shrink: 0
-      h4
-        display: block
-        font-size: 18px
-        text-align: center
-        margin: 0 0 5px 0
-      .list
-        padding: 0
-        li
-          cursor: pointer
-          margin-bottom: 5px
-          padding: 0 10px
-          max-width: 30ch
-          overflow: hidden
-          text-overflow: ellipsis
-          white-space: nowrap
-          &[active]
-            font-weight: bolder
     .details
       h4
         text-align: left
