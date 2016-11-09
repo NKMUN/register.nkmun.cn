@@ -45,7 +45,7 @@
       </div>
 
       <div class="credential">
-        <img class="credential-img" :src="imageURL"></img>
+        <img class="credential-img" v-show="imageLoaded" :src="imageURL"></img>
       </div>
 
       <div class="operation ok" v-if="!activeEntryState">
@@ -101,6 +101,7 @@
         dirty: false,
         active: null,
         activeEntryState: null,
+        imageLoaded: false,
         billing: null,
         imageURL: null,
         rejectReason: null,
@@ -162,11 +163,13 @@
       },
       loadCredential(id) {
         this.busy = true
+        this.imageLoaded = false
         return this.$http.get(`payment/${id}`)
         .then( (res) => res.blob() )
         .then( (blob) => {
           this.clearImageURL()
           this.imageURL = window.URL.createObjectURL(blob) 
+          this.imageLoaded = true
         })
         .catch( (res) => getResponseMessage(res).then( msg => this.error = msg ) )
         .then( () => this.busy = false )
