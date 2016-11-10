@@ -30,7 +30,7 @@
     </div>
     <div class="details right" v-show="active" v-el:detail>
       <div class="billing-detail">
-        <h4>{{active}} 应付款项：¥ {{ billing ? billing.total : 'Error'}}</h4>
+        <h4>{{active}} 应付款项：¥ {{ billing ? billing.total : '正在载入...'}}</h4>
         <table>
           <thead>
             <tr><th>项目</th><th>细则</th></tr>
@@ -45,6 +45,7 @@
       </div>
 
       <div class="credential">
+        <p v-if="!imageLoaded">正在载入...</p>
         <img class="credential-img" v-show="imageLoaded" :src="imageURL"></img>
       </div>
 
@@ -114,10 +115,10 @@
         return this.list.filter( $ => ! $.state ).length
       },
       displayList() {
-        return this.list.filter( this.needsReview ).sort( byId )
+        return this.list ? this.list.filter( this.needsReview ).sort( byId ) : null
       },
       reviewedList() {
-        return this.list.filter( (...arg) => !this.needsReview(...arg) ).sort( byId )
+        return this.list ? this.list.filter( (...arg) => !this.needsReview(...arg) ).sort( byId ) : null
       },
       displayCommittee() {
         if (!this.committee)
@@ -176,6 +177,7 @@
       },
       loadBilling(id) {
         this.busy = true
+        this.billing = null
         return this.$http.get(`billing/${id}`)
         .then( (res) => res.json() )
         .then( (json) => this.billing = json )
@@ -184,6 +186,7 @@
       },
       loadCommittee(id) {
         this.busy = true
+        this.committee = null
         return this.$http.get('enroll/committee/'+id)
         .then( (res) => res.json() )
         .then( (json) => this.committee = json )
@@ -192,6 +195,7 @@
       },
       loadReservation(id) {
         this.busy = true
+        this.reservation = null
         return this.$http.get('accommodation/'+id)
         .then( (res) => res.json() )
         .then( (json) => this.reservation = json )
@@ -202,6 +206,8 @@
         if (id === null) {
           this.active = null
           this.billing = null
+          this.committee = null
+          this.reservation = null
           this.rejectReason = null
           return
         }
