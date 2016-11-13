@@ -71,10 +71,12 @@
         >审核不通过{{ !rejectReason ? '（先填写理由）' : ''}}</button>
       </div>
 
-      <div class="operation reviewed" v-if="activeEntryState">
-        <h4>已审核</h4>
+      <div class="operation reviewed" v-if="(activeEntryState === 'accepted')">
+        <h4 class="accepted">已审核，已通过</h4>
       </div>
-
+      <div class="operation reviewed" v-if="(activeEntryState === 'rejected')">
+        <h4 class="rejected">已审核，未通过</h4>
+      </div>
     </div>
   </div>
 </template>
@@ -311,8 +313,11 @@
           display: block
           margin-bottom: .5em
       &.reviewed
-        color: green
         font-size: 1.5em
         width: 500px
         text-align: center
+      .accepted
+        color: green
+      .rejected
+        color: red
 </style>

@@ -36,7 +36,8 @@
     'quota-confirmed': '名额已确认',
     'accommodation-confirmed': '住宿信息已确认',
     'paid': '已付款，待审核',
-    'payment-confirmed': '已付款，已审核'
+    'payment-confirmed': '已付款，已通过',
+    'payment-rejected': '已付款，未通过'
   }
 
   function complainError(res) {
