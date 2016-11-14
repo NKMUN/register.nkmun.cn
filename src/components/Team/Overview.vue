@@ -31,7 +31,7 @@
         <li v-if="todo_hotel">   确认住宿信息</li>
         <li v-if="todo_payment"> 支付费用</li>
         <li v-if="todo_wait">    等待组委审核缴费凭证</li>
-        <li v-if="todo_attend">  等待二轮分配</li>
+        <li v-if="todo_attend">  缴费成功，等待二轮分配</li>
         <li v-if="todo_contact"> 缴费失败，请尽快联系组委完成一轮缴费</li>
       </ol>
     </div>
