@@ -39,6 +39,12 @@
         </div>
       </li>
 
+      <li v-if="data.state === 'payment-rejected'">
+        <h4>请重新上传缴费凭证，如银行交易明细单。</h4>
+        <p v-if="data.paymentStatus && data.paymentStatus.state === 'rejected'">审核未通过原因：{{data.paymentStatus.reason}}</p>
+        <span style="color: red">请在一张图片内包含所有缴费记录，且总额等于应缴费额</span>
+      </li>
+
       <li>
         <h4>上传支付凭证</h4>
         <p>请上传 银行转账凭证 或 支付宝转账截图，包含 转账人、金额、时间</p>
