@@ -205,20 +205,20 @@
         .then( this.busy = false )
       },
       load(id, state) {
+        this.billing = null
+        this.committee = null
+        this.reservation = null
+        this.rejectReason = null
         if (id === null) {
-          this.active = null
-          this.billing = null
-          this.committee = null
-          this.reservation = null
-          this.rejectReason = null
-          return
-        }
-        this.active = id
-        this.activeEntryState = state
-        return this.loadBilling(id)
-        .then( this.loadCredential(id) )
-        .then( this.loadCommittee(id) )
-        .then( this.loadReservation(id) )
+          return this.active = null
+		} else {
+          this.active = id
+          this.activeEntryState = state
+          return this.loadBilling(id)
+          .then( this.loadCredential(id) )
+          .then( this.loadCommittee(id) )
+          .then( this.loadReservation(id) )
+		}
       },
       clearImageURL() {
         if (this.imageURL) {
