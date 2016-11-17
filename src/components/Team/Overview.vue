@@ -32,7 +32,7 @@
         <li v-if="todo_payment"> 支付费用</li>
         <li v-if="todo_wait">    等待组委审核缴费凭证</li>
         <li v-if="todo_repay">   缴费凭证未通过审核，请重新上传缴费凭证</li>
-        <li v-if="todo_attend">  等待二轮分配</li>
+        <li v-if="todo_round2">  缴费成功，等待二轮分配</li>
       </ol>
     </div>
   </div>
@@ -68,7 +68,7 @@
       todo_hotel()    { return this.state==='registered' || this.state==='quota-confirmed' },
       todo_payment()  { return this.state==='registered' || this.state==='quota-confirmed' || this.state==='accommodation-confirmed' },
       todo_wait()     { return this.state==='paid' },
-      todo_attend()   { return this.state==='payment-confirmed' },
+      todo_round2()   { return this.state==='payment-confirmed' },
       todo_repay()    { return this.state==='payment-rejected' }
     },
     methods: {
