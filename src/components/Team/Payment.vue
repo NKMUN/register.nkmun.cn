@@ -41,7 +41,10 @@
 
       <li v-if="data.state === 'payment-rejected'">
         <h4>请重新上传缴费凭证，如银行交易明细单。</h4>
-        <p v-if="data.paymentStatus && data.paymentStatus.state === 'rejected'">审核未通过原因：{{data.paymentStatus.reason}}</p>
+        <p v-if="data.paymentStatus
+              && data.paymentStatus.state === 'rejected'
+              && data.paymentStatus.reason"
+        >审核未通过原因：{{data.paymentStatus.reason}}</p>
         <span style="color: red">请在一张图片内包含所有缴费记录，且总额等于应缴费额</span>
       </li>
 

@@ -105,8 +105,8 @@
         active: null,
         activeEntryState: null,
         imageLoaded: false,
-        billing: null,
         imageURL: null,
+        billing: null,
         rejectReason: null,
         committee: null,
         reservation: null
