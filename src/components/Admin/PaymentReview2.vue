@@ -30,7 +30,7 @@
     </div>
     <div class="details right" v-show="active" v-el:detail>
       <div class="billing-detail">
-        <h4>{{active}} 应付款项：¥ {{ billing ? billing.total : '正在载入...'}}</h4>
+        <h4>{{active}} 二轮应付款项：¥ {{ billing ? billing.total : '正在载入...'}}</h4>
         <table>
           <thead>
             <tr><th>项目</th><th>细则</th></tr>
@@ -167,7 +167,7 @@
       loadCredential(id) {
         this.busy = true
         this.imageLoaded = false
-        return this.$http.get(`payment/${id}`)
+        return this.$http.get(`payment2/${id}`)
         .then( (res) => res.blob() )
         .then( (blob) => {
           this.clearImageURL()
@@ -180,7 +180,7 @@
       loadBilling(id) {
         this.busy = true
         this.billing = null
-        return this.$http.get(`billing/${id}`)
+        return this.$http.get(`billing2/${id}`)
         .then( (res) => res.json() )
         .then( (json) => this.billing = json )
         .catch( (res) => getResponseMessage(res).then( msg => this.error = msg ) )
@@ -191,14 +191,14 @@
         this.committee = null
         return this.$http.get('enroll/committee/'+id)
         .then( (res) => res.json() )
-        .then( (json) => this.committee = json.committee )
+        .then( (json) => this.committee = json.committee2 )
         .catch( (res) => complainError(res, this) )
         .then( this.busy = false )
       },
       loadReservation(id) {
         this.busy = true
         this.reservation = null
-        return this.$http.get('accommodation/'+id)
+        return this.$http.get('accommodation2/'+id)
         .then( (res) => res.json() )
         .then( (json) => this.reservation = json )
         .catch( (res) => complainError(res, this) )
@@ -229,7 +229,7 @@
       accept(id) {
         const idx = this.getListIdx(id)
         this.busy = true
-        return this.$http.post(`payment/${id}`, { accept: this.billing.total })
+        return this.$http.post(`payment2/${id}`, { accept: this.billing.total })
         .then( (res) => res.json() )
         .then( () => {
           alert('审核成功，已发送邮件')
@@ -243,7 +243,7 @@
       reject(id) {
         const idx = this.getListIdx(id)
         this.busy = true
-        return this.$http.post(`payment/${id}`, { reject: this.rejectReason })
+        return this.$http.post(`payment2/${id}`, { reject: this.rejectReason })
         .then( (res) => res.json() )
         .then( () => {
           alert('审核成功，已发送邮件')
@@ -257,7 +257,7 @@
     },
     ready() {
       this.busy = true
-      this.$http.get('payment')
+      this.$http.get('payment2')
       .then( (res) => res.json() )
       .then( (json) => this.list = json )
       .catch( (res) => complainError(res, this) )

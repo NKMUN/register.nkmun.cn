@@ -37,7 +37,12 @@
     'accommodation-confirmed': '住宿信息已确认',
     'paid': '已付款，待审核',
     'payment-confirmed': '已付款，已通过',
-    'payment-rejected': '已付款，未通过'
+    'payment-rejected': '已付款，未通过',
+    'stage2': '等待确认二轮住宿信息',
+    'accommodation-confirmed-2': '二轮住宿信息已确认',
+    'paid-2': '二轮已付款，待审核',
+    'payment-confirmed-2': '二轮已付款，已通过',
+    'payment-rejected-2': '二轮已付款，未通过',
   }
 
   function complainError(res) {

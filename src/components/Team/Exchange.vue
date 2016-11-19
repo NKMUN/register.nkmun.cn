@@ -2,16 +2,7 @@
   <div class="container quota-exchange" :busy="busy">
     <div class="section own-quota">
       <h3>已分配名额</h3>
-      <table class="quota-detail">
-        <tr>
-          <th>名额归属</th>
-          <th>数量</th>
-        </tr>
-        <tr v-for="$ in committees | filterBy hasQuota">
-          <td><span class="name">{{ getCommitteeName($.dbId) }}</span></td>
-          <td><span class="quota">{{ data.committee[$.dbId] }}</span></td>
-        </tr>
-      </table>
+      <quota-detail :c1="data.committee" :c2="data.committee2"></quota-detail>
     </div>
 
     <div class="section requests" v-if="timeout">
@@ -138,7 +129,7 @@
             <label>
               <span class="field-name">数量：</span>
               <input-integer
-                class="field-value small"
+                class="field-value"
                 v-model="giveup.amount"
                 min="0"
                 :max="maxGiveupAmount"
@@ -199,7 +190,7 @@
             <label>
               <span class="field-name">数量：</span>
               <input-integer
-                class="field-value small"
+                class="field-value"
                 v-model="exchange.amount"
                 min="0"
                 :max="maxExchangeAmount"
@@ -249,6 +240,7 @@
   @import "../../styles/busy";
   @import "../../styles/form";
   @import "../../styles/button";
+  @import "../../styles/alert";
   .quota-exchange
     width: 80%
     margin: 15px auto
@@ -256,11 +248,6 @@
       margin-top: 100px
     .section:first-child
       margin-top: 0
-    .quota-detail
-      text-align: center
-      width: 40%
-      th, td
-        width: auto
     .waiting-apply
       text-align: center
       width: 100%
@@ -296,17 +283,6 @@
       text-align: center
       h3
         text-align: left
-  .alert
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-  .alert-danger
-    color: #a94442;
-    background-color: #f2dede;
-    border-color: #ebccd1;
-  .danger
-    color: #d9534f
   .confirm-checkbox
     margin: 1em 0
     &.center
@@ -321,42 +297,13 @@
       .field
         .field-name
           width: 80px
-      select
-        display: inline-block
-        width: 50%
-        height: 34px
-        margin: 5px
-        padding: 5px 12px
-        font-size: 14px
-        line-height: 16px
-        outline: 0
-        color: #000
-        background-color: #fff
-        background-image: none
-        border: 1px solid #aaa
-        border-radius: 8px
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
   .huge
     font-size: 30px
-  select
-    display: inline-block
-    width: auto
-    height: 34px
-    margin: 5px
-    padding: 5px 12px
-    font-size: 14px
-    line-height: 16px
-    outline: 0
-    color: #000
-    background-color: #fff
-    background-image: none
-    border: 1px solid #aaa
-    border-radius: 8px
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
 </style>
 
 <script>
   import OverlayModal from '../OverlayModal'
+  import QuotaDetail from '../QuotaDetail'
   import getResponseMessage from '../../lib/guess-response-message'
   import {
     groups as COMMITTEE_GROUPS,
@@ -386,7 +333,7 @@
   }
 
   export default {
-    components: { OverlayModal, InputInteger },
+    components: { OverlayModal, InputInteger, QuotaDetail },
     props: ['data'],
     created() {
       this.groups = COMMITTEE_GROUPS
@@ -490,7 +437,7 @@
         return this.$http.post(`leader/exchange-request/${id}`)
         .then( (res) => {
           alert('名额交换已接受')
-          return this.fetchPendingRequests().then( this.fetchSelfQuota() ).then( this.fetchSchoolQuotas() ) 
+          return this.fetchPendingRequests().then( this.fetchSelfQuota() ).then( this.fetchSchoolQuotas() )
         })
         .catch( handleExchangeError.bind(this) )
         .then( () => this.busy = false )

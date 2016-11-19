@@ -1,5 +1,5 @@
 <template>
-  <div class="container accommodation" :busy="busy">
+  <div class="container accommodation2" :busy="busy">
 
     <div class="section own-quota">
       <h4>已分配名额</h4>
@@ -87,7 +87,7 @@
   @import "../../styles/busy";
   @import "../../styles/form";
   @import "../../styles/alert";
-  .accommodation
+  .accommodation2
     width: 80%
     margin: auto
     .accommodation-list
@@ -132,8 +132,8 @@
       disabled() { return this.busy },
       numOfRepresentatives() {
         let s = 0
-        for (let k in this.data.committee)
-          s += this.data.committee[k]
+        for (let k in this.data.committee2)
+          s += this.data.committee2[k]
         return s
       },
       maxReservationReached() {
@@ -184,11 +184,11 @@
       },
       confirm() {
         let reservations = this.reservations.map( ({id, checkIn, checkOut}) => ({ id, checkIn, checkOut }) )
-        return this.$http.post('accommodation', { reservations })
+        return this.$http.post('accommodation2', { reservations })
         .then( res => {
           alert('酒店预订成功')
-          this.data.state = 'accommodation-confirmed'
-          this.$router.replace('payment')
+          this.data.state = 'accommodation-confirmed-2'
+          this.$router.replace('payment2')
         })
         .catch( res => {
           if (res && res.status === 410) {

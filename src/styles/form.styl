@@ -2,76 +2,93 @@
 
 form
   margin-bottom: 40px
-
-  .section 
+  .section
     border-top: 1px solid #bdbdbd
     margin: 20px 100px
     &:first-child
       border-top: none
 
-  input, textarea
-    &~.hint
-      position: relative
-      &:after
-        position: absolute
-    &.touched.invalid
-      border: 1px solid #fb2f53
-      &~.hint:after
-        color: #fb2f53
-        content: "×"
-    &.touched.valid
-      border: 1px solid #2ec522
-      &~.hint:after
-        color: #2ec522
-        content: "√"
+input, textarea, select
+  border: 1px solid #aaa
+  &~.hint
+    position: relative
+    &:after
+      position: absolute
+  &.touched.invalid
+    border: 1px solid #fb2f53
+    &~.hint:after
+      color: #fb2f53
+      content: "×"
+  &.touched.valid
+    border: 1px solid #2ec522
+    &~.hint:after
+      color: #2ec522
+      content: "√"
+  &[lighter]
+    color: #bbb
+    &:hover
+      color: #777
+  &[darker]
+    font-weight: bolder
 
-  .field
-    line-height: 50px
-    .field-name
-      display: inline-block
-      width: 64px
-      text-align: right
-      margin-right: 15px
-
-  input[type="text"], input[type="number"], input[type="password"], .radio-group
+.field
+  line-height: 50px
+  .field-name
     display: inline-block
-    height: 20px
-    width: 220px
-    padding: 5px 8px
-    margin: 5px
-    line-height: normal
+    width: 64px
+    text-align: right
+    margin-right: 15px
 
-  input.small
-    width: 120px
+input, select
+  display: inline-block
+  height: 20px
+  padding: 5px 8px
+  margin: 5px
+  line-height: normal
+  border-radius: 8px
+  &:focus
+    border: 1px solid #52abf3
+    outline: 0
+  &[readonly]
+    border: none
+    vertical-align: middle
 
-  input[type="text"], input[type="number"], input[type="password"]
-    border: 1px solid #aaa
-    border-radius: 8px
+input[type="file"]
+  border: 0
+  padding: initial
+  height: initial
+  margin: initial
+  border-radius: initial
+
+input[type="text"], input[type="password"], .radio-group
+  width: 220px
+
+input[type="number"]
+  width: 6ch
+
+select
+   width: auto
+   height: 34px
+   box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
+
+textarea
+  resize: none
+  width: 75%
+  font-size: 14px
+  border-radius: 10px
+  &:focus
+    border: 1px solid #52abf3
+    outline: 0
+
+.radio-group
+  .radio-options
+    display: inline-block
+    margin:  0 32px
+  input[type="radio"]
+    width: 15px
+    height: 15px
+    padding: 0
+    vertical-align: middle
+    margin: -2px 0 1px 0
     &:focus
-      border: 1px solid #52abf3
       outline: 0
-    &[readonly]
-      border: none
-      vertical-align: middle
-
-  textarea
-    resize: none
-    width: 75%
-    font-size: 14px
-    border-radius: 10px
-    &:focus
-      border: 1px solid #52abf3
-      outline: 0
-
-  .radio-group
-    .radio-options
-      display: inline-block
-      margin:  0 32px
-    input[type="radio"]
-      width: 15px
-      height: 15px
-      padding: 0
-      vertical-align: middle
-      margin: -2px 0 1px 0
-      &:focus
-        outline: 0

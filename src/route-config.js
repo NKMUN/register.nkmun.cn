@@ -28,18 +28,22 @@
     '/admin': {
       component: require('./components/Admin/Home.vue'),
       subRoutes: {
-        '/enroll': { component: require('./components/Admin/Enroll.vue') },
-        '/status': { component: require('./components/Admin/Status.vue') },
-        '/payment': {component: require('./components/Admin/PaymentReview.vue') }
+        '/enroll':   { component: require('./components/Admin/Enroll.vue') },
+        '/status':   { component: require('./components/Admin/Status.vue') },
+        '/payment':  { component: require('./components/Admin/PaymentReview.vue') },
+        '/stage2':   { component: require('./components/Admin/Stage2.vue') },
+        '/payment2': { component: require('./components/Admin/PaymentReview2.vue') }
       }
     },
     'team': {
       component: require('./components/Team/Home.vue'),
       subRoutes: {
-        'overview':      { component: require('./components/Team/Overview.vue') },
-        'exchange':      { component: require('./components/Team/Exchange.vue') },
-        'accommodation': { component: require('./components/Team/Accommodation.vue') },
-        'payment':       { component: require('./components/Team/Payment.vue') }
+        'overview':       { component: require('./components/Team/Overview.vue') },
+        'exchange':       { component: require('./components/Team/Exchange.vue') },
+        'accommodation':  { component: require('./components/Team/Accommodation.vue') },
+        'payment':        { component: require('./components/Team/Payment.vue') },
+        'accommodation2': { component: require('./components/Team/Accommodation2.vue') },
+        'payment2':       { component: require('./components/Team/Payment2.vue') },
       }
     },
     // not found handler

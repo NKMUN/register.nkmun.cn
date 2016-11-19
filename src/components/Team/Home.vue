@@ -10,10 +10,12 @@
         </a>
         <a v-if="show_hotel"    :active="active === 'accommodation'" @click="go('accommodation')">住宿信息</a>
         <a v-if="show_payment"  :active="active === 'payment'"  @click="go('payment')">支付</a>
+        <a v-if="show_hotel2"   :active="active === 'accommodation2'" @click="go('accommodation2')">二轮住宿信息</a>
+        <a v-if="show_payment2" :active="active === 'payment2'" @click="go('payment2')">二轮会费支付</a>
         <logout-btn></logout-btn>
       </nav>
     </div>
-    
+
     <div v-if="!data">
       <h4>正在载入信息，请稍等...</h4>
     </div>
@@ -69,7 +71,9 @@
       show_exchange() { return this.state === 'registered' },
       show_hotel()    { return this.state === 'quota-confirmed' },
       show_payment()  { return this.state === 'accommodation-confirmed' || this.state === 'payment-rejected' },
-      show_attend()   { return this.state === 'payment-confirmed' }
+      show_attend()   { return this.state === 'payment-confirmed' },
+      show_hotel2()   { return this.state === 'stage-2' },
+      show_payment2() { return this.state === 'accommodation-confirmed-2' || this.state === 'payment-rejected-2' }
     },
     methods: {
       go(route, args = {}) {

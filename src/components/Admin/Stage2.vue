@@ -1,7 +1,7 @@
 <template>
-  <div class="container admin-enroll lr" :busy="busy">
+  <div class="container admin-stage2 lr" :busy="busy">
     <div class="left selection">
-      <h4>待审核学校列表</h4>
+      <h4>待分配学校列表</h4>
       <ul class="list">
         <li
           v-for="entry in displayList"
@@ -15,46 +15,45 @@
       </ul>
     </div>
     <div class="details right" v-show="!active">
-      <h4 v-if="untouchedEntries === 0">没有更多待审核学校</h4>
-      <h4 v-else>请选择待审核学校</h4>
+      <h4 v-if="untouchedEntries === 0">没有更多待分配学校</h4>
+      <h4 v-else>请选择待分配学校</h4>
     </div>
     <div class="details right" v-show="active" v-el:detail>
-      <div v-for="$ in form" class="section {{$.class}}">
-        <h4 class="heading {{$.class}}">{{$.section}}</h4>
-        <div class="field" v-for="_ in $.fields">
-          <span class="field-name">{{_.name}}</span>
-          <span class="value" v-if="_.tag === 'input'">{{ activeEntry[_.dbId] }}</span>
-          <span class="value" v-if="_.tag === 'radio'">
-            <template v-for="opt in _.opts" v-if="activeEntry[_.dbId] === opt.val">{{ opt.text }}</template>
-          </span>
-          <span class="value" v-if="_.tag === 'integer'">{{ activeEntry[_.dbId] }}</span>
-          <pre class="value" v-if="_.tag === 'textarea'">{{ activeEntry[_.dbId] }}</pre>
-        </div>
-      </div>
-
       <div class="committee">
-        <h4>分配名额</h4>
+        <h4>分配二轮名额：{{active}}</h4>
         <validator name="committee">
           <form>
-            <div class="field" v-for="$ in committeeMapping">
-              <label>
-                <span>{{$.name}}</span>
-                <input-integer
-                  min="0"
-                  max="10"
-                  step="1"
-                  :name="$.dbId"
-                  :field="$.dbId"
-                  :placeholder="$.placeholder"
-                  :disabled="disabled"
-                  :lighter="!committee[$.dbId]"
-                  :darker="committee[$.dbId] > 0"
-                  v-validate="$.validate"
-                  v-model="committee[$.dbId]"
-                  @change.prevent="this.dirty = true"
-                ></input-integer>
-              </label>
-            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="committee-name">会场</th>
+                  <th class="stage1">一轮</th>
+                  <th class="stage2">二轮</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="$ in committeeMapping">
+                  <td class="committee-name">{{$.name}}</td>
+                  <td class="stage1">{{ committee[$.dbId] > 0 ? committee[$.dbId] : ' ' }}</td>
+                  <td class="stage2">
+                    <input-integer
+                      min="0"
+                      max="10"
+                      step="1"
+                      :name="$.dbId"
+                      :field="$.dbId"
+                      :placeholder="$.placeholder"
+                      :disabled="disabled"
+                      :lighter="!committee2[$.dbId]"
+                      :darker="committee2[$.dbId] > 0"
+                      v-validate="$.validate"
+                      v-model="committee2[$.dbId]"
+                      @change.prevent="this.dirty = true"
+                    ></input-integer>
+                  </td>
+                <tr>
+              </tbody>
+            </table>
           </form>
         </validator>
       </div>
@@ -63,18 +62,13 @@
         <button
           class="xlarge next"
           :disabled="busy"
-          @click.prevent="!busy ? sendInvitation(active) : nop()"
-        >确认并发送邀请信</button>
-        <button
-          class="xlarge warn"
-          :disabled="busy"
-          @click.prevent="!busy ? setToPending(active) : nop()"
-        >待定</button>
+          @click.prevent="!busy ? confirmStage2(active) : nop()"
+        >确认并分配二轮名额</button>
         <button
           class="xlarge"
           :disabled="busy"
           @click.prevent="!busy ? edit( nextToReview( getDisplayListIdx(active) ) ) : nop()"
-        >下一个待审核学校</button>
+        >下一个待分配学校</button>
       </div>
 
     </div>
@@ -87,35 +81,24 @@
   @import "../../styles/flex-lr";
   @import "../../styles/button";
   @import "../../styles/list-selection";
-  .admin-enroll
+  .admin-stage2
     overflow-y: hidden
     align-items: stretch
-    .details, .selection
+    .selection, .details
       overflow-x: initial
       overflow-y: scroll
       align-self: stretch
     .details
       flex-grow: 1
-    .details
-      h4
-        text-align: left
-      .field
-        .value
-          max-width: 80ch
-        pre.value
-          word-break: break-word
-          word-wrap:  break-word
-          white-space: pre-wrap
     .committee
       text-align: left
-      .field
-        span
-          text-align: right
-          display: inline-block
-          width: 180px
-        .quota
-          width: 30px
-          text-align: right
+      td, th
+        padding: 0 3ch
+      .committee-name, .stage1
+        text-align: right
+      .stage2
+        input
+          width: 5ch
     .operation
       margin-bottom: 40px
       button.xlarge
@@ -151,8 +134,6 @@
       'input-integer': InputInteger
     },
     created() {    // bind private, non-reactive data
-      this.test = TEST_FLAG    // debug flag
-      this.form = FORM     // form generation data
       this.committeeMapping = COMMITTEE    // committee allocation
     },
     data() {
@@ -163,11 +144,12 @@
         active: '',
         activeEntry: {},
         committee: {},
+        committee2: {},
       }
     },
     computed: {
       untouchedEntries() {
-        return this.list.filter( $ => ! $.state ).length
+        return this.list.length
       },
       displayList() {
         return this.list.filter( this.needsReview ).sort( bySchoolName )
@@ -176,7 +158,7 @@
     methods: {
       nop() {},
       needsReview(entry) {
-        return !entry.state || entry.state === 'pending'
+        return entry.state === 'payment-confirmed'
       },
       getListIdx(id) {
         for (let idx=0; idx!==this.list.length;++idx)
@@ -189,18 +171,12 @@
             return idx
       },
       nextToReview(idx) {
-        for (let next=idx+1; next < this.displayList.length; ++next)
-          if ( ! this.displayList[next].state )
-            return this.displayList[next].id
-        for (let next=0; next < idx; ++next)
-          if ( ! this.displayList[next].state )
-            return this.displayList[next].id
-        return null
+        return this.displayList[(idx+1) % this.displayList.length].id
       },
       update() {
         this.busy = true
         let payload = {
-          committee: this.committee
+          committee2: this.committee2
         }
         return this.$http.post('enroll/'+this.active+'?update=1', payload)
                 .then( (res) => {
@@ -209,33 +185,18 @@
                 })
                 .catch( (res) => complainError(res, this) )
       },
-      sendInvitation(id) {
+      confirmStage2(id) {
         const idx = this.getListIdx(id)
         return this.update()
-               .then( () => this.$http.post('invitation/', {id}) )
+               .then( () => this.$http.post('stage2/', {id}) )
                .then( (res) => {
-                 alert('已发送邀请')
+                 alert('已分配二轮名额')
                  // TOOD: hint invitation success
                  this.busy = false
                  this.dirty = false
                  this.edit( this.nextToReview(this.getDisplayListIdx(id)) )
-                 this.list[idx].state = 'inviting'
+                 this.list[idx].state = 'stage-2'
                  this.list.$set(idx, this.list[idx])    // force view update
-               })
-               .catch( (res) => complainError(res, this) )
-      },
-      setToPending(id) {
-        const idx = this.getListIdx(id)
-        return this.update()
-               .then( () => this.$http.post('pending/', {id}) )
-               .then( (res) => {
-                 alert('保留在待审核列表')
-                 // TOOD: hint pending set
-                 this.busy = false
-                 this.dirty = false
-                 this.edit( this.nextToReview(this.getDisplayListIdx(id)) )
-                 this.list[idx].state = 'pending'
-                 this.list.$set(idx, this.list[idx])    // forve cire update
                })
                .catch( (res) => complainError(res, this) )
       },
@@ -246,13 +207,13 @@
           return
         }
         this.busy = true
-        return this.$http.get('enroll/'+id)
+        return this.$http.get('enroll/committee/'+id)
                    .then( (res) => res.json() )
                    .then( (json) => {
                      this.busy = false
-                     this.activeEntry = json
                      this.active = id
-                     this.committee = this.activeEntry.committee || defaultCommittee()
+                     this.committee = json.committee
+                     this.committee2 = json.committee2 || defaultCommittee()
                      this.dirty = false
                      this.$els.detail.scrollTop = 0
                    })

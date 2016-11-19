@@ -3,16 +3,7 @@
 
     <div class="section own-quota">
       <h4>已分配名额</h4>
-      <table class="quota-detail">
-        <tr>
-          <th>名额归属</th>
-          <th>数量</th>
-        </tr>
-        <tr v-for="$ in committees | filterBy hasQuota">
-          <td><span class="name">{{ committee_name[$.dbId] }}</span></td>
-          <td><span class="quota">{{ data.committee[$.dbId] }}</span></td>
-        </tr>
-      </table>
+      <quota-detail :c1="data.committee" :c2="data.committee2"></quota-detail>
     </div>
 
     <div class="section school">
@@ -32,7 +23,10 @@
         <li v-if="todo_payment"> 支付费用</li>
         <li v-if="todo_wait">    等待组委审核缴费凭证</li>
         <li v-if="todo_repay">   缴费凭证未通过审核，请重新上传缴费凭证</li>
-        <li v-if="todo_round2">  缴费成功，等待二轮分配</li>
+        <li v-if="todo_stage2">  缴费成功，等待二轮分配</li>
+        <li v-if="todo_hotel2">  确认二轮住宿信息</li>
+        <li v-if="todo_payment2">支付二轮费用</li>
+        <li v-if="todo_repay2">  二轮缴费凭证未通过审核，请重新上传缴费凭证</li>
       </ol>
     </div>
   </div>
@@ -45,36 +39,27 @@
   .team-overview
     width: 80%
     margin: 20px auto
-    .quota-detail
-      text-align: center
-      td
-        width: 25%
 </style>
 
 <script>
   import getResponseMessage from '../../lib/guess-response-message'
-  import {groups as COMMITTEE_GROUPS, ungrouped as committees, idMapping as committee_name} from '../../def/committee'
+  import QuotaDetail from '../QuotaDetail'
 
   export default {
+    components: { QuotaDetail },
     props: ['data'],
-    created() {
-      this.groups = COMMITTEE_GROUPS
-      this.committees = committees
-      this.committee_name = committee_name
-    },
     computed: {
       state() { return this.data && this.data.state ? this.data.state : 'registered' },
       todo_exchange() { return this.state==='registered' },
       todo_hotel()    { return this.state==='registered' || this.state==='quota-confirmed' },
       todo_payment()  { return this.state==='registered' || this.state==='quota-confirmed' || this.state==='accommodation-confirmed' },
       todo_wait()     { return this.state==='paid' },
-      todo_round2()   { return this.state==='payment-confirmed' },
-      todo_repay()    { return this.state==='payment-rejected' }
-    },
-    methods: {
-      hasQuota({dbId}) {
-        return this.data.committee && this.data.committee[dbId] > 0
-      }
+      todo_stage2()   { return this.state==='payment-confirmed' },
+      todo_repay()    { return this.state==='payment-rejected' },
+      todo_hotel2()   { return this.state==='stage-2' },
+      todo_payment2() { return this.state==='accommodation-confirmed-2' },
+      todo_repay2()   { return this.state==='payment-rejected-2' },
+      todo_attend()   { return this.state==='payment-confirmed-2' }
     }
   }
 </script>
