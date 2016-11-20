@@ -16,11 +16,11 @@
 </template>
 
 <script>
-  import computeDisplayCommittee from '../lib/display-committee'
+  import { toArray, merge } from '../lib/committee-util'
   export default {
     props: ['c1', 'c2'],
     computed: {
-      displayCommittee() { return computeDisplayCommittee(this.c1, this.c2) }
+      displayCommittee() { return toArray( merge(this.c1, this.c2) ) }
     }
   }
 </script>

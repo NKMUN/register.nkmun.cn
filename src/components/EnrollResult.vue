@@ -14,10 +14,15 @@
       <p>请稍后重试</p>
       <pre>{{error}}</pre>
     </div>
+    <div class="tab-view-control" v-if="loaded">
+      <label class="selector stage1"><input type="checkbox" v-model="stage1"></input>一轮名额</label>
+      <label class="selector stage2"><input type="checkbox" v-model="stage2"></input>二轮名额</label>
+      <label class="selector sum"><input type="checkbox" v-model="sum"></input>名额总数</label>
+    </div>
     <div class="tab-view" v-if="loaded">
       <ul class="tab-list">
-        <li 
-          v-for="group in groups" 
+        <li
+          v-for="group in groups"
           class="tab-name"
           @click.prevent="tab = group.id"
           :active="group.id === tab"
@@ -32,14 +37,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="$ in schools">
-              <th>{{$.school}}</th>
-              <td v-for="_ in group.keys">{{$.committee ? $.committee[_.dbId] : 0}}</td>
+            <tr v-for="$ in displaySchools">
+              <th>{{$.name}}</th>
+              <td v-for="_ in group.keys">
+                <div class="quota-wrap lr" v-show="$.committee[_.dbId] && $.committee[_.dbId][0] > 0">
+                  <span class="quota stage1" v-if="stage1">{{ $.committee[_.dbId][1] ? $.committee[_.dbId][1] : '-'}}</span>
+                  <span class="quota stage2" v-if="stage2">{{ $.committee[_.dbId][2] ? $.committee[_.dbId][2] : '-'}}</span>
+                  <span class="quota sum"    v-if="sum">   {{ $.committee[_.dbId][0] }}</span>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      
+
     </div>
   </div>
 </template>
@@ -48,6 +59,7 @@
   @import "../styles/busy";
   @import "../styles/table";
   @import "../styles/tab-view";
+  @import "../styles/flex-lr";
   .tab-name
     cursor: pointer
   .banner
@@ -71,12 +83,34 @@
     font-size: 18px
     h3
       font-size: 24px
+    .quota-wrap
+      min-width: 14ch
+      align-items: center
+      justify-content: center
+      .quota
+        line-height: initial
+        width: 2ch
+        padding: 0 .5ch
+        text-align: center
+      .quota:not(:last-child)
+        border-right: 1px solid #bbb
+    .stage1
+      color: green
+    .stage2
+      color: blue
+    .sum
+      color: black
 </style>
 
 <script>
   import Vue from 'vue'
   import {groups as COMMITTEE_GROUPS} from '../def/committee'
   import getResponseMessage from '../lib/guess-response-message'
+  import {merge} from '../lib/committee-util'
+
+  function byId(a, b) {
+    return String(a.id).localeCompare(b.id)
+  }
 
   export default {
     created() {    // bind private, non-reactive data
@@ -89,6 +123,17 @@
         error:   null,
         schools: [],
         tab:     COMMITTEE_GROUPS[0].id,
+        stage1: false,
+        stage2: false,
+        sum: true
+      }
+    },
+    computed: {
+      displaySchools() {
+        return this.schools.sort( byId ).map( $ => ({
+          name: $.school,
+          committee: merge($.committee, $.committee2)
+        }) )
       }
     },
     ready() {
