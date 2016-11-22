@@ -4,7 +4,7 @@
       <h4>组委后台</h4>
       <nav>
         <a :active="active === 'enroll'"   @click="go('enroll')">  预报名审核</a>
-        <a :active="active === 'payment'"  @click="go('payment')"> 缴费审核</a>
+        <a :active="active === 'payment'"  @click="go('payment')"> 一轮缴费审核</a>
         <a :active="active === 'stage2'"   @click="go('stage2')">  二轮分配</a>
         <a :active="active === 'payment2'" @click="go('payment2')">二轮缴费审核</a>
         <a :active="active === 'status'"   @click="go('status')">  状态</a>
