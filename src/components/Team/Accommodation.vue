@@ -69,10 +69,12 @@
     </div>
 
     <div class="section confirm">
-      <div class="alert alert-danger" role="alert">
-        <p>警告：住宿确认后将进入缴费环节，房间数量不能修改！</p>
-        <p>如有额外需求，请与组委联系。</p>
-      </div>
+      <alert-div>
+        <p>
+          警告：住宿确认后将进入缴费环节，房间数量不能修改！<br>
+          如有额外需求，请与组委联系。
+        </p>
+      </alert-div>
       <button class="xlarge next" @click="(!busy && validate) ? confirm() : nop()" :disabled="disabled || !validate">确认住宿信息</button>
     </div>
 
@@ -86,7 +88,6 @@
 <style lang="stylus">
   @import "../../styles/busy";
   @import "../../styles/form";
-  @import "../../styles/alert";
   .accommodation
     width: 80%
     margin: auto
@@ -108,6 +109,7 @@
   import QuotaDetail from '../QuotaDetail'
   import unique from 'array-unique'
   import dateFormat from 'dateformat'
+  import AlertDiv from '../AlertDiv.vue'
 
   const CHECKIN_DATE_MIN = '2017-01-18'
   const CHECKIN_DATE_MAX = '2017-01-21'
@@ -115,7 +117,7 @@
   const CHECKOUT_DATE_MAX = '2017-01-28'
 
   export default {
-    components: { OverlayModal, QuotaDetail },
+    components: { OverlayModal, QuotaDetail, AlertDiv },
     props: ['data'],
     data() {
       return {

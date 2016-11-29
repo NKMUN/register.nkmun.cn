@@ -14,6 +14,7 @@
           <td>{{ $.state }}</td>
           <td>
             <button v-if="$.canResendInvitation" @click="!busy ? sendInvitation($.id) : nop()">重发邀请</button>
+            <button v-if="$.canStartRepresentativeInfo" @click="!busy ? startRepresentativeInfo($.id) : nop()">录入代表信息</button>
           </td>
       </tbody>
     </table>
@@ -43,6 +44,7 @@
     'paid-2': '二轮已付款，待审核',
     'payment-confirmed-2': '二轮已付款，已通过',
     'payment-rejected-2': '二轮已付款，未通过',
+    'representative-info': '等待代表信息'
   }
 
   function complainError(res) {
@@ -78,7 +80,8 @@
             id:     $.id,
             school: $.school,
             state:  STATE_NAME[$.state] || STATE_NAME['*'],
-            canResendInvitation: valueInSet($.state, 'inviting', 'invited')
+            canResendInvitation: valueInSet($.state, 'inviting', 'invited'),
+            canStartRepresentativeInfo: valueInSet($.state, 'payment-confirmed-2', 'payment-confirmed')
           }))
           .sort( bySchoolName )
       }
@@ -99,6 +102,20 @@
                .catch( complainError.bind(this) )
                .then( () => this.busy = false )
       },
+      startRepresentativeInfo(id) {
+        this.busy = true
+        return this.$http.post('representative', {school: id})
+               .then( (res) => {
+                 for (let i=0; i!==this.rawList.length; ++i)
+                   if (this.rawList[i].id === id) {
+                     this.rawList[i].state = 'representative-info'
+                     this.rawList.$set(i, this.rawList[i])
+                     break
+                   }
+               })
+               .catch( complainError.bind(this) )
+               .then( () => this.busy = false )
+      }
     }
   }
 </script>
