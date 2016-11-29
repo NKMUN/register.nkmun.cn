@@ -7,9 +7,9 @@
 
     <div class="section requests" v-if="timeout">
       <h3>待处理交换申请 <button :disabled="disabled" @click="!disabled ? fetchPendingRequests() : nop()">刷新</button> </h3>
-      <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：请谨慎处理来自双代会场的名额。名额确认时，双代会场名额必须为偶数。</span>
-      </div>
+      <alert-div>
+        <span>请谨慎处理来自双代会场的名额。名额确认时，双代会场名额必须为偶数。</span>
+      <alert-div>
       <table v-if="requests.length" class="waiting-apply">
         <tr>
           <th>来源学校</th>
@@ -38,9 +38,9 @@
 
     <div class="section others-quota" v-if="timeout">
       <h3>名额交换 <button :disabled="disabled" @click="!disabled ? fetchSchoolQuotas() : nop()">刷新</button></h3>
-      <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：请慎重选择对方学校及名额，建议提前完成沟通，一旦交换成功，不可撤销。</span>
-      </div>
+      <alert-div>
+        <span>请慎重选择对方学校及名额，建议提前完成沟通，一旦交换成功，不可撤销。</span>
+      <alert-div>
       <div v-if="schools" class="tab-view">
         <ul class="tab-list">
           <li
@@ -81,9 +81,9 @@
 
     <div class="section giveup">
       <h3>放弃名额</h3>
-      <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：放弃的名额将进入二轮分配！放弃后不可恢复！名额确认时，双代会场名额必须为偶数。</span>
-      </div>
+      <alert-div>
+        <span>放弃的名额将进入二轮分配！放弃后不可恢复！名额确认时，双代会场名额必须为偶数。</span>
+      </alert-div>
       <table class="quota-detail">
         <tr>
           <th>名额归属</th>
@@ -100,9 +100,9 @@
 
     <div class="section confirmation">
       <h3>名额确认</h3>
-      <div class="alert alert-danger" role="alert">
-        <span class="danger">警告：请确认以上名额信息，确认后不能再进行交换或放弃。双代会场名额必须为偶数。</span>
-      </div>
+      <alert-div>
+        <span>警告：请确认以上名额信息，确认后不能再进行交换或放弃。双代会场名额必须为偶数。</span>
+      </alert-div>
       <div class="confirm-checkbox center">
         <!-- intentionally unlabeled, reduces clickable area, to prevent accident click -->
         <div class="field">
@@ -313,6 +313,7 @@
     idMapping as committee_name
   } from '../../def/committee'
   import InputInteger from '../FormInput/Integer'
+  import AlertDiv from '../AlertDiv.vue'
 
   function getCommitteeName(dbId) { return committee_name[dbId] }
   function find( pred ) { return (res, $) => res || (pred($) ? $ : null) }
@@ -333,7 +334,7 @@
   }
 
   export default {
-    components: { OverlayModal, InputInteger, QuotaDetail },
+    components: { OverlayModal, InputInteger, QuotaDetail, AlertDiv },
     props: ['data'],
     created() {
       this.groups = COMMITTEE_GROUPS

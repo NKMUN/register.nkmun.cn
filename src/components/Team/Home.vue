@@ -12,6 +12,8 @@
         <a v-if="show_payment"  :active="active === 'payment'"  @click="go('payment')">一轮会费支付</a>
         <a v-if="show_hotel2"   :active="active === 'accommodation2'" @click="go('accommodation2')">二轮住宿信息</a>
         <a v-if="show_payment2" :active="active === 'payment2'" @click="go('payment2')">二轮会费支付</a>
+        <a v-if="show_repr"     :active="active === 'representative'" @click="go('representative')">填写代表信息</a>
+        <a v-if="show_repr"     :active="active === 'representativeConfirm'" @click="go('representativeConfirm')">核对代表信息</a>
         <logout-btn></logout-btn>
       </nav>
     </div>
@@ -73,7 +75,8 @@
       show_payment()  { return this.state === 'accommodation-confirmed' || this.state === 'payment-rejected' },
       show_attend()   { return this.state === 'payment-confirmed' },
       show_hotel2()   { return this.state === 'stage-2' },
-      show_payment2() { return this.state === 'accommodation-confirmed-2' || this.state === 'payment-rejected-2' }
+      show_payment2() { return this.state === 'accommodation-confirmed-2' || this.state === 'payment-rejected-2' },
+      show_repr()     { return this.state === 'representative-info' }
     },
     methods: {
       go(route, args = {}) {

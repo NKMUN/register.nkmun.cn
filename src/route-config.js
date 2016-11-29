@@ -44,6 +44,8 @@
         'payment':        { component: require('./components/Team/Payment.vue') },
         'accommodation2': { component: require('./components/Team/Accommodation2.vue') },
         'payment2':       { component: require('./components/Team/Payment2.vue') },
+        'representative': { component: require('./components/Team/Representative.vue') },
+        'representativeConfirm': { component: require('./components/Team/representativeConfirm.vue') }
       }
     },
     // not found handler

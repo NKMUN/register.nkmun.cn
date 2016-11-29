@@ -27,7 +27,8 @@
         <li v-if="todo_hotel2">  确认二轮住宿信息</li>
         <li v-if="todo_payment2">支付二轮费用</li>
         <li v-if="todo_repay2">  二轮缴费凭证未通过审核，请重新上传缴费凭证</li>
-        <li v-if="todo_info">    等待填写代表信息</li>
+        <li v-if="todo_wait2">   等待填写代表信息</li>
+        <li v-if="todo_info">    填写代表信息</li>
       </ol>
     </div>
   </div>
@@ -60,7 +61,8 @@
       todo_hotel2()   { return this.state==='stage-2' },
       todo_payment2() { return this.state==='accommodation-confirmed-2' },
       todo_repay2()   { return this.state==='payment-rejected-2' },
-      todo_info()     { return this.state==='payment-confirmed-2' }
+      todo_wait2()    { return this.state==='payment-confirmed-2' },
+      todo_info()     { return this.state==='representative-info' },
     }
   }
 </script>
