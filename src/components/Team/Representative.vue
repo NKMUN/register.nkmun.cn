@@ -174,7 +174,7 @@
       <div class="operation">
         <button
           class="xlarge next"
-          @click="!disabled ? edit(active) : nop()"
+          @click="!disabled ? update() : nop()"
         >保存</button>
       </div>
     </div>
