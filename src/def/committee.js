@@ -5,7 +5,10 @@ function ungroupCommittees(groups) {
   return groups.map( $=>$.keys ).reduce( mergeArray )
 }
 function idToName(committees) {
-  return committees.reduce( (m, {name, dbId}) => { m[dbId]=name; return m }, {} )
+  return committees.reduce( (m, {name, dbId}) => { m[dbId]=name; return m }, { 'loc_absent_leader': '不参会领队' } )
+}
+function canBeLeader(committee) {
+  return committee!=='loc_superv' && committee!=='loc_observer'
 }
 
 /*
@@ -54,4 +57,5 @@ export const exchangableGroups = exchangableCommittees
 export const exchangableUngrouped = ungroupCommittees(exchangableCommittees)
 
 export const idMapping = idToName(ungrouped)
+export {canBeLeader}
 export default ungrouped

@@ -27,6 +27,18 @@
           </label>
         </div>
 
+        <div class="field" v-if="canBeLeader">
+          <label>
+            <span class="field-name">该代表为领队：</span>
+            <input
+              type="checkbox"
+              v-model="activeEntry.is_leader"
+              @change="this.dirty = true"
+              :disabled="disabled || leaderAssigned"
+            ></input>
+          </label>
+        </div>
+
         <div class="field">
           <label>
             <span class="field-name">姓名</span>
@@ -66,10 +78,8 @@
             </label>
           </div>
         </div>
-        <alert-div>
-          <span>如为指导老师，请填写在此项填写2017年</span>
-        </alert-div>
-        <div class="field">
+
+        <div class="field" v-if="!isSupervisor">
           <label>
             <span class="field-name">预期毕业年份</span>
             <select v-model="activeEntry.exp_grad" @change="this.dirty = true" :disabled="disabled">
@@ -112,11 +122,8 @@
           </label>
         </div>
 
-        <h5>保险信息</h5>
-        <alert-div>
-          <span>如为指导老师，请填写本人信息。监护人关系一栏选择其他</span>
-        </alert-div>
-        <div class="field">
+        <h5 v-if="!isSupervisor">保险信息</h5>
+        <div class="field" v-if="!isSupervisor">
           <label>
             <span class="field-name">监护人姓名</span>
             <input
@@ -127,11 +134,11 @@
           </label>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="!isSupervisor">
           <label>
             <span class="field-name">监护人关系</span>
             <select v-model="activeEntry.guardian_type" @change="this.dirty = true">
-              <option disabled hidden selected value="">【请选择】</option>
+              <option disabled hidden selected value="">[请选择]</option>
               <option value="father">父</option>
               <option value="mother">母</option>
               <option value="other">其他</option>
@@ -139,7 +146,7 @@
           </label>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="!isSupervisor">
           <label>
             <span class="field-name">监护人身份证号</span>
             <input
@@ -150,7 +157,7 @@
           </label>
         </div>
 
-        <div class="field">
+        <div class="field" v-if="!isSupervisor">
           <label>
             <span class="field-name">监护人手机</span>
             <input
@@ -225,7 +232,7 @@
 </style>
 
 <script>
-  import {idMapping} from '../../def/committee'
+  import {idMapping, canBeLeader} from '../../def/committee'
   import getResponseMessage from '../../lib/guess-response-message'
   import AlertDiv from '../AlertDiv.vue'
 
@@ -254,8 +261,18 @@
     note: null
   }
 
+  const SUPERVISOR = {
+    guardian_type: 'superv',
+    exp_grad: 'superv'
+  }
+
   function createRepresentativeModel(serverData) {
-    return Object.assign( {}, DEFAULT_REPRESENTATIVE, serverData )
+    if (serverData.committee === 'loc_absent_leader')
+      return Object.assign( {is_leader: true}, DEFAULT_REPRESENTATIVE, serverData )
+    if (serverData.committee === 'loc_superv')
+      return Object.assign( {is_leader: false}, DEFAULT_REPRESENTATIVE, SUPERVISOR, serverData )
+    // normal representative
+    return Object.assign( {is_leader: false}, DEFAULT_REPRESENTATIVE, serverData )
   }
 
   function createValidatorComputedResult(v) {
@@ -282,6 +299,17 @@
         dirty: false,
         active: '',
         activeEntry: {}
+      }
+    },
+    computed: {
+      leaderAssigned() {    // whether leader is inferred from absent leader
+        return this.list.filter( $ => $.committee === 'loc_absent_leader' ).length > 0
+      },
+      canBeLeader() {
+        return canBeLeader(this.activeEntry ? this.activeEntry.committee : '')
+      },
+      isSupervisor() {
+        return this.activeEntry && this.activeEntry.committee === 'loc_superv'
       }
     },
     methods: {

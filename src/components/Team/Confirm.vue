@@ -6,6 +6,7 @@
     </div>
 
     <div v-if="loaded && loaded >= total" class="representative-info">
+      <h4>代表信息</h4>
       <div class="tab-view">
         <ul class="tab-list">
           <li
@@ -32,14 +33,36 @@
       </div>
     </div>
 
+    <div v-if="loaded && loaded >= total" class="reservation-info">
+      <h4>住宿信息</h4>
+      <table class="horz-stripe hover-effect">
+        <thead>
+          <tr><th>酒店</th><th>房型</th><th>入住时间</th><th>退房时间</th></tr>
+        </thead>
+        <tbody>
+          <tr v-for="$ in reservations">
+            <td>{{ $.name }}</td>
+            <td>{{ $.type }}</td>
+            <td>{{ $.checkIn }}</td>
+            <td>{{ $.checkOut }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div v-if="loaded && loaded >= total" class="operation">
       <alert-div>
-        <span>{{ valid ? '请在代表信息不再更改后再进行确认，确认后视为同意将该信息用于身份牌印刷、保险购买等事项，如有填写错误导致信息无效，后果自负。' : '请返回上一个页面，修正不正确的信息（已用红色标出）。' }}</span>
+        <div v-if="valid">
+          <h5 style="margin-top: 0;">请确认以上信息。<span style="text-decoration: underline;">如有填写错误导致信息无效，后果自负。</span></h5>
+          <p>代表信息将用于身份牌印刷、保险购买等事项。</p>
+          <p>如果对住宿信息有疑问，请联系组委。</p>
+        </div>
+        <span v-else>请返回上一个页面，修正不正确的信息（已用红色标出）。</span>
       </alert-div>
 
       <button class="next xlarge"
         @click="!disabled && valid ? confirmRepresentative() : nop()"
-        :disabled="disabled || !valid"
+        :disabled="disabled || !valid || loaded < total"
       >确认
       </button>
     </div>
@@ -54,13 +77,19 @@
     width: 80%
     margin: 0 auto
     td, th
+      padding-left: 1ch
+      padding-right: 1ch
       &[invalid]
         background-color: #ffd7d7 !important
         color: darkred !important
+    .reservation-info
+      td, th
+        padding-left: 2ch
+        padding-right: 2ch
 </style>
 
 <script>
-  import {idMapping} from '../../def/committee'
+  import {idMapping, canBeLeader} from '../../def/committee'
   import getResponseMessage from '../../lib/guess-response-message'
   import AlertDiv from '../AlertDiv.vue'
   import * as re from '../../lib/regexp'
@@ -79,21 +108,24 @@
 
   const Validate = {
     name:     (s) => s,
+    is_leader: () => true,
     gender:   (s) => /^(m|f)$/.test(s),
-    exp_grad: (s) => 2017<=s && s<=2020,
+    exp_grad: (s) => 2017<=s && s<=2020 || s==='superv',
     phone:    (s) => re.phone.test(s),
     email:    (s) => re.email.test(s) && /\.(com|cn|net|org|edu)$/i.test(s),  // limit to common TLD
     note:     (s) => true,
     residence_id:   (s) => V.residenceId(s),
     guardian_name:  (s) => s,
-    guardian_type:  (s) => /^father|mother|other$/.test(s),
+    guardian_type:  (s) => /^(father|mother|other|superv)$/.test(s),
     guardian_phone: (s) => re.phone.test(s),
     guardian_residence_id: (s) => V.residenceId(s),
   }
 
   const ValueMap = {
     gender: (s) => ({m: '男', f: '女'})[s],
-    guardian_type: (s) => ({father: '父', mother: '母', other: '其他'})[s]
+    guardian_type: (s) => ({father: '父', mother: '母', other: '其他', superv: '指导老师'})[s],
+    is_leader: (b) => b ? '领队' : '',
+    exp_grad: (n) => n === 'superv' ? '指导教师' : n
   }
 
   export default {
@@ -104,6 +136,7 @@
         representative: {
           name: '代表信息',
           fields: {
+            is_leader:    '领队标识',
             name:         '姓名',
             gender:       '性别',
             exp_grad:     '预期毕业时间',
@@ -116,6 +149,7 @@
         guardian: {
           name: '监护人',
           fields: {
+            is_leader:    '领队标识',
             name:         '姓名',
             guardian_name: '监护人姓名',
             guardian_type: '监护人关系',
@@ -131,12 +165,13 @@
         representatives: [],
         total: 0,
         loaded: 0,
+        valid: null,
         tab: 'representative'
       }
     },
     computed: {
       validateResult() {
-        return this.representatives.map( $ => {
+        let result = this.representatives.map( $ => {
           let ret = {
             id: $.id,
             committee: $.committee
@@ -148,6 +183,36 @@
             }
           return ret
         })
+
+        // special check: leader is assigned
+        let leaderAssigned = this.representatives.filter( $ => $.is_leader ).length === 1
+        result.forEach( $ => $.is_leader.valid = leaderAssigned )
+
+        // special check: guardian of supervisor don't have to be filled
+        result.filter( $ => $.committee === 'loc_superv' )
+        .forEach( $ => {
+          $.guardian_name.valid = true
+          $.guardian_residence_id.valid = true
+          $.guardian_phone.valid = true
+        })
+
+        // special check: observer, supervisor can't be leader
+        result.filter( $ => ! canBeLeader($.committee) )
+        .forEach( $ => $.is_leader.valid = !$.is_leader.value )
+
+        return result
+      },
+      reservations() {
+        return [ ... this.reservation1, ... this.reservation2 ].sort( (a,b) => (a.name+a.type).localeCompare(b.name+b.type) )
+      },
+      valid() {
+        if (!this.validateResult)
+          return false
+        for (let i=0; i!==this.validateResult.length; ++i)
+          for (let k in this.validateResult[i])
+            if ( ! this.validateResult[i][k].valid )
+              return false
+        return true
       },
       displayTable() {
         return this.validateResult.sort( byCommitteeId )
@@ -158,31 +223,45 @@
       getCommitteeName(id) {
         return idMapping[id]
       },
-<<<<<<< HEAD
-=======
       confirmRepresentative() {
-        
+
       }
->>>>>>> f89864f9be9aaa9df00f333cd11dfefbb73ff2aa
     },
     ready() {
       this.loaded = 0
-      this.total = null
+      this.total = 3    // total requests that need to complete
       this.busy = true
-      this.$http.get('representative')
-      .then( (res) => res.json() )
-      .then( (json) => {
-        this.total = json.length
-        this.representative = []
-        return Promise.all(
-          json.map( $ => {
-            this.$http.get('representative/'+$.id)
-            .then( res => res.json() )
-            .then( json => this.representatives.push(json) )
-            .then( () => this.loaded++)
-          })
-        )
-      })
+      Promise.all( [
+        // representative info
+        this.$http.get('representative')
+        .then( (res) => res.json() )
+        .then( (json) => {
+          this.total += json.length
+          this.loaded += 1
+          this.representative = []
+          return Promise.all(
+            json.map( $ => {
+              this.$http.get('representative/'+$.id)
+              .then( res => res.json() )
+              .then( json => this.representatives.push(json) )
+              .then( () => this.loaded++)
+            })
+          )
+        }),
+        // reservation
+        this.$http.get('reservation')
+        .then( (res) => res.json() )
+        .then( (json) => {
+          this.loaded += 1
+          this.reservation1 = json
+        }),
+        this.$http.get('reservation2')
+        .then( (res) => res.json() )
+        .then( (json) => {
+          this.loaded += 1
+          this.reservation2 = json
+        })
+      ])
       .catch( (res) => complainError(res, this) )
       .then( () => this.busy = false )
     }
