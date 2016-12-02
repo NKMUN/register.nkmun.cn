@@ -34,11 +34,11 @@
 
     <div v-if="loaded && loaded >= total" class="operation">
       <alert-div>
-        <span>{{ valid ? '请核对代表信息，确认后不能修改。' : '请返回上一个页面，修正不正确的信息（已用红色标出）。' }}</span>
+        <span>{{ valid ? '请在代表信息不再更改后再进行确认，确认后视为同意将该信息用于身份牌印刷、保险购买等事项，如有填写错误导致信息无效，后果自负。' : '请返回上一个页面，修正不正确的信息（已用红色标出）。' }}</span>
       </alert-div>
 
       <button class="next xlarge"
-        @click="!disabled && valid ? confirmRepresentative : nop()"
+        @click="!disabled && valid ? confirmRepresentative() : nop()"
         :disabled="disabled || !valid"
       >确认
       </button>
@@ -158,6 +158,12 @@
       getCommitteeName(id) {
         return idMapping[id]
       },
+<<<<<<< HEAD
+=======
+      confirmRepresentative() {
+        
+      }
+>>>>>>> f89864f9be9aaa9df00f333cd11dfefbb73ff2aa
     },
     ready() {
       this.loaded = 0

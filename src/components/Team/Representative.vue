@@ -1,7 +1,7 @@
 <template>
   <div class="container team-representative-info lr" :busy="busy">
     <div class="left selection">
-      <h4>代表席位</h4>
+      <h4>参会人员席位/身份</h4>
       <ul class="list">
         <li
           v-for="entry in list"
@@ -18,11 +18,11 @@
     <div class="details right" v-show="active" v-el:detail>
       <div class="representative-info">
 
-        <h5>参会代表信息</h5>
+        <h5>参会人员信息</h5>
 
         <div class="field">
           <label>
-            <span class="field-name">会场</span>
+            <span class="field-name">会场/身份</span>
             <input type="text" readonly :value="getCommitteeName(activeEntry.committee)"></input>
           </label>
         </div>
@@ -66,7 +66,9 @@
             </label>
           </div>
         </div>
-
+        <alert-div>
+          <span>如为指导老师，请填写在此项填写2017年</span>
+        </alert-div>
         <div class="field">
           <label>
             <span class="field-name">预期毕业年份</span>
@@ -111,7 +113,9 @@
         </div>
 
         <h5>保险信息</h5>
-
+        <alert-div>
+          <span>如为指导老师，请填写本人信息。监护人关系一栏选择其他</span>
+        </alert-div>
         <div class="field">
           <label>
             <span class="field-name">监护人姓名</span>
@@ -127,7 +131,7 @@
           <label>
             <span class="field-name">监护人关系</span>
             <select v-model="activeEntry.guardian_type" @change="this.dirty = true">
-              <option disabled hidden selected value="">[请选择]</option>
+              <option disabled hidden selected value="">【请选择】</option>
               <option value="father">父</option>
               <option value="mother">母</option>
               <option value="other">其他</option>
@@ -174,7 +178,7 @@
       <div class="operation">
         <button
           class="xlarge next"
-          @click="!disabled ? edit(active) : nop()"
+          @click="!disabled ? update() : nop()"
         >保存</button>
       </div>
     </div>
@@ -223,6 +227,7 @@
 <script>
   import {idMapping} from '../../def/committee'
   import getResponseMessage from '../../lib/guess-response-message'
+  import AlertDiv from '../AlertDiv.vue'
 
   function complainError(res, vm) {
     vm.busy = false
@@ -266,6 +271,7 @@
   }
 
   export default {
+    components: { AlertDiv },
     created() {
       this.GRADUATE_YEARS = [2017, 2018, 2019, 2020]
     },
