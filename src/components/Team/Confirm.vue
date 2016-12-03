@@ -171,7 +171,7 @@
     },
     computed: {
       validateResult() {
-        let result = this.representatives.map( $ => {
+        let result = this.representatives.sort(byCommitteeId).map( $ => {
           let ret = {
             id: $.id,
             committee: $.committee
@@ -200,7 +200,7 @@
         result.filter( $ => ! canBeLeader($.committee) )
         .forEach( $ => $.is_leader.valid = !$.is_leader.value )
 
-        return result.sort( byCommitteeId )
+        return result
       },
       reservations() {
         return [ ... this.reservation1, ... this.reservation2 ].sort( (a,b) => (a.name+a.type).localeCompare(b.name+b.type) )
@@ -210,10 +210,8 @@
           return false
         for (let i=0; i!==this.validateResult.length; ++i)
           for (let k in Validate)
-            if ( ! this.validateResult[i][k] || ! this.validateResult[i][k].valid ) {
-              console.log(this.validateResult[i][k])
+            if ( ! this.validateResult[i][k] || ! this.validateResult[i][k].valid )
               return false
-            }
         return true
       }
     },
@@ -227,7 +225,7 @@
               .then( () => {
                   window.alert('信息已确认。感谢您的配合。')
                   this.data.state = 'confirmed'
-                  this.$router.go('overview')
+                  this.$router.replace('')
               })
               .catch( (res) => complainError(res, this) )
               .then( () => this.busy = false )
