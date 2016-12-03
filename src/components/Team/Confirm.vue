@@ -18,14 +18,10 @@
         </ul>
         <table v-for="$ in tabs" :data-tab="$key" v-show="tab === $key" class="horz-stripe hover-effect">
           <thead>
-            <tr>
-              <th>会场</th>
-              <th v-for="name in $.fields">{{name}}</th>
-            </tr>
+            <tr> <th v-for="name in $.fields">{{name}}</th> </tr>
           </thead>
           <tbody>
-            <tr v-for="repr in displayTable">
-              <th>{{ getCommitteeName(repr.committee) }}</th>
+            <tr v-for="repr in validateResult">
               <td v-for="_ in $.fields" :invalid="!repr[$key].valid">{{ repr[$key].value }}</td>
             </tr>
           </tbody>
@@ -89,7 +85,7 @@
 </style>
 
 <script>
-  import {idMapping, canBeLeader} from '../../def/committee'
+  import {idMapping as COMMITTEE_NAME, canBeLeader} from '../../def/committee'
   import getResponseMessage from '../../lib/guess-response-message'
   import AlertDiv from '../AlertDiv.vue'
   import * as re from '../../lib/regexp'
@@ -108,6 +104,7 @@
 
   const Validate = {
     name:     (s) => s,
+    committee: () => true,
     is_leader: () => true,
     gender:   (s) => /^(m|f)$/.test(s),
     exp_grad: (s) => 2017<=s && s<=2020 || s==='superv',
@@ -122,6 +119,7 @@
   }
 
   const ValueMap = {
+    committee: (s) => COMMITTEE_NAME[s] || '***',
     gender: (s) => ({m: '男', f: '女'})[s],
     guardian_type: (s) => ({father: '父', mother: '母', other: '其他', superv: '指导老师'})[s],
     is_leader: (b) => b ? '领队' : '',
@@ -136,6 +134,7 @@
         representative: {
           name: '代表信息',
           fields: {
+            committee:    '会场',
             is_leader:    '领队标识',
             name:         '姓名',
             gender:       '性别',
@@ -149,6 +148,7 @@
         guardian: {
           name: '监护人',
           fields: {
+            committee:    '会场',
             is_leader:    '领队标识',
             name:         '姓名',
             guardian_name: '监护人姓名',
@@ -200,7 +200,7 @@
         result.filter( $ => ! canBeLeader($.committee) )
         .forEach( $ => $.is_leader.valid = !$.is_leader.value )
 
-        return result
+        return result.sort( byCommitteeId )
       },
       reservations() {
         return [ ... this.reservation1, ... this.reservation2 ].sort( (a,b) => (a.name+a.type).localeCompare(b.name+b.type) )
@@ -209,22 +209,29 @@
         if (!this.validateResult)
           return false
         for (let i=0; i!==this.validateResult.length; ++i)
-          for (let k in this.validateResult[i])
-            if ( ! this.validateResult[i][k].valid )
+          for (let k in Validate)
+            if ( ! this.validateResult[i][k] || ! this.validateResult[i][k].valid ) {
+              console.log(this.validateResult[i][k])
               return false
+            }
         return true
-      },
-      displayTable() {
-        return this.validateResult.sort( byCommitteeId )
       }
     },
     methods: {
       nop() {},
-      getCommitteeName(id) {
-        return idMapping[id]
-      },
       confirmRepresentative() {
-
+          if ( window.confirm('请检查以上信息是否正确，如因信息错误导致问题，后果自负。确认要提交吗？') ) {
+              this.busy = true
+              this.$http.post('confirm')
+              .then( (res) => res.json() )
+              .then( () => {
+                  window.alert('信息已确认。感谢您的配合。')
+                  this.data.state = 'confirmed'
+                  this.$router.go('overview')
+              })
+              .catch( (res) => complainError(res, this) )
+              .then( () => this.busy = false )
+          }
       }
     },
     ready() {

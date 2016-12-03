@@ -30,6 +30,7 @@
         <li v-if="todo_wait2">   等待填写代表信息</li>
         <li v-if="todo_info">    填写代表信息</li>
         <li v-if="todo_confirm"> 核对信息</li>
+        <li v-if="todo_attend">  等待参会信息</li>
       </ol>
     </div>
   </div>
@@ -64,7 +65,8 @@
       todo_repay2()   { return this.state==='payment-rejected-2' },
       todo_wait2()    { return this.state==='payment-confirmed-2' },
       todo_info()     { return this.state==='representative-info' },
-      todo_confirm()  { return this.state==='representative-info' }
+      todo_confirm()  { return this.state==='representative-info' },
+      todo_attend()   { return this.state==='confirmed' }
     }
   }
 </script>
