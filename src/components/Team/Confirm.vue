@@ -225,7 +225,7 @@
               .then( () => {
                   window.alert('信息已确认。感谢您的配合。')
                   this.data.state = 'confirmed'
-                  this.$router.replace('')
+                  this.$router.replace('/team/')
               })
               .catch( (res) => complainError(res, this) )
               .then( () => this.busy = false )
