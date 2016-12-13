@@ -44,7 +44,8 @@
     'paid-2': '二轮已付款，待审核',
     'payment-confirmed-2': '二轮已付款，已通过',
     'payment-rejected-2': '二轮已付款，未通过',
-    'representative-info': '等待代表信息'
+    'representative-info': '等待代表信息',
+    'confirmed': '代表信息已确认'
   }
 
   function complainError(res) {
