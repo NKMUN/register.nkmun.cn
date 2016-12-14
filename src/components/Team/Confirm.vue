@@ -174,7 +174,7 @@
         let result = this.representatives.sort(byCommitteeId).map( $ => {
           let ret = {
             id: $.id,
-            committee: $.committee
+            _committee: $.committee
           }
           for (let k in Validate)
             ret[k] = {
@@ -189,7 +189,7 @@
         result.forEach( $ => $.is_leader.valid = leaderAssigned )
 
         // special check: guardian of supervisor don't have to be filled
-        result.filter( $ => $.committee === 'loc_superv' )
+        result.filter( $ => $._committee === 'loc_superv' )
         .forEach( $ => {
           $.guardian_name.valid = true
           $.guardian_residence_id.valid = true
@@ -197,7 +197,7 @@
         })
 
         // special check: observer, supervisor can't be leader
-        result.filter( $ => ! canBeLeader($.committee) )
+        result.filter( $ => ! canBeLeader($._committee) )
         .forEach( $ => $.is_leader.valid = !$.is_leader.value )
 
         return result
