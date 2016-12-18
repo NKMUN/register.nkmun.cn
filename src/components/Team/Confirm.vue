@@ -49,8 +49,8 @@
     <div v-if="loaded && loaded >= total" class="operation">
       <alert-div>
         <div v-if="valid">
-          <h5 style="margin-top: 0;">请确认以上信息。<span style="text-decoration: underline;">如有填写错误导致信息无效，后果自负。</span></h5>
-          <p>代表信息将用于身份牌印刷、保险购买等事项。</p>
+          <p>请确认以上信息。</p>
+          <p>代表信息在确认后将用于身份牌印刷、保险购买等事项，无法再次修改。<span style="text-decoration: underline;">如有填写错误导致信息无效，后果自负。</span></p>
           <p>如果对住宿信息有疑问，请联系组委。</p>
         </div>
         <span v-else>请返回上一个页面，修正不正确的信息（已用红色标出）。</span>
