@@ -32,7 +32,8 @@
         '/status':   { component: require('./components/Admin/Status.vue') },
         '/payment':  { component: require('./components/Admin/PaymentReview.vue') },
         '/stage2':   { component: require('./components/Admin/Stage2.vue') },
-        '/payment2': { component: require('./components/Admin/PaymentReview2.vue') }
+        '/payment2': { component: require('./components/Admin/PaymentReview2.vue') },
+        '/representative': { component: require('./components/Admin/Representative.vue') }
       }
     },
     'team': {
