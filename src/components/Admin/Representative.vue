@@ -4,7 +4,8 @@
       <h4>正在载入...</h4>
     </div>
     <div v-else>
-      <button class="xlarge next" @click="!busy && exportCSV()">导出代表信息 (CSV)</button>
+      <button class="xlarge next" @click="!busy && exportRepresentatives()">导出代表信息 (CSV)</button>
+      <button class="xlarge next" @click="!busy && exportReservations()">导出住宿信息 (CSV)</button>
     </div>
   </div>
 </template>
@@ -19,7 +20,7 @@
   import csvStringify from 'csv-stringify'
   import saveAsFile from '../../lib/save-as-file'
 
-  const TableHeader = [
+  const RepresentativeTableHeader = [
     '学校',
     '会场',
     '领队标识',
@@ -40,7 +41,7 @@
   const AsIs = (field) => ($) => $[field]
 
   // macth TableHeader in order
-  const TableMappers = [
+  const RepresentativeTableMappers = [
     AsIs('school'),
         ({committee}) => COMMITTEE_NAME[committee] || '***',
         ({is_leader}) => is_leader ? '领队' : '',
@@ -58,7 +59,28 @@
   ]
 
   // reduce json -> csv-compatible Array
-  const TableMapper = ($) => TableMappers.reduce(
+  const RepresentativeTableMapper = ($) => RepresentativeTableMappers.reduce(
+    (row, mapper) => [ ...row, mapper($) || '' ]
+    , []
+  )
+
+  const ReservationTableHeaders = [
+    '学校',
+    '酒店',
+    '房型',
+    '入住日期',
+    '退房日期'
+  ]
+
+  const ReservationTableMappers = [
+    AsIs('school'),
+    AsIs('name'),
+    AsIs('type'),
+    AsIs('checkIn'),
+    AsIs('checkOut')
+  ]
+
+  const ReservationTableMapper = ($) => ReservationTableMappers.reduce(
     (row, mapper) => [ ...row, mapper($) || '' ]
     , []
   )
@@ -71,6 +93,7 @@
         busy: false,
         representativeList: null,
         schoolStateList: null,
+        reservationList: null,
       }
     },
     computed: {
@@ -78,22 +101,25 @@
         if ( ! this.schoolStateList )
           return null
         let ret = {}
-        this.schoolStateList.forEach( ({school, state}) => {
-          ret[school] = state === 'confirmed'
-        })
+        this.schoolStateList.forEach( ({school, state}) =>  ret[school] = state === 'confirmed' )
         return ret
       },
-      readableTable() {
+      representativeTable() {
         if ( ! this.representativeList )
           return null
-        return this.representativeList.map( $ => TableMapper($) )
+        return this.representativeList.map( RepresentativeTableMapper )
       },
+      reservationTable() {
+        if ( ! this.reservationList )
+          return null
+        return this.reservationList.map( ReservationTableMapper )
+      }
     },
     methods: {
-      exportCSV() {
-        let header = [ '确认标识', ...TableHeader ]
+      exportRepresentatives() {
+        let header = [ '确认标识', ...RepresentativeTableHeader ]
         // copy, sort, insert confirmation flag
-        let rows = [ ...this.readableTable ]
+        let rows = [ ...this.representativeTable ]
                    .sort( byColumn(0) )
                    .map( $ => [ this.schoolConfirmed[$[0]] ? '已确认' : '', ...$ ])
 
@@ -105,18 +131,36 @@
           let filename = '参会代表信息.csv'
           saveAsFile(blob, filename)
         })
+      },
+      exportReservations() {
+        csvStringify( [
+          ReservationTableHeaders,
+          ... [...this.reservationTable].sort( byColumn(0) )
+        ], (err, csv) => {
+          if (err)
+            return alert('导出失败：' + err.message)
+          let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;', endings: 'transparent' })
+          let filename = '住宿信息.csv'
+          saveAsFile(blob, filename)
+        })
       }
     },
     ready() {
       this.busy = true
-      this.$http.get('enroll/status')    // request school's state
-      .then( (res) => res.json() )
-      .then( (json) => this.schoolStateList = json )
-      .then( () => this.$http.get('representative-list') )    // request all representatives
-      .then( (res) => res.json() )
-      .then( (json) => this.representativeList = json )
-      .then( () => this.busy = false )
-      .catch( (res) => complainError.bind(this) )
+      Promise.all([
+        this.$http.get('enroll/status'),
+        this.$http.get('representative-list'),
+        this.$http.get('reservation-list'),
+        this.$http.get('reservation2-list')
+      ])
+      .then( (resps) => Promise.all( resps.map( resp => resp.json() ) ) )
+      .then( ([ states, representatives, reservation, reservation2 ]) => {
+        this.schoolStateList = states
+        this.representativeList = representatives
+        this.reservationList = [ ...reservation, ...reservation2 ]
+        this.busy = false
+      })
+      .catch( () => alert('Error when fetching data') )
     }
   }
 </script>
