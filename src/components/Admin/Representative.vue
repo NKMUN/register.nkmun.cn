@@ -123,4 +123,9 @@
 
 <style lang="stylus">
   @import '../../styles/button'
+  .admin-representative-info
+    margin: 15px 0 0 30px
+    button
+      display: block
+      margin-bottom: 20px
 </style>
